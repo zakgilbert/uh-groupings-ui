@@ -20,7 +20,7 @@
          */
         $scope.init = function () {
             $scope.loading = true;
-            var groupingsOwned = "localhost:8081/uhgroupings/api/groupings/groupingAssignment";
+            var groupingsOwned = "http://localhost:8081/uhgroupings/api/groupings/";
 
             dataProvider.loadData(function (d) {
                 $scope.groupingsList = d.groupingsOwned;
