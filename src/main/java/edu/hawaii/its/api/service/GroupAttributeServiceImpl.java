@@ -2,12 +2,15 @@ package edu.hawaii.its.api.service;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import edu.hawaii.its.api.type.Destination;
 import edu.hawaii.its.api.type.Grouping;
 import edu.hawaii.its.api.type.GroupingsServiceResult;
 
 import edu.internet2.middleware.grouperClient.ws.beans.WsAssignAttributesResults;
 import edu.internet2.middleware.grouperClient.ws.beans.WsAssignGrouperPrivilegesLiteResult;
 import edu.internet2.middleware.grouperClient.ws.beans.WsAttributeAssign;
+import edu.internet2.middleware.grouperClient.ws.beans.WsAttributeDefName;
+import edu.internet2.middleware.grouperClient.ws.beans.WsFindAttributeDefNamesResults;
 import edu.internet2.middleware.grouperClient.ws.beans.WsGetAttributeAssignmentsResults;
 import edu.internet2.middleware.grouperClient.ws.beans.WsSubjectLookup;
 
@@ -346,6 +349,23 @@ public class GroupAttributeServiceImpl implements GroupAttributeService {
                         set);
 
         return hs.makeGroupingsServiceResult(grouperPrivilegesLiteResult, action);
+    }
+
+    @Override
+    public List<Destination> getGroupingDestinations(String grouping) {
+        logger.info("getGroupingDestinations; grouping: "
+                + grouping + ";");
+
+        WsFindAttributeDefNamesResults attributeDefNamesResults = grouperFS.makeWsFindAttributeDefNamesResults(
+                DESTINATIONS);
+
+        WsAttributeDefName[] attributeDefNames = attributeDefNamesResults.getAttributeDefNameResults();
+
+        List<Destination> destinations = new ArrayList<>();
+        for (WsAttributeDefName att : attributeDefNames) {
+            destinations.add(new Destination(att.getExtension(), att.getDisplayExtension(), att.getDescription()));
+        }
+        return destinations;
     }
 
 }

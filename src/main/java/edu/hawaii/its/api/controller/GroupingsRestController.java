@@ -25,6 +25,7 @@ import edu.hawaii.its.api.service.HelperService;
 import edu.hawaii.its.api.service.MemberAttributeService;
 import edu.hawaii.its.api.service.MembershipService;
 import edu.hawaii.its.api.type.AdminListsHolder;
+import edu.hawaii.its.api.type.Destination;
 import edu.hawaii.its.api.type.Grouping;
 import edu.hawaii.its.api.type.GroupingAssignment;
 import edu.hawaii.its.api.type.GroupingsServiceResult;
@@ -438,6 +439,16 @@ public class GroupingsRestController {
         return ResponseEntity
                 .ok()
                 .body(groupingAssignmentService.adminLists(principal.getName()));
+    }
+
+    @RequestMapping(value = "/{grouping}/destinations",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Destination>> getGroupingDestinations(@PathVariable String grouping) {
+        logger.info("Entered REST getGroupingDestinations...");
+        return ResponseEntity
+                .ok()
+                .body(groupAttributeService.getGroupingDestinations(grouping));
     }
 
     /**

@@ -14,6 +14,7 @@ import edu.internet2.middleware.grouperClient.api.GcAddMember;
 import edu.internet2.middleware.grouperClient.api.GcAssignAttributes;
 import edu.internet2.middleware.grouperClient.api.GcAssignGrouperPrivilegesLite;
 import edu.internet2.middleware.grouperClient.api.GcDeleteMember;
+import edu.internet2.middleware.grouperClient.api.GcFindAttributeDefNames;
 import edu.internet2.middleware.grouperClient.api.GcFindGroups;
 import edu.internet2.middleware.grouperClient.api.GcGetAttributeAssignments;
 import edu.internet2.middleware.grouperClient.api.GcGetGrouperPrivilegesLite;
@@ -30,6 +31,7 @@ import edu.internet2.middleware.grouperClient.ws.beans.WsAssignGrouperPrivileges
 import edu.internet2.middleware.grouperClient.ws.beans.WsAttributeAssign;
 import edu.internet2.middleware.grouperClient.ws.beans.WsAttributeAssignValue;
 import edu.internet2.middleware.grouperClient.ws.beans.WsDeleteMemberResults;
+import edu.internet2.middleware.grouperClient.ws.beans.WsFindAttributeDefNamesResults;
 import edu.internet2.middleware.grouperClient.ws.beans.WsFindGroupsResults;
 import edu.internet2.middleware.grouperClient.ws.beans.WsGetAttributeAssignmentsResults;
 import edu.internet2.middleware.grouperClient.ws.beans.WsGetGrouperPrivilegesLiteResult;
@@ -526,6 +528,18 @@ public class GrouperFactoryServiceImpl implements GrouperFactoryService {
                 .addSubjectIdentifier(username)
                 .assignWsStemLookup(stemLookup)
                 .assignStemScope(stemScope)
+                .execute();
+    }
+
+    /**
+     * Creates a request to find attribute definition names.
+     * @param scope: the path containing the attribute definition names
+     * @return the result with the assigned scope
+     */
+    @Override
+    public WsFindAttributeDefNamesResults makeWsFindAttributeDefNamesResults(String scope) {
+        return new GcFindAttributeDefNames()
+                .assignScope(scope)
                 .execute();
     }
 

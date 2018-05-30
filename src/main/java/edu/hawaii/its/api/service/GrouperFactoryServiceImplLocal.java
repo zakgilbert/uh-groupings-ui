@@ -22,6 +22,7 @@ import edu.hawaii.its.api.type.Grouping;
 import edu.hawaii.its.api.type.Membership;
 import edu.hawaii.its.api.type.Person;
 
+import edu.internet2.middleware.grouperClient.api.GcFindAttributeDefNames;
 import edu.internet2.middleware.grouperClient.ws.StemScope;
 import edu.internet2.middleware.grouperClient.ws.beans.WsAddMemberResults;
 import edu.internet2.middleware.grouperClient.ws.beans.WsAssignAttributesResults;
@@ -30,6 +31,7 @@ import edu.internet2.middleware.grouperClient.ws.beans.WsAttributeAssign;
 import edu.internet2.middleware.grouperClient.ws.beans.WsAttributeAssignValue;
 import edu.internet2.middleware.grouperClient.ws.beans.WsAttributeDefName;
 import edu.internet2.middleware.grouperClient.ws.beans.WsDeleteMemberResults;
+import edu.internet2.middleware.grouperClient.ws.beans.WsFindAttributeDefNamesResults;
 import edu.internet2.middleware.grouperClient.ws.beans.WsFindGroupsResults;
 import edu.internet2.middleware.grouperClient.ws.beans.WsGetAttributeAssignmentsResults;
 import edu.internet2.middleware.grouperClient.ws.beans.WsGetGrouperPrivilegesLiteResult;
@@ -1137,6 +1139,18 @@ public class GrouperFactoryServiceImplLocal implements GrouperFactoryService {
         wsGetAttributeAssignmentsResults.setWsGroups(groupList.toArray(new WsGroup[groupList.size()]));
 
         return wsGetAttributeAssignmentsResults;
+    }
+
+    /**
+     * Creates a request to find attribute definition names.
+     * @param scope: the path containing the attribute definition names
+     * @return the result with the assigned scope
+     */
+    @Override
+    public WsFindAttributeDefNamesResults makeWsFindAttributeDefNamesResults(String scope) {
+        return new GcFindAttributeDefNames()
+                .assignScope(scope)
+                .execute();
     }
 
     @Override
