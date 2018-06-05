@@ -34,7 +34,7 @@ public class Destination {
         this.displayName = displayName;
     }
 
-    public String geDisplayName() {
+    public String getDisplayName() {
         return displayName;
     }
 
