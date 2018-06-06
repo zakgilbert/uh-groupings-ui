@@ -441,16 +441,6 @@ public class GroupingsRestController {
                 .body(groupingAssignmentService.adminLists(principal.getName()));
     }
 
-    @RequestMapping(value = "/{grouping}/destinations",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Destination>> getGroupingDestinations(@PathVariable String grouping) {
-        logger.info("Entered REST getGroupingDestinations...");
-        return ResponseEntity
-                .ok()
-                .body(groupAttributeService.getGroupingDestinations(grouping));
-    }
-
     /**
      * //@param grouping: String containing the path of the parent Grouping
      * //@param newGrouping: String containing the name of the Grouping to be created
