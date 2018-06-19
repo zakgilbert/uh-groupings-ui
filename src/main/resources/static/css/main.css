@@ -50,26 +50,6 @@ h3 {
     margin-top: -5.357em;
 }
 
-::-webkit-input-placeholder {
-    /* Chrome/Opera/Safari */
-    font-weight: bold;
-}
-
-::-moz-placeholder {
-    /* Firefox 19+ */
-    font-weight: bold;
-}
-
-:-ms-input-placeholder {
-    /* IE 10+ */
-    font-weight: bold;
-}
-
-:-moz-placeholder {
-    /* Firefox 18- */
-    font-weight: bold;
-}
-
 #overlay {
     position: fixed;
     top: 0;
