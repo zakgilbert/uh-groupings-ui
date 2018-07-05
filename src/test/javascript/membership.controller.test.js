@@ -1,225 +1,161 @@
-describe("MembershipJsController", function () {
+describe("MembershipController", function () {
 
-    beforeEach(module('membershipApp'));
+    beforeEach(module("UHGroupingsApp"));
+    beforeEach(module("ngMockE2E"));
 
     var scope;
-    var testing;
     var controller;
-    var dataProvider;
-    var dataUpdater;
+    var httpBackend;
+    var BASE_URL;
 
-    beforeEach(inject(function ($rootScope, $controller, dataProvider, dataUpdater) {
-        testing = false;
+    beforeEach(inject(function ($rootScope, $controller, _BASE_URL_, _$httpBackend_) {
         scope = $rootScope.$new();
-        controller = $controller('MembershipJsController', {
-            $scope: scope,
-            dataProvider: dataProvider,
-            dataUpdater:dataUpdater
+        controller = $controller("MembershipJsController", {
+            $scope: scope
         });
+        httpBackend = _$httpBackend_;
+        BASE_URL = _BASE_URL_;
     }));
 
-    it("checkInitFunction", function () {
-        spyOn(scope, "init").and.callFake(function () {
-            scope.membersList.push({
-                "name": "ksanidad-test",
-            });
-            scope.membersList.push({
-                "name": "zknobel-test",
-            });
-            scope.membersList.push({
-                "name": "aaronvil-test",
-            });
-        });
+    it("should define the membership controller", function () {
         expect(controller).toBeDefined();
-        //expect(scope.membershipList).toBeDefined();
-        expect(scope.membersList.length).toEqual(0);
-        expect(scope.optInList.length).toEqual(0);
-        expect(scope.optOutList.length).toEqual(0);
-        expect(scope.optedIn.length).toEqual(0);
-        expect(scope.optedOut.length).toEqual(0);
-
-        scope.init();
-
-        expect(scope.init).toHaveBeenCalled();
-        expect(scope.membersList).toBeDefined();
-        expect(scope.membersList.length).toEqual(3);
-
-        expect(scope.membersList[0].name).toEqual("ksanidad-test");
-        expect(scope.membersList[1].name).toEqual("zknobel-test");
-        expect(scope.membersList[2].name).toEqual("aaronvil-test");
     });
 
-    it("checkPageGroupFunction", function() {
-        spyOn(scope, "init").and.callFake(function() {
-            for(var i = 1; i < 101; i++) {
-                scope.membersList.push({
-                    "name": "group "+i
-                });
-                scope.pagedItems1.push({
-                    "name": "group "+i
-                });
-            }
+    it("should define the variables and methods in the table controller", function () {
+        expect(scope.columnSort).toBeDefined();
+        expect(scope.groupToPages).toBeDefined();
+        expect(scope.filter).toBeDefined();
+        expect(scope.pageRange).toBeDefined();
+        expect(scope.setPage).toBeDefined();
+        expect(scope.disableFirstAndPrev).toBeDefined();
+        expect(scope.disableNextAndLast).toBeDefined();
+        expect(scope.sortBy).toBeDefined();
+    });
+
+    describe("init", function () {
+        var mockResponse;
+
+        beforeEach(function () {
+            mockResponse = {
+                groupingsIn: [
+                    {
+                        path: "path1:path2:grouping1",
+                        name: "grouping1"
+                    },
+                    {
+                        path: "path1:path3:grouping2",
+                        name: "grouping2"
+                    },
+                    {
+                        path: "path1:path2:grouping3",
+                        name: "grouping3"
+                    }
+                ],
+                groupingsToOptInTo: [
+                    {
+                        path: "path1:path4:grouping4",
+                        name: "grouping4"
+                    }
+                ],
+                groupingsToOptOutOf: [
+                    {
+                        path: "path1:path3:grouping2",
+                        name: "grouping2"
+                    }
+                ]
+            };
+
+            scope.itemsPerPage = 2;
+
+            httpBackend.whenGET(BASE_URL + "groupingAssignment")
+                .respond(200, mockResponse);
+
+            scope.init();
         });
 
-
-        scope.init();
-        // scope.groupToPages();
-        expect(scope.init).toHaveBeenCalled();
-        // expect(scope.groupToPages).toHaveBeenCalled();
-        expect(scope.membersList.length).toEqual(100);
-        expect(scope.itemsPerPage).toEqual(5);
-        expect(scope.pagedItems1.length).toEqual(100);
-        expect(scope.currentPageOptIn).toEqual(0);
-        scope.currentPage('Page Opt In Prev');
-        expect(scope.currentPageOptIn).toEqual(0);
-        scope.currentPage('Page Opt In Next');
-        expect(scope.currentPageOptIn).toEqual(1);
-    });
-
-    it("gettingMockDataForOpts", function() {
-        spyOn(scope, "init").and.callFake(function() {
-            for(var i = 1; i < 101; i++) {
-                scope.optInList.push({
-                    "name": "Grouped "+i
-                });
-                scope.membersList.push({
-                    "name": "Member "+i
-                });
-                scope.optedIn.push({
-                    "name": "Opted In "+i
-                });
-                scope.optedOut.push({
-                    "name": "Opted Out "+i
-                });
-            }
+        it("should make an API call to groupingAssignment", function () {
+            httpBackend.expectGET(BASE_URL + "groupingAssignment").respond(200, mockResponse);
+            expect(httpBackend.flush).not.toThrow();
         });
 
+        it("should initialize membershipsList", function () {
+            httpBackend.expectGET(BASE_URL + "groupingAssignment").respond(200, mockResponse);
+            httpBackend.flush();
 
-        expect(scope.optInList).toBeDefined();
-        expect(scope.optOutList).toBeDefined();
-        expect(scope.optedIn).toBeDefined();
-        expect(scope.optedOut).toBeDefined();
-        expect(scope.optInList.length).toEqual(0);
-        expect(scope.optOutList.length).toEqual(0);
-        expect(scope.optedIn.length).toEqual(0);
-        expect(scope.optedOut.length).toEqual(0);
+            expect(scope.membershipsList.length).toEqual(3);
+            expect(scope.pagedItemsMemberships.length).toEqual(2);
+            expect(scope.membershipsList).toContain(mockResponse.groupingsIn[0]);
+            expect(scope.membershipsList).toContain(mockResponse.groupingsIn[1]);
+            expect(scope.membershipsList).toContain(mockResponse.groupingsIn[2]);
+        });
 
-        scope.init();
-        expect(scope.optInList.length).toEqual(100);
-        expect(scope.membersList.length).toEqual(100);
-        expect(scope.optedIn.length).toEqual(100);
-        expect(scope.optedOut.length).toEqual(100);
+        it("should initialize optInList", function () {
+            httpBackend.expectGET(BASE_URL + "groupingAssignment").respond(200, mockResponse);
+            httpBackend.flush();
 
-        expect(scope.membersList[0].name).toEqual("Member 1");
-        expect(scope.optInList[25].name).toEqual("Grouped 26");
-        expect(scope.optedIn[56].name).toEqual("Opted In 57");
-        expect(scope.optedOut[17].name).toEqual("Opted Out 18");
-    });
+            expect(scope.optInList.length).toEqual(1);
+            expect(scope.pagedItemsOptInList.length).toEqual(1);
+            expect(scope.optInList).toContain(mockResponse.groupingsToOptInTo[0]);
+        });
 
-    it("groupToPagesTesting", function(){
-        /**
-        *  Generic placeholders
-        **/
-        var testOptInList = ["ora","ora","ora","ora","ora"];
-        var testMembersList = ["ora","ora","ora","ora","ora"];
-        var testOptedIn = ["ora","ora","ora","ora","ora"];
-        var testOptedOut = ["ora","ora","ora","ora","ora"];
-        var n = 2;
+        it("should initialize optOutList", function () {
+            httpBackend.expectGET(BASE_URL + "groupingAssignment").respond(200, mockResponse);
+            httpBackend.flush();
 
-        scope.pagedItems1 = testOptInList;
-        scope.pagedItems3 = testMembersList;
-        scope.pagedItems4 = testOptedIn;
-        scope.pagedItems5 = testOptedOut;
-
-        expect(testOptInList.length).toEqual(5);
-        expect(scope.pagedItems1.length).toEqual(5);
-        expect(scope.currentPageOptIn).toEqual(0);
-        expect(scope.currentPageOptOut).toEqual(0);
-        expect(scope.currentPageCancelOptIn).toEqual(0);
-        expect(scope.currentPageCancelOptOut).toEqual(0);
-
-        scope.currentPage("Page Opt In Next");
-        expect(scope.currentPageOptIn).toEqual(1);
-        scope.currentPage("Page Opt In Next");
-        scope.currentPage("Page Opt In Next");
-        expect(scope.currentPageOptIn).toEqual(3);
-        scope.currentPage("Page Opt In Prev");
-        expect(scope.currentPageOptIn).toEqual(2);
-
-        scope.currentPage("Cancel Opt In Next");
-        expect(scope.currentPageCancelOptIn).toEqual(1);
-        scope.currentPage("Cancel Opt In Next");
-        expect(scope.currentPageCancelOptIn).toEqual(2);
-        scope.currentPage("Cancel Opt In Next");
-        expect(scope.currentPageCancelOptIn).toEqual(3);
-        scope.currentPage("Cancel Opt In Next");
-        expect(scope.currentPageCancelOptIn).toEqual(4);
-        scope.currentPage("Cancel Opt In Next");
-        expect(scope.currentPageCancelOptIn).toEqual(4);
-        scope.currentPage("Cancel Opt In Prev");
-        expect(scope.currentPageCancelOptIn).toEqual(3);
-        // scope.currentPage("Cancel Opt In Prev");
-        // expect(scope.currentPageCancelOptIn).toEqual(4);
-
-        scope.currentPage("Cancel Opt Out set");
-        expect(scope.currentPageCancelOptOut).toEqual(2);
-
+            expect(scope.optOutList.length).toEqual(1);
+            expect(scope.optOutList).toContain(mockResponse.groupingsToOptOutOf[0]);
+        });
 
     });
 
-    it("testingRangem", function(){
+    describe("membershipRequired", function () {
+        beforeEach(function () {
+            scope.membershipsList = [
+                {
+                    path: "path:path2:path3:grouping1",
+                    name: "grouping1"
+                },
+                {
+                    path: "path:path2:path4:grouping2",
+                    name: "grouping2"
+                },
+                {
+                    path: "path:path2:path5:grouping3",
+                    name: "grouping3"
+                },
+                {
+                    path: "path:path2:path3:grouping4",
+                    name: "grouping4"
+                }
+            ];
+            scope.itemsPerPage = 2;
+            scope.pagedItemsMemberships = scope.groupToPages(scope.membershipsList);
 
-        var testingRange = [];
+            scope.optOutList = [
+                {
+                    path: "path:path2:path3:grouping1",
+                    name: "grouping1"
+                },
+                {
+                    path: "path:path2:path3:grouping4",
+                    name: "grouping4"
+                }
+            ];
+        });
 
-        expect(testingRange).toBeDefined();
-        testingRange = scope.range(20,14,19);
-        expect(testingRange.length).toEqual(5);
-        expect(testingRange[0]).toEqual(14);
-        testingRange = scope.range(20,15,20);
-        expect(testingRange.length).toEqual(5);
-        expect(testingRange[0]).toEqual(15);
-        testingRange = scope.range(20,16,21);
-        expect(testingRange.length).toEqual(4);
-        expect(testingRange[0]).toEqual(16);
+        it("should return false for groupings in both membershipsList and optOutList", function () {
+            // path:path2:path3:grouping1
+            expect(scope.membershipRequired(0, 0)).toBe(false);
+            // path:path2:path3:grouping4
+            expect(scope.membershipRequired(1, 1)).toBe(false);
+        });
+
+        it("should return true for groupings in membershipsList, but not in optOutList", function () {
+            // path:path2:path4:grouping2
+            expect(scope.membershipRequired(0, 1)).toBe(true);
+            // path:path2:path5:grouping3
+            expect(scope.membershipRequired(1, 0)).toBe(true);
+        });
     });
-
-    it("testing Sort", function () {
-      spyOn(scope, "init").and.callFake(function () {
-        scope.membersList.push({
-          "name": "ksanidad-test"
-        });
-        scope.membersList.push({
-          "name": "zknobel-test"
-        });
-        scope.membersList.push({
-          "name": "aaronvil-test"
-        });
-      });
-
-      spyOn(_, 'sortBy').and.callFake(function () {
-        scope.membersList.push({
-          "name": "ksanidad-test"
-        });
-      });
-
-      expect(controller).toBeDefined();
-      expect(scope.membersList).toBeDefined();
-      expect(scope.membersList.length).toEqual(0);
-
-      // What we are testing
-      scope.init();
-
-      expect(scope.init).toHaveBeenCalled();
-      expect(scope.membersList).toBeDefined();
-      expect(scope.membersList.length).toEqual(3);
-
-      expect(scope.membersList[0].name).toEqual("ksanidad-test");
-
-      var list = scope.membersList;
-
-      scope.sort(list, 'name', 'pagedItems1', 'symbol');
-
-      expect(scope.sort).toHaveBeenCalled();
-    })
 
 });
