@@ -9,6 +9,7 @@ import org.jasig.cas.client.validation.Saml11TicketValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.annotation.Order;
@@ -32,6 +33,7 @@ import org.springframework.util.Assert;
 import edu.hawaii.its.groupings.access.UserBuilder;
 import edu.hawaii.its.groupings.access.UserDetailsServiceImpl;
 
+@EnableOAuth2Sso
 @ComponentScan(basePackages = "edu.hawaii.its")
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
