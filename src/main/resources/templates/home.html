@@ -16,8 +16,8 @@
                      src="images/grouper-users-icon-02.png" alt="" id="groupings-icon"></img>
             </div>
             <div class="col-sm-12 col-md-10 col-lg-10">
-                <h1 class="dropshadow">UH Groupings</h1>
-                <p class="lead" th:utext="#{screen.message.home.page.leadDescription}"> </p>
+                <h1 id="title-header" class="dropshadow">UH Groupings</h1>
+                <p id="line-spacing" class="lead" th:utext="#{screen.message.home.page.leadDescription}"> </p>
                 <div>
                     <div sec:authorize="!isAuthenticated()">
                         <a class="btn btn-lg btn-success" th:href="@{/login}" role="button">Login Here</a>
