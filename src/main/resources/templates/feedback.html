@@ -8,13 +8,18 @@
 
 <!--  Content container -->
 <div class="container">
-    <h1>Feedback</h1>
+    <!--<h1>Feedback</h1>-->
 
     <div class="alert alert-success" role="alert" th:if="${success}">
         <p th:utext="#{screen.message.feedback.page.alertSuccess}"> </p>
     </div>
 
-    <p th:utext="#{screen.message.feedback.page.description}"> </p>
+   <!-- <p th:utext="#{screen.message.feedback.page.description}"> </p>-->
+
+    <div th:replace="fragments/page-header :: page-header(title='Feedback', description=#{screen.message.feedback.page.description})">
+    </div>
+
+
 
     <div class="panel panel-default">
         <div class="panel-body">

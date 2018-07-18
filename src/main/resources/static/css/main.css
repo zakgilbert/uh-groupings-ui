@@ -34,6 +34,7 @@ h3 {
 
 .panel-title {
     font-size: 25px;
+    color: #1c6070;
 }
 
 .loader {
@@ -464,8 +465,9 @@ td.uh-pre {
     background-color: #07575b;
 }*/
 
-.nav.nav-tabs > li.active > a {
+.nav.nav-tabs > li.active {
     border-bottom: none;
+    border:none;
 }
 
 @media (min-width: 768px) {
@@ -528,4 +530,14 @@ td.uh-pre {
      }
 }
 
+.table>tbody>tr>td{
+    background-color: #fff;
+}
 
+.boarder{
+    border: 1px solid #ddd;
+}
+
+.nav-tabs>li>a{
+    margin-right:0;
+}
