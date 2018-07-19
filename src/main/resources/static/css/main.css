@@ -534,16 +534,25 @@ td.uh-pre {
     background-color: #fff;
 }
 
-.boarder{
+.border{
     border: 1px solid #ddd;
 }
 
-.nav-tabs>li>a{
+.nav-tabs > li > a {
     margin-right:0;
+    width: 197px;
+}
+
+.nav-tabs > li.active > a {
+    width: 199px;
 }
 
 #home-page-description{
     margin-bottom: 30px;
     padding-left: 5px;
     padding-right: 5px;
+}
+
+.nav-tabs>li>a:hover {
+    border-bottom: none;
 }

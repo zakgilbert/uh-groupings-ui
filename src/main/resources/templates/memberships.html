@@ -11,17 +11,17 @@
 
     <!-- <p th:text="#{screen.message.home.test('{{currentUsername}}')}">Hi my name is aaron</p> -->
 
-    <div th:replace="fragments/page-header :: page-header(title='Manage My Membership', description=#{screen.message.memberships.page.description})">
+    <div th:replace="fragments/page-header :: page-header(title='Manage My Memberships', description=#{screen.message.memberships.page.description})">
     </div>
 
     <ul class="nav nav-tabs" id="memTab">
-        <li role="presentation" class="active boarder" data-toggle="tooltip" data-placement="top">
+        <li role="presentation" class="active border" data-toggle="tooltip" data-placement="top">
             <a href="#belong" data-toggle="tab" role="tab">
                 <!--<i class="fa fa-users fa-3x" aria-hidden="true"></i>-->
                 Current Memberships
             </a>
         </li>
-        <li role="presentation" class="boarder" data-toggle="tooltip" data-placement="top">
+        <li role="presentation" class="border" data-toggle="tooltip" data-placement="top">
             <a href="#optOut" data-toggle="tab" role="tab">
                 <!--<i class="fa fa-user-plus fa-3x" aria-hidden="true"></i>-->
                 Membership Opportunities
