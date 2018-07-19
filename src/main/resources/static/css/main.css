@@ -541,3 +541,9 @@ td.uh-pre {
 .nav-tabs>li>a{
     margin-right:0;
 }
+
+#home-page-description{
+    margin-bottom: 30px;
+    padding-left: 5px;
+    padding-right: 5px;
+}

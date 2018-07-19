@@ -16,12 +16,15 @@
 
    <!-- <p th:utext="#{screen.message.feedback.page.description}"> </p>-->
 
-    <div th:replace="fragments/page-header :: page-header(title='Feedback', description=#{screen.message.feedback.page.description})">
-    </div>
-
-
+    <!--<div th:replace="fragments/page-header :: page-header(title='Feedback', description=#{screen.message.feedback.page.description})">
+    </div>-->
 
     <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">Feedback</h2>
+            <p class="text-left" th:utext="#{screen.message.feedback.page.description}"> </p>
+
+        </div>
         <div class="panel-body">
             <form class="form-horizontal" th:action="@{/feedback}" th:object="${feedback}" method="post">
                 <div class="form-group" id="typeError">
