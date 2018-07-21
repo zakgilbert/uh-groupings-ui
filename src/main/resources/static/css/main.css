@@ -556,3 +556,21 @@ td.uh-pre {
 .nav-tabs>li>a:hover {
     border-bottom: none;
 }
+
+@media (max-width: 288px) {
+    #header-padding {
+        margin-top: 40px;
+
+    }
+
+    #header-smaller {
+        font-size: x-large;
+    }
+    #header-margin{
+        margin-top: 45px;
+    }
+
+    .smaller-header{
+        font-size: large;
+    }
+}
