@@ -574,3 +574,9 @@ td.uh-pre {
         font-size: large;
     }
 }
+
+@media (max-width: 287px){
+    .navbar-brand.uh-nav-app-name{
+        font-size: 22px;
+    }
+}
