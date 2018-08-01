@@ -514,6 +514,7 @@ td.uh-pre {
     }
 }
 
+<<<<<<< HEAD
 .panel {
      -webkit-box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
      -moz-box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
@@ -583,3 +584,27 @@ td.uh-pre {
         font-size: 22px;
     }
 }
+=======
+/** nav-tabs on the admin page to remove border from small screen widths */
+@media (max-width: 319px) {
+    #admin-tabs > li > a {
+        border-color: transparent;
+    }
+
+    #admin-tabs > li:last-child > a {
+        /** Prevent the last tab from cutting into the panel's border */
+        margin-bottom: 1px;
+    }
+}
+
+/** nav-tabs on the memberships page to remove border from small screen widths */
+@media (max-width: 416px) {
+    #memberships-tabs > li > a {
+        border-color: transparent;
+    }
+
+    #memberships-tabs > li:last-child > a {
+        margin-bottom: 1px;
+    }
+}
+>>>>>>> master

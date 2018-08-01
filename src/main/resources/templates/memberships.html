@@ -14,6 +14,7 @@
     <div th:replace="fragments/page-header :: page-header(title='Manage My Memberships', description=#{screen.message.memberships.page.description})">
     </div>
 
+<<<<<<< HEAD
     <ul class="nav nav-tabs" id="memTab">
         <li role="presentation" class="active border" data-toggle="tooltip" data-placement="top">
             <a href="#belong" data-toggle="tab" role="tab">
@@ -31,6 +32,25 @@
     <div id="overlay" ng-show="loading">
         <div class="loader" ng-show="loading"></div>
     </div>
+=======
+            <ul class="nav nav-tabs " id="memberships-tabs">
+                <li role="presentation" class="active" data-toggle="tooltip" data-placement="top">
+                    <a href="#belong" data-toggle="tab" role="tab">
+                        <!--<i class="fa fa-users fa-3x" aria-hidden="true"></i>-->
+                        Current Memberships
+                    </a>
+                </li>
+                <li role="presentation" data-toggle="tooltip" data-placement="top">
+                    <a href="#optOut" data-toggle="tab" role="tab">
+                        <!--<i class="fa fa-user-plus fa-3x" aria-hidden="true"></i>-->
+                        Membership Opportunities
+                    </a>
+                </li>
+            </ul>
+            <div id="overlay" ng-show="loading">
+                <div class="loader" ng-show="loading"></div>
+            </div>
+>>>>>>> master
 
     <!-- Content that should be viewed by the nav tabs -->
     <div class="tab-content">
