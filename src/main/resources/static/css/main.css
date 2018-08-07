@@ -34,6 +34,7 @@ h3 {
 
 .panel-title {
     font-size: 25px;
+    color: #1c6070;
 }
 
 .loader {
@@ -48,26 +49,6 @@ h3 {
     top: 50%;
     margin-left: -5.357em;
     margin-top: -5.357em;
-}
-
-::-webkit-input-placeholder {
-    /* Chrome/Opera/Safari */
-    font-weight: bold;
-}
-
-::-moz-placeholder {
-    /* Firefox 19+ */
-    font-weight: bold;
-}
-
-:-ms-input-placeholder {
-    /* IE 10+ */
-    font-weight: bold;
-}
-
-:-moz-placeholder {
-    /* Firefox 18- */
-    font-weight: bold;
 }
 
 #overlay {
@@ -489,8 +470,9 @@ td.uh-pre {
     background-color: #07575b;
 }*/
 
-.nav.nav-tabs > li.active > a {
+.nav.nav-tabs > li.active {
     border-bottom: none;
+    border:none;
 }
 
 @media (min-width: 768px) {
@@ -538,6 +520,77 @@ td.uh-pre {
     }
 }
 
+<<<<<<< HEAD
+.panel {
+     -webkit-box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+     -moz-box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+     box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 303px) {
+    #title-header{
+        font-size: xx-large;
+    }
+
+    #line-spacing{
+         line-height: 1;
+     }
+}
+
+@media (max-width: 768px){
+    #title-header{
+        margin-top: 0px;
+    }
+}
+
+.table>tbody>tr>td{
+    background-color: #fff;
+}
+
+.border{
+    border: 1px solid #ddd;
+}
+
+.nav-tabs > li > a {
+    margin-right:0;
+    width: 197px;
+}
+
+.nav-tabs > li.active > a {
+    width: 199px;
+}
+
+#home-page-description{
+    margin-bottom: 30px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.nav-tabs>li>a:hover {
+    border-bottom: none;
+}
+
+@media (max-width: 288px) {
+    #header-padding {
+        margin-top: 40px;
+
+    }
+
+    #header-smaller {
+        font-size: x-large;
+    }
+
+    .smaller-header{
+        font-size: large;
+    }
+}
+
+@media (max-width: 287px){
+    .navbar-brand.uh-nav-app-name{
+        font-size: 22px;
+    }
+}
+=======
 /** nav-tabs on the admin page to remove border from small screen widths */
 @media (max-width: 319px) {
     #admin-tabs > li > a {
@@ -560,3 +613,4 @@ td.uh-pre {
         margin-bottom: 1px;
     }
 }
+>>>>>>> master

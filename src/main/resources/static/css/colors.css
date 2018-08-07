@@ -123,3 +123,59 @@ a:hover {
     background-color: #e3e3e3;
     color: #9B7506;
 }
+
+body{
+background: url("../images/background.png") repeat 0px 0px #f0f0f0;
+}
+
+.jumbotron{
+    background: #f5f5f5;
+    border-color: #b5bcc7;
+}
+
+.btn-default{
+    background: #6fa9be;
+    border-color: #5a9cb4;
+    color: white;
+}
+
+.well{
+    background: #f5f5f5;
+    border-color: #e3e3e3;
+}
+
+#uh-nav-name{
+    color: black;
+}
+
+h1, h2{
+    color: #1c6070;
+}
+
+.text-left{
+    /*font-size: 1em;*/
+    color: #1c6070
+}
+
+.panel-default > .panel-heading{
+    background: #e5eef1;
+}
+
+.members-tab-title{
+    color: inherit;
+}
+
+thead > tr > th {
+    background: #f5f5f5;
+    font-size: 0.917em;
+}
+
+a:hover{
+    color: #003f59
+}
+
+/*
+.panel-default > .panel-heading {
+    background-color: #1c6070;
+    color: #999999;
+}*/

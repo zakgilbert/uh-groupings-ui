@@ -28,7 +28,7 @@
                 <li><a th:href="@{/login}" sec:authorize="!isAuthenticated()">Login</a></li>
                 <li class="app-logout">
                     <form sec:authorize="isAuthenticated()" action="/logout" th:action="@{/logout}" method="post" id="logout_form">
-                        <button class="btn btn-link" type="submit" style="text-decoration: none;">Logout (<span id="name" sec:authentication="name"></span>)</button>
+                        <button class="btn btn-link" type="submit" style="text-decoration: none;">Logout (<span style="color:#0076a5;" id="name" sec:authentication="name"></span>)</button>
                     </form>
                 </li>
             </ul>
