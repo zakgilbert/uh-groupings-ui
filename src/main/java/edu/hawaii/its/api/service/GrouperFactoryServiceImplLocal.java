@@ -40,6 +40,7 @@ import edu.internet2.middleware.grouperClient.ws.beans.WsGetGroupsResults;
 import edu.internet2.middleware.grouperClient.ws.beans.WsGetMembersResult;
 import edu.internet2.middleware.grouperClient.ws.beans.WsGetMembersResults;
 import edu.internet2.middleware.grouperClient.ws.beans.WsGetMembershipsResults;
+import edu.internet2.middleware.grouperClient.ws.beans.WsGetSubjectsResults;
 import edu.internet2.middleware.grouperClient.ws.beans.WsGroup;
 import edu.internet2.middleware.grouperClient.ws.beans.WsGroupLookup;
 import edu.internet2.middleware.grouperClient.ws.beans.WsGroupSaveResults;
@@ -95,6 +96,9 @@ public class GrouperFactoryServiceImplLocal implements GrouperFactoryService {
 
     @Value("${groupings.api.listserv}")
     private String LISTSERV;
+
+    @Value("${groupings.api.ldap}")
+    private String LDAP;
 
     @Value("${groupings.api.trio}")
     private String TRIO;
@@ -608,6 +612,9 @@ public class GrouperFactoryServiceImplLocal implements GrouperFactoryService {
         if (grouping.isListservOn()) {
             wsGetAttributeAssignmentsResults = addAssignmentResults(wsGetAttributeAssignmentsResults, LISTSERV);
         }
+        if (grouping.isLdapOn()) {
+            wsGetAttributeAssignmentsResults = addAssignmentResults(wsGetAttributeAssignmentsResults, LDAP);
+        }
         if (grouping.isOptInOn()) {
             wsGetAttributeAssignmentsResults = addAssignmentResults(wsGetAttributeAssignmentsResults, OPT_IN);
         }
@@ -693,6 +700,11 @@ public class GrouperFactoryServiceImplLocal implements GrouperFactoryService {
 
             {
                 grouping.setListservOn(onOrrOff);
+
+            } else if (attributeDefNameName.equals(LDAP))
+
+            {
+                grouping.setLdapOn(onOrrOff);
 
             } else if (attributeDefNameName.equals(OPT_IN))
 
@@ -983,6 +995,8 @@ public class GrouperFactoryServiceImplLocal implements GrouperFactoryService {
     private boolean setGroupingAttribute(Grouping grouping, String attributeName, boolean on) {
         if (attributeName.equals(LISTSERV)) {
             grouping.setListservOn(on);
+        } else if (attributeName.equals(LDAP)) {
+            grouping.setLdapOn(on);
         } else if (attributeName.equals(OPT_IN)) {
             grouping.setOptInOn(on);
         } else if (attributeName.equals(OPT_OUT)) {
@@ -1156,6 +1170,11 @@ public class GrouperFactoryServiceImplLocal implements GrouperFactoryService {
     @Override
     public String toString() {
         return "GrouperFactoryServiceImplLocal [SETTINGS=" + SETTINGS + "]";
+    }
+
+    public WsGetSubjectsResults makeWsGetSubjectsResults(WsSubjectLookup lookup) {
+        //todo Not needed for getUserAttributes function, will implement if necessary
+        return null;
     }
 
     @Override public WsGroupSaveResults addCompositeGroup(String username, String parentGroupPath, String compositeType,

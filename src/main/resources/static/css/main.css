@@ -225,6 +225,7 @@ td.uh-pre {
 }
 
 #footerBottom {
+    margin-top: 25px;
     display: relative;
     padding: 0px 15px;
 
@@ -469,6 +470,11 @@ td.uh-pre {
 
     .xs-left-sm-right {
         float: left;
+        margin-top: 5px;
+    }
+
+    .panel > .panel-heading > div.row > div > input {
+        margin-top: 5px;
     }
 }
 
@@ -525,8 +531,32 @@ td.uh-pre {
     -webkit-border-bottom-left-radius: 0;
     -webkit-border-bottom-right-radius: 0;
 }
+
 @media (max-width: 1200px) {
     .membership-btn-alignment {
         display: none;
+    }
+}
+
+/** nav-tabs on the admin page to remove border from small screen widths */
+@media (max-width: 319px) {
+    #admin-tabs > li > a {
+        border-color: transparent;
+    }
+
+    #admin-tabs > li:last-child > a {
+        /** Prevent the last tab from cutting into the panel's border */
+        margin-bottom: 1px;
+    }
+}
+
+/** nav-tabs on the memberships page to remove border from small screen widths */
+@media (max-width: 416px) {
+    #memberships-tabs > li > a {
+        border-color: transparent;
+    }
+
+    #memberships-tabs > li:last-child > a {
+        margin-bottom: 1px;
     }
 }

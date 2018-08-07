@@ -21,6 +21,7 @@ import edu.internet2.middleware.grouperClient.api.GcGetGrouperPrivilegesLite;
 import edu.internet2.middleware.grouperClient.api.GcGetGroups;
 import edu.internet2.middleware.grouperClient.api.GcGetMembers;
 import edu.internet2.middleware.grouperClient.api.GcGetMemberships;
+import edu.internet2.middleware.grouperClient.api.GcGetSubjects;
 import edu.internet2.middleware.grouperClient.api.GcGroupSave;
 import edu.internet2.middleware.grouperClient.api.GcHasMember;
 import edu.internet2.middleware.grouperClient.api.GcStemSave;
@@ -38,6 +39,7 @@ import edu.internet2.middleware.grouperClient.ws.beans.WsGetGrouperPrivilegesLit
 import edu.internet2.middleware.grouperClient.ws.beans.WsGetGroupsResults;
 import edu.internet2.middleware.grouperClient.ws.beans.WsGetMembersResults;
 import edu.internet2.middleware.grouperClient.ws.beans.WsGetMembershipsResults;
+import edu.internet2.middleware.grouperClient.ws.beans.WsGetSubjectsResults;
 import edu.internet2.middleware.grouperClient.ws.beans.WsGroup;
 import edu.internet2.middleware.grouperClient.ws.beans.WsGroupDetail;
 import edu.internet2.middleware.grouperClient.ws.beans.WsGroupLookup;
@@ -86,7 +88,8 @@ public class GrouperFactoryServiceImpl implements GrouperFactoryService {
     }
 
     @Override
-    public WsGroupSaveResults addCompositeGroup(String username, String parentGroupPath, String compositeType, String leftGroupPath, String rightGroupPath) {
+    public WsGroupSaveResults addCompositeGroup(String username, String parentGroupPath, String compositeType,
+            String leftGroupPath, String rightGroupPath) {
         WsGroupToSave groupToSave = new WsGroupToSave();
         WsGroup group = new WsGroup();
         WsGroupDetail wsGroupDetail = new WsGroupDetail();
@@ -145,7 +148,7 @@ public class GrouperFactoryServiceImpl implements GrouperFactoryService {
     @Override
     public WsStemSaveResults makeWsStemSaveResults(String username, String stemPath) {
         String[] splitString = stemPath.split(":");
-        String splitStringName = splitString[splitString.length -1];
+        String splitStringName = splitString[splitString.length - 1];
 
         WsStemToSave stemToSave = new WsStemToSave();
         WsStemLookup stemLookup = new WsStemLookup();
@@ -203,7 +206,7 @@ public class GrouperFactoryServiceImpl implements GrouperFactoryService {
             return makeWsAddMemberResults(group, lookup, personToAdd.getUsername());
         }
 
-        if(personToAdd.getUuid() == null){
+        if (personToAdd.getUuid() == null) {
             throw new NullPointerException("The person is required to have either a username or a uuid");
         }
 
@@ -258,7 +261,7 @@ public class GrouperFactoryServiceImpl implements GrouperFactoryService {
             return makeWsDeleteMemberResults(group, lookup, personToDelete.getUsername());
         }
 
-        if(personToDelete.getUuid() == null){
+        if (personToDelete.getUuid() == null) {
             throw new NullPointerException("The person is required to have either a username or a uuid");
         }
 
@@ -400,7 +403,7 @@ public class GrouperFactoryServiceImpl implements GrouperFactoryService {
             return makeWsHasMemberResults(group, person.getUsername());
         }
 
-        if(person.getUuid() == null){
+        if (person.getUuid() == null) {
             throw new NullPointerException("The person is required to have either a username or a uuid");
         }
 
@@ -531,11 +534,18 @@ public class GrouperFactoryServiceImpl implements GrouperFactoryService {
                 .execute();
     }
 
-    /**
-     * Creates a request to find attribute definition names.
-     * @param scope: the path containing the attribute definition names
-     * @return the result with the assigned scope
-     */
+    public WsGetSubjectsResults makeWsGetSubjectsResults(WsSubjectLookup lookup) {
+
+        return new GcGetSubjects()
+                .addSubjectAttributeName("uid")
+                .addSubjectAttributeName("cn")
+                .addSubjectAttributeName("sn")
+                .addSubjectAttributeName("givenName")
+                .addSubjectAttributeName("uhuuid")
+                .addWsSubjectLookup(lookup)
+                .execute();
+    }
+
     @Override
     public WsFindAttributeDefNamesResults makeWsFindAttributeDefNamesResults(String scope) {
         return new GcFindAttributeDefNames()

@@ -7,8 +7,9 @@
             <!-- Export to CSV button -->
             <div class="col-md-6 col-sm-6 col-xs-12" style="padding: 0;">
                 <div class="pull-left">
-                    <button type="button" class="btn btn-primary" ng-click="export(groupingExclude, selectedGrouping.name, 'exclude')">
-                        Export To CSV
+                    <button type="button" class="btn btn-primary" th:title="#{screen.message.common.tooltip.export.csv}"
+                            ng-click="exportGroupToCsv(groupingExclude, selectedGrouping.name, 'exclude')">
+                        Export to CSV
                     </button>
                 </div>
             </div>
@@ -18,7 +19,7 @@
                     <input class="form-control" placeholder="Filter Members..." type="text"
                            title="Filter Members"
                            ng-model="excludeQuery"
-                           ng-change="filter(groupingExclude, 'pagedItemsExclude', 'currentPageExclude', 'excludeQuery')"/>
+                           ng-change="filter(groupingExclude, 'pagedItemsExclude', 'currentPageExclude', excludeQuery)"/>
                 </div>
             </div>
         </div>
@@ -39,9 +40,9 @@
                     UH Username
                     <i class="fa sort-icon" ng-show="columnSort.groupingExclude.property === 'username'" ng-class="{ reverse: columnSort.groupingExclude.reverse }"></i>
                 </th>
-                <th ng-click="sortBy('groupingExclude', 'pagedItemsExclude', 'basis')" class="clickable">
+                <th ng-click="sortBy('groupingExclude', 'pagedItemsExclude', 'inBasis')" class="clickable">
                     In Basis?
-                    <i class="fa sort-icon" ng-show="columnSort.groupingExclude.property === 'basis'" ng-class="{ reverse: columnSort.groupingExclude.reverse }"></i>
+                    <i class="fa sort-icon" ng-show="columnSort.groupingExclude.property === 'inBasis'" ng-class="{ reverse: columnSort.groupingExclude.reverse }"></i>
                 </th>
             </tr>
             </thead>
@@ -54,8 +55,8 @@
                           onmouseover="$(this).tooltip('show')" style="margin-right: 10px;"
                           tabindex="0"
                           th:title="#{screen.message.common.tooltip.remove.exclude}"
-                          ng-keypress="$event.keyCode === 13 ? removeMember('Exclude', $index) : null"
-                          ng-click="removeMember('Exclude', $index)">
+                          ng-keypress="$event.keyCode === 13 ? removeMember('Exclude', currentPageExclude, $index) : null"
+                          ng-click="removeMember('Exclude', currentPageExclude, $index)">
                     </span>
                 </td>
                 <td>{{e.uuid}}</td>
@@ -70,46 +71,46 @@
                         </i>
                     </div>
                 </td>
-                <td class="text-center" style="width: 3%">{{e.basis}}</td>
+                <td class="text-center" style="width: 3%">{{e.inBasis}}</td>
             </tr>
             </tbody>
             <tfoot>
             <!-- Pagination control -->
             <td colspan="6">
                 <ul class="pagination pull-right">
-                    <li ng-class="{disabled: (currentPageExclude) == 0 }">
-                        <a class="clickable" ng-click="currentPage('First','currentPageExclude','pagedItemsExclude')">«« First</a>
+                    <li ng-class="{ disabled: disableFirstAndPrev(currentPageExclude) }">
+                        <a class="clickable" ng-click="setPage('First','currentPageExclude','pagedItemsExclude')">«« First</a>
                     </li>
-                    <li ng-class="{disabled: (currentPageExclude) == 0 }">
-                        <a class="clickable" ng-click="currentPage('Prev','currentPageExclude','pagedItemsExclude')">« Prev</a>
+                    <li ng-class="{ disabled: disableFirstAndPrev(currentPageExclude) }">
+                        <a class="clickable" ng-click="setPage('Prev','currentPageExclude','pagedItemsExclude')">« Prev</a>
                     </li>
-                    <li ng-repeat="n in range(pagedItemsExclude.length, currentPageExclude - gap, currentPageExclude + gap + 1) "
-                        ng-class="{active: n == currentPageExclude}"
-                        ng-click="currentPage('Set','currentPageExclude','pagedItemsExclude')">
+                    <li ng-repeat="n in pageRange(currentPageExclude, pagedItemsExclude.length, gap)"
+                        ng-class="{ active: n === currentPageExclude }"
+                        ng-click="setPage('Set','currentPageExclude','pagedItemsExclude')">
                         <a class="clickable" ng-bind="n + 1"></a>
                     </li>
-                    <li ng-class="{disabled: (currentPageExclude) == pagedItemsExclude.length - 1 || pagedItemsExclude.length == 0}">
-                        <a class="clickable" ng-click="currentPage('Next','currentPageExclude','pagedItemsExclude')">Next »</a>
+                    <li ng-class="{ disabled: disableNextAndLast(pagedItemsExclude, currentPageExclude) }">
+                        <a class="clickable" ng-click="setPage('Next','currentPageExclude','pagedItemsExclude')">Next »</a>
                     </li>
-                    <li ng-class="{disabled: (currentPageExclude) == pagedItemsExclude.length - 1 || pagedItemsExclude.length == 0}">
-                        <a class="clickable" ng-click="currentPage('Last','currentPageExclude','pagedItemsExclude')">Last »»</a>
+                    <li ng-class="{ disabled: disableNextAndLast(pagedItemsExclude, currentPageExclude) }">
+                        <a class="clickable" ng-click="setPage('Last','currentPageExclude','pagedItemsExclude')">Last »»</a>
                     </li>
                 </ul>
+                <!-- Input to add a user to the exclude group -->
+                <div class="pull-left col-lg-4 col-md-5 col-sm-5 col-xs-12 input-group input-inline-pagination">
+                    <form ng-submit="addMember('Exclude')">
+                        <div class="input-group">
+								    <input class="form-control" type="text" placeholder="UH Username"
+								           title="Enter UH username to exclude"
+								           ng-model="userToAdd"/>
+								    <div class="input-group-btn">
+								        <button class="btn btn-primary" type="submit">Add</button>
+								    </div>
+                        </div>
+                    </form>
+                </div>                                
             </td>
             </tfoot>
         </table>
-    </div>
-    <!-- Input to add a user to the exclude group -->
-    <div class="col-lg-4 col-md-6" style="padding: inherit;">
-        <form ng-submit="addMember('Exclude')">
-            <div class="input-group">
-                <input class="form-control" type="text" placeholder="Enter UH username to exclude"
-                       title="Enter UH username to exclude"
-                       ng-model="addUser"/>
-                <div class="input-group-btn">
-                    <button class="btn btn-primary" type="submit">Add</button>
-                </div>
-            </div>
-        </form>
     </div>
 </th:block>

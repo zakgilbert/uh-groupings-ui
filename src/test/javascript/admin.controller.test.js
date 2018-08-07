@@ -1,140 +1,143 @@
-describe("AdminJsController", function () {
+describe("AdminController", function () {
 
-    beforeEach(module('adminApp'));
+    // Set up mock element for setting the current user
+    var mockElement = document.createElement("div");
+    mockElement.innerHTML = "jdoe";
+    document.getElementById = jasmine.createSpy("name").and.returnValue(mockElement);
+
+    beforeEach(module("UHGroupingsApp"));
+    beforeEach(module("ngMockE2E"));
 
     var scope;
     var controller;
-    var dataProvider;
-    var dataDelete;
-    var dataUpdater
+    var httpBackend;
+    var BASE_URL;
 
-    beforeEach(inject(function ($rootScope, $controller, dataProvider, dataDelete, dataUpdater) {
+    beforeEach(inject(function ($rootScope, $controller, _BASE_URL_, _$httpBackend_) {
         scope = $rootScope.$new();
-        controller = $controller('AdminJsController', {
-            $scope: scope,
-            dataProvider: dataProvider,
-            deleteData: dataDelete,
-            dataUpdater: dataUpdater
+        controller = $controller("AdminJsController", {
+            $scope: scope
         });
+        httpBackend = _$httpBackend_;
+        BASE_URL = _BASE_URL_;
     }));
 
-    it("checkInitFunction", function () {
-
-        var dummyElement = document.createElement('span');
-        document.getElementById = jasmine.createSpy('HTML Element').and.returnValue(dummyElement);
-
-        spyOn(scope, "init").and.callFake(function () {
-            scope.list.push({
-                "basis": "\u2716",
-                "name": "Jake Nal",
-                "uuid": 1021521,
-                "username": "jnal"
-            });
-        });
-
+    it("should define the admin controller", function () {
         expect(controller).toBeDefined();
-        expect(scope.list).toBeDefined();
-        expect(scope.list.length).toEqual(0);
-
-        // What we are testing
-        scope.init();
-
-        expect(scope.init).toHaveBeenCalled();
-        expect(scope.list).toBeDefined();
-        expect(scope.list.length).toEqual(1);
-
-        expect(scope.list[0].name).toEqual("Jake Nal");
     });
 
-    it("Check Add Function", function () {
-        spyOn(scope, "init").and.callFake(function () {
-            scope.list.push({
-                "basis": "\u2716",
-                "name": "Jake Nal",
-                "uuid": 1021521,
-                "username": "jnal"
-            });
-        });
-
-        spyOn(scope, "add").and.callFake(function () {
-            scope.list.push({
-                "basis": "\u2716",
-                "name": "Jacob Akek",
-                "uuid": 1024321,
-                "username": "jakek"
-            });
-        });
-
-        // What we are testing
-        scope.init();
-        scope.add("jakek");
-
-        expect(scope.add).toHaveBeenCalled();
-        expect(scope.list.length).toEqual(2);
-        expect(scope.list[1].name).toEqual("Jacob Akek");
+    it("should define the variables and methods in the table controller", function () {
+        expect(scope.columnSort).toBeDefined();
+        expect(scope.groupToPages).toBeDefined();
+        expect(scope.filter).toBeDefined();
+        expect(scope.pageRange).toBeDefined();
+        expect(scope.setPage).toBeDefined();
+        expect(scope.disableFirstAndPrev).toBeDefined();
+        expect(scope.disableNextAndLast).toBeDefined();
+        expect(scope.sortBy).toBeDefined();
     });
 
+    it("should define the variables in the general controller", function () {
+        expect(scope.groupingsList).toBeDefined();
+        expect(scope.pagedItemsGroupings).toBeDefined();
+        expect(scope.currentPageGroupings).toBeDefined();
 
-    it("Check Remove Function", function () {
-        spyOn(scope, "init").and.callFake(function () {
-            scope.list.push({
-                "basis": "\u2716",
-                "name": "Jake Nal",
-                "uuid": 1021521,
-                "username": "jnal"
-            }, {
-                "basis": "\u2716",
-                "name": "Jacob Akek",
-                "uuid": 1024321,
-                "username": "jakek"
-            });
-        });
+        expect(scope.groupingBasis).toBeDefined();
+        expect(scope.pagedItemsBasis).toBeDefined();
+        expect(scope.currentPageBasis).toBeDefined();
 
-        spyOn(scope, "remove").and.callFake(function () {
-            if (scope.list.length > 1) {
-                scope.list.pop();
-            }
-        });
+        expect(scope.groupingMembers).toBeDefined();
+        expect(scope.pagedItemsMembers).toBeDefined();
+        expect(scope.currentPageMembers).toBeDefined();
 
-        expect(controller).toBeDefined();
-        expect(scope.list).toBeDefined();
-        expect(scope.list.length).toEqual(0);
+        expect(scope.groupingInclude).toBeDefined();
+        expect(scope.pagedItemsInclude).toBeDefined();
+        expect(scope.currentPageInclude).toBeDefined();
 
-        scope.init();
-        expect(scope.init).toHaveBeenCalled();
+        expect(scope.groupingExclude).toBeDefined();
+        expect(scope.pagedItemsExclude).toBeDefined();
+        expect(scope.currentPageExclude).toBeDefined();
 
-        expect(scope.list.length).toEqual(2);
-        scope.remove(1);
-        expect(scope.remove).toHaveBeenCalled();
-        expect(scope.list.length).toEqual(1);
-        expect(scope.list[0].username).toEqual("jnal");
+        expect(scope.groupingOwners).toBeDefined();
+        expect(scope.pagedItemsOwners).toBeDefined();
+        expect(scope.currentPageOwners).toBeDefined();
+
+        expect(scope.allowOptIn).toBeDefined();
+        expect(scope.allowOptOut).toBeDefined();
+        expect(scope.listserv).toBeDefined();
+        expect(scope.ldap).toBeDefined();
+
+        expect(scope.showGrouping).toBeDefined();
+
+        expect(scope.loading).toBeDefined();
     });
 
-    it("Check Fail Remove Function", function () {
-        spyOn(scope, "init").and.callFake(function () {
-            scope.list.push({
-                "basis": "\u2716",
-                "name": "Jake Nal",
-                "uuid": 1021521,
-                "username": "jnal"
+    it("should define the methods in the general controller", function () {
+        expect(scope.displayGrouping).toBeDefined();
+        expect(scope.getGroupingInformation).toBeDefined();
+        expect(scope.createApiErrorModal).toBeDefined();
+        expect(scope.closeApiError).toBeDefined();
+        expect(scope.addInBasis).toBeDefined();
+        expect(scope.addWhereListed).toBeDefined();
+        expect(scope.addMember).toBeDefined();
+        expect(scope.updateAddMember).toBeDefined();
+        expect(scope.isInAnotherList).toBeDefined();
+        expect(scope.createCheckModal).toBeDefined();
+        expect(scope.proceedCheckModal).toBeDefined();
+        expect(scope.closeCheckModal).toBeDefined();
+        expect(scope.addOwner).toBeDefined();
+        expect(scope.createAddModal).toBeDefined();
+        expect(scope.closeAddModal).toBeDefined();
+        expect(scope.removeMember).toBeDefined();
+        expect(scope.removeOwner).toBeDefined();
+        expect(scope.proceedRemoveUser).toBeDefined();
+        expect(scope.cancelRemoveUser).toBeDefined();
+        expect(scope.returnToGroupingsList).toBeDefined();
+        expect(scope.resetGroupingInformation).toBeDefined();
+        expect(scope.createPreferenceInfoModal).toBeDefined();
+        expect(scope.closePreferenceInfo).toBeDefined();
+        expect(scope.updateAllowOptOut).toBeDefined();
+        expect(scope.updateAllowOptIn).toBeDefined();
+        expect(scope.updateListserv).toBeDefined();
+        expect(scope.updateLdap).toBeDefined();
+        expect(scope.createPreferenceErrorModal).toBeDefined();
+        expect(scope.closePreferenceError).toBeDefined();
+        expect(scope.resetFields).toBeDefined();
+        expect(scope.exportGroupToCsv).toBeDefined();
+        expect(scope.convertListToCsv).toBeDefined();
+        expect(scope.showWarningRemovingSelf).toBeDefined();
+    });
+
+    it("should correctly set the currentUser", function () {
+        expect(scope.currentUser).toEqual("jdoe");
+    });
+
+    describe("displayAdmins", function () {
+        it("should call resetGroupingInformation", function () {
+            spyOn(scope, "resetGroupingInformation").and.callThrough();
+            scope.displayAdmins();
+
+            expect(scope.resetGroupingInformation).toHaveBeenCalled();
+        });
+
+        it("should repaginate the groupings list table (since the filter is reset)", function () {
+            spyOn(scope, "groupToPages").and.callThrough();
+            scope.displayAdmins();
+
+            expect(scope.groupToPages).toHaveBeenCalledWith(scope.groupingsList);
+        });
+
+        describe("a user is currently looking at a selected grouping", function () {
+            beforeEach(function () {
+                scope.showGrouping = true;
+            });
+
+            it("should no longer show the selected grouping", function () {
+                scope.displayAdmins();
+
+                expect(scope.showGrouping).toBe(false);
             });
         });
-
-        spyOn(scope, "remove").and.callFake(function () {
-            if (scope.list.length > 1) {
-                scope.list.pop();
-            }
-        });
-
-        expect(controller).toBeDefined();
-        expect(scope.list).toBeDefined();
-        expect(scope.list.length).toEqual(0);
-
-        scope.init();
-
-        expect(scope.list.length).toEqual(1);
-        scope.remove(0);
-        expect(scope.list.length).toEqual(1);
     });
 
 
