@@ -126,7 +126,6 @@
             $scope.seconds = 300;
             dataProvider.loadData(function (res) {
                 console.log("Success in pinging tomcat");
-            },function (res){console.log("Error in pinging tomcat")
             }, endpoint);
         }
 

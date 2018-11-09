@@ -8,7 +8,7 @@
      * @param dataProvider - the service that provides GET and POST requests for getting or updating data
      * @param BASE_URL - the constant base URL for endpoints
      */
-    function MembershipJsController($scope, $window, $controller, dataProvider, BASE_URL) {
+    function MembershipJsController($scope, $http, $window, $controller, dataProvider, BASE_URL) {
 
         $scope.membershipsList = [];
         $scope.pagedItemsMemberships = [];
@@ -35,7 +35,9 @@
         $scope.init = function () {
             var endpoint = BASE_URL + "groupingAssignment";
 
-            dataProvider.loadData(function (res) {
+            dataProvider.loadData(function(res){
+                res = res.data;
+
                 if (_.isNull(res)) {
                     $scope.createApiErrorModal();
                 } else {
@@ -48,9 +50,7 @@
                     $scope.optOutList = res.groupingsToOptOutOf;
                 }
                 $scope.loading = false;
-            }, function (res) {
-                dataProvider.handleException({ exceptionMessage: res.exceptionMessage }, "feedback/error", "feedback");
-            }, endpoint);
+            },endpoint);
         };
 
         /**
@@ -82,6 +82,7 @@
             $scope.loading = true;
 
             dataProvider.updateData(function (res) {
+                res = res.data
                 if (_.startsWith(res[0].resultCode, "FAILURE")) {
                     alert("Failed to opt out");
                     $scope.loading = false;
@@ -105,6 +106,7 @@
             $scope.loading = true;
 
             dataProvider.updateData(function (res) {
+                console.log(res);
                 if (_.startsWith(res[0].resultCode, "FAILURE")) {
                     alert("Failed to opt in");
                     $scope.loading = false;

@@ -11,12 +11,11 @@
              * @param {string} url - the URL to perform the request on
              * @param {function} callback - the function to perform on a successful request (200)
              */
-            loadData: function (callback, callError, url) {
+            loadData: function (callback,url) {
                 $http.get(encodeURI(url))
-                    .success(callback)
-                    .error(callError, function (data, status) {
-                        console.log("Error in dataProvider; status: ", status);
-                    });
+                    .then(callback)
+                    // This still needs to be rewritten
+                    .catch(console.log("Error has occurred"));
             },
 
             /**
@@ -24,12 +23,11 @@
              * @param {string} url - the URL to perform the request on
              * @param {function} callback - the function to perform on a successful request (200)
              */
-            updateData: function (callback, callError, url) {
+            updateData: function (callback, url) {
                 $http.post(encodeURI(url))
-                    .success(callback)
-                    .error(callError, function (data, status) {
-                        console.log("Error in dataProvider; status: ", status);
-                    });
+                    .then(callback)
+                    // This still needs to be rewritten
+                    .catch(console.log("Error has occurred"));
             },
 
             /**
@@ -44,7 +42,7 @@
                         "Content-Type": "application/json"
                     }
                 })
-                    .success(function () {
+                    .then(function () {
                         $window.location.href = redirectUrl;
                     });
             }
