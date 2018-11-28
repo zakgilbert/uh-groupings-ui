@@ -11,11 +11,14 @@
              * @param {string} url - the URL to perform the request on
              * @param {function} callback - the function to perform on a successful request (200)
              */
-            loadData: function (callback,url) {
+            loadData: function (response, url) {
                 $http.get(encodeURI(url))
-                    .then(callback)
-                    // This still needs to be rewritten
-                    .catch(console.log("Error has occurred"));
+                    .then(response)
+                    .catch(function onError(response){
+                        console.log("Error. Status: ",response);
+                        //Need to update redirect to trigger that the redirect to feedback page also includes error response as a stack trace.
+                        $window.location.href = "/uhgroupings/feedback";
+                    });
             },
 
             /**
@@ -26,8 +29,12 @@
             updateData: function (callback, url) {
                 $http.post(encodeURI(url))
                     .then(callback)
+                    .catch(function onError(callback){
+                        console.log("Error. Status: ",callback);
+                        $window.location.href = "/uhgroupings/feedback";
+                    });
                     // This still needs to be rewritten
-                    .catch(console.log("Error has occurred"));
+                    //.catch(console.log("Error has occurred"));
             },
 
             /**

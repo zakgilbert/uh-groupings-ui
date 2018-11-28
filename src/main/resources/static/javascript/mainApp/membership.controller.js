@@ -25,8 +25,8 @@
 
         $scope.optOutList = [];
 
-        angular.extend(this, $controller("TableJsController", { $scope: $scope }));
-        angular.extend(this, $controller("TimeoutJsController", { $scope: $scope }));
+        angular.extend(this, $controller("TableJsController", {$scope: $scope}));
+        angular.extend(this, $controller("TimeoutJsController", {$scope: $scope}));
 
         /**
          * Loads the groups the user is a member in, the groups the user is able to opt in to, and the groups the user
@@ -35,7 +35,8 @@
         $scope.init = function () {
             var endpoint = BASE_URL + "groupingAssignment";
 
-            dataProvider.loadData(function(res){
+
+            dataProvider.loadData(function (res) {
                 res = res.data;
 
                 if (_.isNull(res)) {
@@ -50,7 +51,7 @@
                     $scope.optOutList = res.groupingsToOptOutOf;
                 }
                 $scope.loading = false;
-            },endpoint);
+            }, endpoint);
         };
 
         /**
@@ -82,15 +83,14 @@
             $scope.loading = true;
 
             dataProvider.updateData(function (res) {
-                res = res.data
-                if (_.startsWith(res[0].resultCode, "FAILURE")) {
-                    alert("Failed to opt out");
-                    $scope.loading = false;
-                } else {
+                //console.log(res);
+                if(res.status === 200) {
                     $scope.init();
                 }
-            }, function (res) {
-                console.log("Error, Status Code: " + res.statusCode);
+                else {
+                    alert("Failed to opt out");
+                    $scope.loading = false;
+                }
             }, endpoint);
         };
 
@@ -106,15 +106,14 @@
             $scope.loading = true;
 
             dataProvider.updateData(function (res) {
-                console.log(res);
-                if (_.startsWith(res[0].resultCode, "FAILURE")) {
-                    alert("Failed to opt in");
-                    $scope.loading = false;
-                } else {
+                //console.log(res);
+                if(res.status === 200) {
                     $scope.init();
                 }
-            }, function (res) {
-                console.log("Error, Status Code: " + res.statusCode);
+                else {
+                    alert("Failed to opt out");
+                    $scope.loading = false;
+                }
             }, endpoint);
         };
 
@@ -125,7 +124,7 @@
          */
         $scope.membershipRequired = function (currentPage, indexClicked) {
             var groupingPath = $scope.pagedItemsMemberships[currentPage][indexClicked].path;
-            return !_.some($scope.optOutList, { path: groupingPath });
+            return !_.some($scope.optOutList, {path: groupingPath});
         };
 
     }
