@@ -47,6 +47,12 @@
 
         $scope.loading = false;
 
+        // CLINT: later, link $scope.description to the description from Grouper...
+        $scope.description = "test description; CHANGE ME!!!!";
+        $scope.tempDescription;
+        $scope.descriptionForm = false;      // used with ng-view on selected-grouping.html to toggle description editing.
+        $scope.maxDescriptionLength = 39;
+
         angular.extend(this, $controller("TableJsController", { $scope: $scope }));
 
         /**
@@ -58,7 +64,86 @@
             $scope.selectedGrouping = $scope.pagedItemsGroupings[currentPage][index];
             $scope.getGroupingInformation();
             $scope.showGrouping = true;
+
+            ////////////////////////////// TEST CLINT:
+            // $scope.description = "test description; CHANGE ME!!!!";
+            // // $scope.descriptionOn = false;
+            // $scope.descriptionForm = false;
+
+            // ****test for seeing if we can change the description field:
+            // $scope.changeDescription = function(newDescription) {
+            //     $scope.description = "I am a NEW description, sorta.";
+            //     //$scope.description = newDescription;
+            // }
+
+            // $scope.showDescription = function() {
+            //     $scope.descriptionOn = true;
+            // }
+            //
+            // $scope.hideDescription = function() {
+            //     $scope.descriptionOn = false;
+            // }
+
+
+
+            // // Probably do it this way (one function toggles both...)
+            // $scope.toggledescriptionForm = function() {
+            //     $scope.descriptionForm = true;   // ???do i need this var?
+            //     $scope.descriptionOn = true;
+            // }
+
         };
+
+        // TODO: try adding a function that either shows a Group's description, or, a generic message if description length is 0.
+        $scope.descriptionLengthWarning = function() {
+            // if ($scope.description.length > 39)
+            // {
+            //     return true;
+            // }
+            // return false;
+
+            return ($scope.description.length >= $scope.maxDescriptionLength);
+        }
+
+        /**
+         * Enable or disable editing of a Grouping's description, from selected-grouping.html.
+         */
+        $scope.editDescription = function() {
+            //$scope.descriptionForm = ($scope.descriptionForm) ? false : true;
+
+            // the next line saves the "last saved description" into a variable, to be referenced when user cancels description edit.
+            $scope.tempDescription = angular.element(document.getElementById('descriptionString')).scope().description;
+            $scope.descriptionForm = !($scope.descriptionForm);
+        }
+
+        /**
+         * Cancel the editing of a description, and revert back to base selected-grouping page.
+         */
+        $scope.cancelDescriptionEdit = function() {
+            // refer to last saved description when user cancels the edit:
+            $scope.description = $scope.tempDescription;
+
+            $scope.descriptionForm = !($scope.descriptionForm);
+        }
+
+        /**
+         * Used for placeholder text for a grouping's description
+         * @returns {string} either the description of the grouping, or, placeholder text if the description is empty.
+         */
+        $scope.descriptionDisplay = function() {
+            return ($scope.description.length > 0)
+                ? $scope.description
+                : "";       // causes the description edit box to display the placeholder text.
+        }
+
+        /**
+         * Sets a new description for a Grouping.
+         * TODOS:   --> make this function call RestController to change the description in Grouper.
+         *          --> error checking?
+         */
+        $scope.setDescription = function() {
+            // $scope.description = $scope.descriptionText;
+        }
 
         /**
          * Gets information about the grouping, such as its members and the preferences set.

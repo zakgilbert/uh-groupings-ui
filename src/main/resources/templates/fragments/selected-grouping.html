@@ -18,14 +18,102 @@
         <div class="table-responsive-sm">
             <table class="table table-bordered table-sm">
                 <tbody>
-                <tr>
-                    <th>Name</th>
-                    <td>{{ selectedGrouping.name }}</td>
-                </tr>
-                <tr>
-                    <th>Path</th>
-                    <td>{{ selectedGrouping.path }}</td>
-                </tr>
+                    <tr>
+                        <th>Name</th>
+                        <td>{{ selectedGrouping.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Path</th>
+                        <td>{{ selectedGrouping.path }}</td>
+                    </tr>
+
+
+
+                <!--CLINT NEW!!!!-->
+
+                    <tr>
+                        <th>Description</th>
+                        <td style="table-layout: fixed; width: 80%">
+                            <!--<div ng-show="!descriptionOn">-->
+                            <div ng-show="!descriptionForm">
+                                {{ description }}
+                                <!-- fa-save -->
+                                <!-- <i class="far fa-times-circle"></i> -->
+                                <span ng-click="editDescription()" class="fa fa-pencil-square-o p-1 pull-right clickable"
+                                      style="margin-right: 16px"></span>
+                                <!--<span ng-click="changeDescription()" class="fa fa-pencil-square-o pull-right pt-1"></span>-->
+                            </div>
+
+                            <!-- width: 500px; max-width: 500px -->
+                            <!-- (class="...") form-inline  -->
+                            <!--  style="overflow:hidden; zoom: 1" -->
+                            <div ng-show="descriptionForm" style="margin: 5px">
+                                <form>
+                                    <div ng-show="descriptionLengthWarning()" class="alert alert-warning">
+                                        <p th:utext="#{screen.message.admin.selectedGrouping.descriptionWarning}"> </p>
+                                    </div>
+
+                                    <input class="form-control"
+                                           style="margin: 5px 5px 10px 5px; width: 90%; float: left"
+                                           th:title="#{screen.message.admin.selectedGrouping.descriptionFormTitle}"
+                                           th:placeholder="#{screen.message.admin.selectedGrouping.descriptionPlaceholder}"
+                                           ng-value="descriptionDisplay()"
+                                           ng-model="description"
+                                           maxlength="{{ maxDescriptionLength }}"
+                                           id="descriptionForm" />
+                                    <span ng-click="editDescription()"
+                                          class="fa fa-save pull-right pt-1 clickable"
+                                          style="margin-left: 14px; margin-top: 12px; margin-right: 10px; float: left"></span>
+                                    <span ng-click="cancelDescriptionEdit()"
+                                          class="fa fa-times-circle pull-right pt-1 clickable" id="descriptionString"
+                                          style="margin-top: 12px; margin-right: 8px; float: left"></span>
+                                </form>
+                            </div>
+
+                            <!--<div ng-show="descriptionForm" class="d-lg-flex d-block justify-content-lg-between-->
+                            <!--justify-content-start" style="margin: 5px">-->
+                                <!--<form style="display: inline-block">-->
+                                    <!--&lt;!&ndash; NOTE: the input tag below seems to control the form box's size... &ndash;&gt;-->
+                                    <!--&lt;!&ndash; "...width: ___px" can make the width bigger than the smaller default size, but does not auto-stretch...&ndash;&gt;-->
+                                    <!--<input class="form-control" type="text"-->
+                                           <!--style="display: inline-block; box-sizing: border-box; width: auto"-->
+                                        <!--placeholder="Brief description for this Grouping..."-->
+                                        <!--title="Enter a brief description for this grouping"-->
+                                        <!--ng-value="descriptionDisplay()"-->
+                                        <!--ng-model="description"/>-->
+                                    <!--<span ng-click="editDescription()" class="fa fa-times-circle pull-right pt-1 clickable"-->
+                                        <!--style="margin-top: 5px; margin-right: 10px"></span>-->
+                                    <!--<span ng-click="editDescription()" class="fa fa-save pull-right pt-1 clickable"-->
+                                        <!--style="margin-left: 16px; margin-top: 5px; margin-right: 10px"></span>-->
+                                <!--</form>-->
+                            <!--</div>-->
+
+                            <!--<div ng-show="textBox" style="margin: 10px">-->
+                                <!--<input class="form-control" type="text" placeholder="Describe this Grouping..."-->
+                                   <!--title="Enter brief description for this grouping"-->
+                                   <!--ng-model="userToAdd"/>-->
+                                <!--<span ng-click="changeDescription()" class="fa fa-times-circle pull-right pt-1" style="margin-right: 16px"></span>-->
+                                <!--<span ng-click="changeDescription()" class="fa fa-save pull-right pt-1" style="margin-right: 16px"></span>-->
+                                <!--&lt;!&ndash;<div class="input-group-append">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<button class="btn btn-primary" type="submit">Save</button>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<button class="btn btn-primary" type="submit">Cancel</button>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                            <!--</div>-->
+
+                            <!--
+                                <textarea class="form-control" rows="1" type="text"
+                                           style="display: inline-block; box-sizing: border-box; width: auto"
+                                        placeholder="Brief description for this Grouping..."
+                                        title="Enter a brief description for this grouping"
+                                        ng-value="descriptionDisplay()"
+                                        ng-model="userToAdd">
+                                    </textarea>
+                            -->
+                        </td>
+                    </tr>
+
+
+
                 </tbody>
             </table>
         </div>
