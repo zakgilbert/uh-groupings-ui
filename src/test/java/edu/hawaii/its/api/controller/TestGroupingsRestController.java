@@ -1,5 +1,6 @@
 package edu.hawaii.its.api.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.hawaii.its.api.type.*;
 import edu.hawaii.its.groupings.access.Role;
@@ -119,6 +120,8 @@ public class TestGroupingsRestController {
     private User uhUser04;
     private User uhUser06;
     private User specific_user;
+
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     @PostConstruct
     public void init() {
@@ -367,6 +370,14 @@ public class TestGroupingsRestController {
     }
 
     @Test
+    public void ownedGroupingsTest() throws Exception {
+
+        List<Grouping> groupings = mapOwnedGroupings(uhUser01);
+
+
+    }
+
+    @Test
     public void myGroupingsTest2() throws Exception {
         GroupingAssignment groupings = mapGroupingAssignment(uhUser04);
 
@@ -604,6 +615,17 @@ public class TestGroupingsRestController {
         return objectMapper.readValue(result.getResponse().getContentAsByteArray(), Grouping.class);
     }
 
+    private List<Grouping> mapOwnedGroupings(User currentUser) throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        MvcResult result = mockMvc.perform(get(API_BASE + "/owners/groupings")
+                .with(user(currentUser)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        return objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<Grouping>>(){});
+    }
+
     private GroupingsServiceResult mapGSR(String uri) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -626,7 +648,7 @@ public class TestGroupingsRestController {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        return objectMapper.readValue(result.getResponse().getContentAsByteArray(), List.class);
+        return objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<List<GroupingsServiceResult>>(){});
     }
 
     private GroupingAssignment mapGroupingAssignment(User currentUser) throws Exception {
@@ -665,8 +687,10 @@ public class TestGroupingsRestController {
 
     private boolean isInIncludeGroup(String grouping, String ownerUsername, String username) {
         Principal principal = new SimplePrincipal(ownerUsername);
-        return ((Grouping) groupingsRestController.grouping(principal, grouping)
-                .getBody())
+        String groupingString = (String) groupingsRestController.grouping(principal, grouping)
+                .getBody();
+
+        return mapGroupingJson(groupingString)
                 .getInclude()
                 .getUsernames()
                 .contains(username);
@@ -674,8 +698,10 @@ public class TestGroupingsRestController {
 
     private boolean isInExcludeGroup(String grouping, String ownerUsername, String username) {
         Principal principal = new SimplePrincipal(ownerUsername);
-        return ((Grouping) groupingsRestController.grouping(principal, grouping)
-                .getBody())
+        String groupingString = (String) groupingsRestController.grouping(principal, grouping)
+                .getBody();
+
+        return mapGroupingJson(groupingString)
                 .getExclude()
                 .getUsernames()
                 .contains(username);
@@ -683,8 +709,9 @@ public class TestGroupingsRestController {
 
     private boolean isInBasisGroup(String grouping, String ownerUsername, String username) {
         Principal principal = new SimplePrincipal(ownerUsername);
-        return ((Grouping) groupingsRestController.grouping(principal, grouping)
-                .getBody())
+        String groupingString = (String) groupingsRestController.grouping(principal, grouping)
+                .getBody();
+        return mapGroupingJson(groupingString)
                 .getBasis()
                 .getUsernames()
                 .contains(username);
@@ -692,8 +719,9 @@ public class TestGroupingsRestController {
 
     private boolean isInGrouping(String grouping, String ownerUsername, String username) {
         Principal principal = new SimplePrincipal(ownerUsername);
-        return ((Grouping) groupingsRestController.grouping(principal, grouping)
-                .getBody())
+        String groupingString = (String) groupingsRestController.grouping(principal, grouping)
+                .getBody();
+        return mapGroupingJson(groupingString)
                 .getComposite()
                 .getUsernames()
                 .contains(username);
@@ -701,8 +729,9 @@ public class TestGroupingsRestController {
 
     private boolean isGroupingOwner(String grouping, String ownerUsername, String username) {
         Principal principal = new SimplePrincipal(ownerUsername);
-        return ((Grouping) groupingsRestController.grouping(principal, grouping)
-                .getBody())
+        String groupingString = (String) groupingsRestController.grouping(principal, grouping)
+                .getBody();
+        return mapGroupingJson(groupingString)
                 .getOwners()
                 .getUsernames()
                 .contains(username);
@@ -710,38 +739,43 @@ public class TestGroupingsRestController {
 
     private boolean isListservOn(String grouping, String username) {
         Principal principal = new SimplePrincipal(username);
-        return ((Grouping) groupingsRestController.grouping(principal, grouping)
-                .getBody())
+        String groupingString = (String) groupingsRestController.grouping(principal, grouping)
+                .getBody();
+        return mapGroupingJson(groupingString)
                 .isListservOn();
     }
 
     private boolean isOptInOn(String grouping, String username) {
         Principal principal = new SimplePrincipal(username);
-        return ((Grouping) groupingsRestController.grouping(principal, grouping)
-                .getBody())
+        String groupingString = (String) groupingsRestController.grouping(principal, grouping)
+                .getBody();
+        return mapGroupingJson(groupingString)
                 .isOptInOn();
     }
 
     private boolean isOptOutOn(String grouping, String username) {
         Principal principal = new SimplePrincipal(username);
-        return ((Grouping) groupingsRestController.grouping(principal, grouping)
-                .getBody())
+        String groupingString =  (String) groupingsRestController.grouping(principal, grouping)
+                .getBody();
+        return mapGroupingJson(groupingString)
                 .isOptOutOn();
     }
 
     private boolean isReleasedGrouping(String grouping, String username) {
         Principal principal = new SimplePrincipal(username);
-        return ((Grouping) groupingsRestController.grouping(principal, grouping)
-                .getBody())
+        String groupingString = (String) groupingsRestController.grouping(principal, grouping)
+                .getBody();
+        return mapGroupingJson(groupingString)
                 .isReleasedGroupingOn();
     }
 
     private boolean isOptedIntoGrouping(String grouping, String username) {
         Principal principal = new SimplePrincipal(username);
-        GroupingAssignment groupingAssignment =
-                (GroupingAssignment) groupingsRestController.groupingAssignment(principal)
+        String groupingAssignmentString =
+                (String) groupingsRestController.groupingAssignment(principal)
                         .getBody();
 
+        GroupingAssignment groupingAssignment = mapGroupingAssignmentJson(groupingAssignmentString);
         List<String> optedIntoList = groupingAssignment
                 .getGroupingsOptedInTo()
                 .stream()
@@ -754,9 +788,11 @@ public class TestGroupingsRestController {
 
     private boolean isOptedOutOfGrouping(String grouping, String username) {
         Principal principal = new SimplePrincipal(username);
-        GroupingAssignment groupingAssignment =
-                (GroupingAssignment) groupingsRestController.groupingAssignment(principal)
+        String groupingAssignmentString =
+                (String) groupingsRestController.groupingAssignment(principal)
                         .getBody();
+
+        GroupingAssignment groupingAssignment = mapGroupingAssignmentJson(groupingAssignmentString);
 
         List<String> optedOutOfList = groupingAssignment
                 .getGroupingsOptedOutOf()
@@ -766,5 +802,21 @@ public class TestGroupingsRestController {
 
         return optedOutOfList.contains(grouping);
 
+    }
+
+    private Grouping mapGroupingJson(String json) {
+        try {
+            return OBJECT_MAPPER.readValue(json, Grouping.class);
+        } catch (Exception e) {
+            throw new GroupingsHTTPException(e.getMessage(), e.getCause());
+        }
+    }
+
+    private GroupingAssignment mapGroupingAssignmentJson(String json) {
+        try {
+            return OBJECT_MAPPER.readValue(json, GroupingAssignment.class);
+        } catch (Exception e) {
+            throw new GroupingsHTTPException(e.getMessage(), e.getCause());
+        }
     }
 }

@@ -1,9 +1,6 @@
 package edu.hawaii.its.api.controller;
 
 import edu.hawaii.its.api.service.HttpRequestService;
-import edu.hawaii.its.api.type.AdminListsHolder;
-import edu.hawaii.its.api.type.Grouping;
-import edu.hawaii.its.api.type.GroupingAssignment;
 import edu.hawaii.its.api.type.GroupingsServiceResult;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -13,13 +10,16 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.PostConstruct;
 import java.security.Principal;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/groupings")
@@ -50,6 +50,12 @@ public class GroupingsRestController {
 
     @Value("${groupings.api.ldap}")
     private String UH_RELEASED_GROUPING;
+
+    @Value("${groupings.api.opt_in}")
+    private String OPT_IN;
+
+    @Value("${groupings.api.opt_out}")
+    private String OPT_OUT;
 
     @Autowired
     HttpRequestService httpRequestService;
@@ -82,7 +88,7 @@ public class GroupingsRestController {
     public ResponseEntity memberAttributes(Principal principal, @PathVariable String uid) {
         logger.info("Entered REST memberAttributes...");
         String uri = String.format(API_2_1_BASE + "/members/%s", uid);
-        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.GET, Map.class);
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.GET);
     }
 
     /**
@@ -96,8 +102,8 @@ public class GroupingsRestController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity addAdmin(Principal principal, @PathVariable String adminToAdd) {
         logger.info("Entered REST addAdmin...");
-        String uri = String.format(API_2_0_BASE + "/admins/%s", adminToAdd);
-        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.POST, GroupingsServiceResult.class);
+        String uri = String.format(API_2_1_BASE + "/admins/%s", adminToAdd);
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.POST);
     }
 
     /**
@@ -111,8 +117,8 @@ public class GroupingsRestController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity deleteAdmin(Principal principal, @PathVariable String adminToDelete) {
         logger.info("Entered REST deleteAdmin...");
-        String uri = String.format(API_2_0_BASE + "/%s/deleteAdmin", adminToDelete);
-        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.POST, GroupingsServiceResult.class);
+        String uri = String.format(API_2_1_BASE + "/admins/%s", adminToDelete);
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.DELETE);
     }
 
     /**
@@ -133,7 +139,7 @@ public class GroupingsRestController {
                                                       @PathVariable String userToAdd) {
         logger.info("Entered REST addGroupingMemberByUsername...");
         String uri = String.format(API_2_0_BASE + "/%s/%s/addGroupingMemberByUsername", grouping, userToAdd);
-        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.POST, List.class);
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.POST);
     }
 
     /**
@@ -154,7 +160,7 @@ public class GroupingsRestController {
                                                   @PathVariable String userToAdd) {
         logger.info("Entered REST addGroupingMemberByUuid...");
         String uri = String.format(API_2_0_BASE + "/%s/%s/addGroupingMemberByUuid", grouping, userToAdd);
-        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.POST, List.class);
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.POST);
     }
 
     /**
@@ -172,8 +178,8 @@ public class GroupingsRestController {
                                                   @PathVariable String grouping,
                                                   @PathVariable String userToAdd) {
         logger.info("Entered REST addMemberToIncludeGroup...");
-        String uri = String.format(API_2_0_BASE + "/%s/%s/addMemberToIncludeGroup", grouping, userToAdd);
-        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.POST, List.class);
+        String uri = String.format(API_2_1_BASE + "/groupings/%s/includeMembers/%s", grouping, userToAdd);
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.PUT);
     }
 
     /**
@@ -191,8 +197,8 @@ public class GroupingsRestController {
                                                   @PathVariable String grouping,
                                                   @PathVariable String userToAdd) {
         logger.info("Entered REST addMemberToExcludeGroup...");
-        String uri = String.format(API_2_0_BASE + "/%s/%s/addMemberToExcludeGroup", grouping, userToAdd);
-        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.POST, List.class);
+        String uri = String.format(API_2_1_BASE + "/groupings/%s/excludeMembers/%s", grouping, userToAdd);
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.PUT);
     }
 
     /**
@@ -209,7 +215,7 @@ public class GroupingsRestController {
                                                          @PathVariable String userToDelete) {
         logger.info("Entered REST deleteGroupingMemberByUsername...");
         String uri = String.format(API_2_0_BASE + "/%s/%s/deleteGroupingMemberByUsername", grouping, userToDelete);
-        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.POST, List.class);
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.POST);
     }
 
     /**
@@ -226,7 +232,7 @@ public class GroupingsRestController {
                                                      @PathVariable String userToDelete) {
         logger.info("Entered REST deleteGroupingMemberByUsername...");
         String uri = String.format(API_2_0_BASE + "/%s/%s/deleteGroupingMemberByUuid", grouping, userToDelete);
-        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.POST, List.class);
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.POST);
     }
 
     /**
@@ -243,8 +249,8 @@ public class GroupingsRestController {
                                                        @PathVariable String grouping,
                                                        @PathVariable String userToDelete) {
         logger.info("Entered REST deleteMemberFromIncludeGroup...");
-        String uri = String.format(API_2_0_BASE + "/%s/%s/deleteMemberFromIncludeGroup", grouping, userToDelete);
-        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.POST, GroupingsServiceResult.class);
+        String uri = String.format(API_2_1_BASE + "/groupings/%s/includeMembers/%s", grouping, userToDelete);
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.DELETE);
     }
 
     /**
@@ -261,8 +267,8 @@ public class GroupingsRestController {
                                                        @PathVariable String grouping,
                                                        @PathVariable String userToDelete) {
         logger.info("Entered REST deleteMemberFromExcludeGroup...");
-        String uri = String.format(API_2_0_BASE + "/%s/%s/deleteMemberFromExcludeGroup", grouping, userToDelete);
-        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.POST, GroupingsServiceResult.class);
+        String uri = String.format(API_2_1_BASE + "/groupings/%s/excludeMembers/%s", grouping, userToDelete);
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.DELETE);
     }
 
     /**
@@ -281,8 +287,8 @@ public class GroupingsRestController {
     public ResponseEntity assignOwnership(Principal principal, @PathVariable String grouping,
                                           @PathVariable String newOwner) {
         logger.info("Entered REST assignOwnership...");
-        String uri = String.format(API_2_0_BASE + "/%s/%s/assignOwnership", grouping, newOwner);
-        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.POST, GroupingsServiceResult.class);
+        String uri = String.format(API_2_1_BASE + "/groupings/%s/owners/%s", grouping, newOwner);
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.PUT);
     }
 
     /**
@@ -302,8 +308,8 @@ public class GroupingsRestController {
     public ResponseEntity removeOwnership(Principal principal, @PathVariable String grouping,
                                           @PathVariable String ownerToRemove) {
         logger.info("Entered REST removeOwnership...");
-        String uri = String.format(API_2_0_BASE + "/%s/%s/removeOwnership", grouping, ownerToRemove);
-        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.POST, GroupingsServiceResult.class);
+        String uri = String.format(API_2_1_BASE + "/groupings/%s/owners/%s", grouping, ownerToRemove);
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.DELETE);
     }
 
     /**
@@ -323,8 +329,8 @@ public class GroupingsRestController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity grouping(Principal principal, @PathVariable String grouping) {
         logger.info("Entered REST grouping...");
-        String uri = String.format(API_2_0_BASE + "/%s/grouping", grouping);
-        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.GET, Grouping.class);
+        String uri = String.format(API_2_1_BASE + "/groupings/%s", grouping);
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.GET);
     }
 
     /**
@@ -340,7 +346,45 @@ public class GroupingsRestController {
     public ResponseEntity groupingAssignment(Principal principal) {
         logger.info("Entered REST GroupingAssignment...");
         String uri = API_2_0_BASE + "/groupingAssignment";
-        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.GET, GroupingAssignment.class);
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.GET);
+    }
+
+    /**
+     * @return a MembershipAssignment Object that contains
+     * Groupings that the user is in
+     * Groupings that the user can opt into
+     */
+    @RequestMapping(value = "/members/groupings",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity membershipAssignment(Principal principal) {
+        logger.info("Entered REST MembershipAssignment...");
+        String uri = API_2_1_BASE + "/members/groupings";
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.GET);
+    }
+
+    /**
+     * @return a list of groupings that a user owns
+     */
+    @RequestMapping(value = "/owners/groupings",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity groupingsOwned(Principal principal) {
+        logger.info("Entered REST GroupingAssignment...");
+        String uri = String.format(API_2_1_BASE + "/owners/%s/groupings", principal.getName());
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.GET);
+    }
+
+    /**
+     * @return a list of groupings that a user owns
+     */
+    @RequestMapping(value = "/owners/{uid}/groupings",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity groupingsOwnedUid(Principal principal, @PathVariable String uid) {
+        logger.info("Entered REST GroupingAssignment...");
+        String uri = String.format(API_2_1_BASE + "/owners/%s/groupings", uid);
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.GET);
     }
 
     /**
@@ -357,7 +401,7 @@ public class GroupingsRestController {
     public ResponseEntity optIn(Principal principal, @PathVariable String grouping) {
         logger.info("Entered REST optIn...");
         String uri = String.format(API_2_0_BASE + "/%s/optIn", grouping);
-        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.POST, List.class);
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.POST);
     }
 
     /**
@@ -374,7 +418,7 @@ public class GroupingsRestController {
     public ResponseEntity optOut(Principal principal, @PathVariable String grouping) {
         logger.info("Entered REST optOut...");
         String uri = String.format(API_2_0_BASE + "/%s/optOut", grouping);
-        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.POST, List.class);
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.POST);
     }
 
     /**
@@ -391,12 +435,7 @@ public class GroupingsRestController {
                                       @PathVariable String grouping,
                                       @PathVariable boolean listservOn) {
         logger.info("Entered REST setListserv...");
-        String ending = "disable";
-        if (listservOn) {
-            ending = "enable";
-        }
-        String uri = String.format(API_2_0_BASE + "/groupings/%s/preferences/%s/%s", grouping, LISTSERV, ending);
-        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.PUT, List.class);
+        return changePreference(grouping, principal.getName(), LISTSERV, listservOn);
     }
 
     /**
@@ -413,12 +452,7 @@ public class GroupingsRestController {
                                   @PathVariable String grouping,
                                   @PathVariable boolean ldapOn) {
         logger.info("Entered REST setLdap...");
-        String ending = "disable";
-        if (ldapOn) {
-            ending = "enable";
-        }
-        String uri = String.format(API_2_1_BASE + "/groupings/%s/preferences/%s/%s", grouping, UH_RELEASED_GROUPING, ending);
-        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.PUT, List.class);
+        return changePreference(grouping, principal.getName(), UH_RELEASED_GROUPING, ldapOn);
     }
 
     /**
@@ -435,8 +469,7 @@ public class GroupingsRestController {
                                    @PathVariable String grouping,
                                    @PathVariable boolean optInOn) {
         logger.info("Entered REST setOptIn...");
-        String uri = String.format(API_2_0_BASE + "/%s/%s/setOptIn", grouping, optInOn);
-        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.POST, List.class);
+        return changePreference(grouping, principal.getName(), OPT_IN, optInOn);
     }
 
     /**
@@ -452,8 +485,7 @@ public class GroupingsRestController {
     public ResponseEntity setOptOut(Principal principal, @PathVariable String grouping,
                                     @PathVariable boolean optOutOn) {
         logger.info("Entered REST setOptOut...");
-        String uri = String.format(API_2_0_BASE + "/%s/%s/setOptOut", grouping, optOutOn);
-        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.POST, List.class);
+        return changePreference(grouping, principal.getName(), OPT_OUT, optOutOn);
     }
 
     @RequestMapping(value = "/adminLists",
@@ -461,8 +493,8 @@ public class GroupingsRestController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity adminLists(Principal principal) {
         logger.info("Entered REST adminListHolder...");
-        String uri = API_2_0_BASE + "/adminLists";
-        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.GET, AdminListsHolder.class);
+        String uri = API_2_1_BASE + "/adminsGroupings";
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.GET);
     }
 
     /**
@@ -511,4 +543,13 @@ public class GroupingsRestController {
         //                .body(groupingFactoryService.deleteGrouping(username, grouping));
     }
 
+    private ResponseEntity changePreference(String grouping, String username, String preference, Boolean isOn){
+
+        String ending = "disable";
+        if (isOn) {
+            ending = "enable";
+        }
+        String uri = String.format(API_2_1_BASE + "/groupings/%s/preferences/%s/%s", grouping, preference, ending);
+        return httpRequestService.makeApiRequest(username, uri, HttpMethod.PUT);
+    }
 }

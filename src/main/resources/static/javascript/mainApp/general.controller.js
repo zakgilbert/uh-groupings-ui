@@ -61,6 +61,17 @@
         };
 
         /**
+         * @param {object[]} members - the members of the group
+         * @returns {object[]} the members of the group, sorted by name and with blank usernames filtered out
+         */
+        function setGroupMembers(members) {
+            _.remove(members, function (member) {
+                return _.isEmpty(member.username);
+            });
+            return _.sortBy(members, "name");
+        }
+
+        /**
          * Gets information about the grouping, such as its members and the preferences set.
          * @param {string} path - the path of the grouping to retrieve information
          */
@@ -106,17 +117,6 @@
                 dataProvider.handleException({ exceptionMessage: res.exceptionMessage }, "feedback/error", "feedback");
             }, endpoint);
         };
-
-        /**
-         * @param {object[]} members - the members of the group
-         * @returns {object[]} the members of the group, sorted by name and with blank usernames filtered out
-         */
-        function setGroupMembers(members) {
-            _.remove(members, function (member) {
-                return _.isEmpty(member.username);
-            });
-            return _.sortBy(members, "name");
-        }
 
         /**
          * Creates a modal for errors in loading data from the API.
@@ -444,7 +444,64 @@
                     endpoint: endpoint,
                     listName: "owners"
                 });
+            } else {
+                $scope.createRemoveErrorModal({
+                    userType: "owner"
+                });
             }
+        };
+
+        /**
+         * Creates a modal that prompts the user whether they want to delete the user or not. If 'Yes' is pressed, then
+         * a request is made to delete the user.
+         * @param {object} options - the options object
+         * @param {string} options.user - the user being removed
+         * @param {string} options.endpoint - the endpoint used to make the request
+         * @param {string} options.listName - where the user is being removed from
+         */
+        $scope.createRemoveModal = function (options) {
+            $scope.userToRemove = options.user;
+            $scope.listName = options.listName;
+
+            var windowClass = $scope.showWarningRemovingSelf() ? "modal-danger" : "";
+
+            $scope.removeModalInstance = $uibModal.open({
+                templateUrl: "modal/removeModal.html",
+                windowClass: windowClass,
+                scope: $scope
+            });
+
+            $scope.removeModalInstance.result.then(function () {
+                $scope.loading = true;
+
+                dataProvider.updateData(function () {
+                    if ($scope.listName === "admins") {
+                        // If deleting self, redirect to home page
+                        if ($scope.currentUser === $scope.userToRemove.username) {
+                            $window.location.href = "home";
+                        } else {
+                            // Otherwise just "refresh" admin page
+                            $scope.init();
+                        }
+                    } else if ($scope.listName === "owners") {
+                        // If deleting from admin page OR if you're not deleting yourself, then just reload the grouping
+                        if (!_.isUndefined($scope.adminsList) || $scope.currentUser !== $scope.userToRemove) {
+                            $scope.getGroupingInformation();
+                        } else if ($scope.currentUser === $scope.userToRemove) {
+                            if ($scope.groupingsList.length === 1) {
+                                $window.location.href = "home";
+                            } else {
+                                $window.location.href = "groupings";
+                            }
+                        }
+                    } else {
+                        $scope.getGroupingInformation();
+                    }
+                }, function (res) {
+                    console.log("Error, Status Code: " + res.statusCode);
+                }, options.endpoint);
+
+            });
         };
 
         /**
@@ -462,26 +519,24 @@
         };
 
         /**
-         * Returns to the list of groupings available for management/administration.
+         * Creates a modal stating there was an error removing the user from a group.
+         * @param {object} options - the options object
+         * @param {string} options.userType - the type of user being removed (either admin or owner)
          */
-        $scope.returnToGroupingsList = function () {
-            $scope.resetGroupingInformation();
+        $scope.createRemoveErrorModal = function (options) {
+            $scope.userType = options.userType;
 
-            // Ensure the groupings list is reset with the now-blank filter
-            $scope.filter($scope.groupingsList, "pagedItemsGroupings", "currentPageGroupings", $scope.groupingsQuery);
-
-            $scope.showGrouping = false;
+            $scope.removeErrorModalInstance = $uibModal.open({
+                templateUrl: "modal/removeErrorModal.html",
+                scope: $scope
+            });
         };
 
         /**
-         * Resets the grouping members, page numbers, filters, and columns to sort by.
+         * Closes the remove error modal.
          */
-        $scope.resetGroupingInformation = function () {
-            resetGroupingMembers();
-            resetPillsToAllMembers();
-            resetFilterQueries();
-            clearAddMemberInput();
-            $scope.columnSort = {};
+        $scope.closeRemoveErrorModal = function () {
+            $scope.removeErrorModalInstance.close();
         };
 
         /**
@@ -514,12 +569,14 @@
             var pills = $("#group-pills")[0].children;
             var pillContents = $("#pill-content")[0].children;
             for (var i = 0; i < pills.length; i++) {
-                if (i === 0 && !$(pills[i]).hasClass("active")) {
-                    $(pills[i]).addClass("active");
-                    $(pillContents[i]).addClass("in active");
-                } else if (i !== 0 && $(pills[i]).hasClass("active")) {
-                    $(pills[i]).removeClass("active");
-                    $(pillContents[i]).removeClass("in active");
+                var anchorTag = $(pills[i].children[0]);
+                var pillContent = $(pillContents[i]);
+                if (i === 0 && !anchorTag.hasClass("active")) {
+                    anchorTag.addClass("active");
+                    pillContent.addClass("show active");
+                } else if (i !== 0 && anchorTag.hasClass("active")) {
+                    anchorTag.removeClass("active");
+                    pillContent.removeClass("show active");
                 }
             }
         }
@@ -556,6 +613,29 @@
         }
 
         /**
+         * Returns to the list of groupings available for management/administration.
+         */
+        $scope.returnToGroupingsList = function () {
+            $scope.resetGroupingInformation();
+
+            // Ensure the groupings list is reset with the now-blank filter
+            $scope.filter($scope.groupingsList, "pagedItemsGroupings", "currentPageGroupings", $scope.groupingsQuery);
+
+            $scope.showGrouping = false;
+        };
+
+        /**
+         * Resets the grouping members, page numbers, filters, and columns to sort by.
+         */
+        $scope.resetGroupingInformation = function () {
+            resetGroupingMembers();
+            resetPillsToAllMembers();
+            resetFilterQueries();
+            clearAddMemberInput();
+            $scope.columnSort = {};
+        };
+
+        /**
          * Creates a modal with a description of the preference selected.
          * @param {string} desc - the description of the preference
          */
@@ -576,10 +656,10 @@
         };
 
         /**
-         * Toggles the grouping preference which allows users to opt out of a grouping.
+         * Toggles a grouping preference option.
+         * @param {string} endpoint - the API endpoint to toggle the preference
          */
-        $scope.updateAllowOptOut = function () {
-            var endpoint = BASE_URL + $scope.selectedGrouping.path + "/" + $scope.allowOptOut + "/setOptOut";
+        function togglePreference(endpoint) {
             dataProvider.updateData(function (res) {
                 if (!_.isUndefined(res.statusCode)) {
                     console.log("Error, Status Code: " + res.statusCode);
@@ -590,6 +670,14 @@
             }, function (res) {
                 console.log("Error, Status Code: " + res.statusCode);
             }, endpoint);
+        }
+
+        /**
+         * Toggles the grouping preference which allows users to opt out of a grouping.
+         */
+        $scope.updateAllowOptOut = function () {
+            var endpoint = BASE_URL + $scope.selectedGrouping.path + "/" + $scope.allowOptOut + "/setOptOut";
+            togglePreference(endpoint);
         };
 
         /**
@@ -597,16 +685,7 @@
          */
         $scope.updateAllowOptIn = function () {
             var endpoint = BASE_URL + $scope.selectedGrouping.path + "/" + $scope.allowOptIn + "/setOptIn";
-            dataProvider.updateData(function (res) {
-                if (!_.isUndefined(res.statusCode)) {
-                    console.log("Error, Status Code: " + res.statusCode);
-                    $scope.createPreferenceErrorModal();
-                } else if (_.startsWith(res[0].resultCode), "SUCCESS") {
-                    console.log("success");
-                }
-            }, function (res) {
-                console.log("Error, Status Code: " + res.statusCode);
-            }, endpoint);
+            togglePreference(endpoint);
         };
 
         /**
@@ -614,34 +693,15 @@
          */
         $scope.updateListserv = function () {
             var endpoint = BASE_URL + $scope.selectedGrouping.path + "/" + $scope.listserv + "/setListserv";
-            dataProvider.updateData(function (res) {
-                if (!_.isUndefined(res.statusCode)) {
-                    console.log("Error, Status Code: " + res.statusCode);
-                    $scope.createPreferenceErrorModal();
-                } else if (res.resultCode === "SUCCESS") {
-                    console.log("success");
-                }
-            }, function (res) {
-                console.log("Error, Status Code: " + res.statusCode);
-            }, endpoint);
+            togglePreference(endpoint);
         };
 
+        /**
+         * Toggles the grouping preference to synchronize memberships with the uhReleasedGroupings attribute.
+         */
         $scope.updateLdap = function () {
             var endpoint = BASE_URL + $scope.selectedGrouping.path + "/" + $scope.ldap + "/setLdap";
-            console.log($scope.ldap);
-
-            dataProvider.updateData(function (res) {
-                if (!_.isUndefined(res.statusCode)) {
-                    console.log("Error, Status Code: " + res.statusCode);
-                    $scope.createPreferenceErrorModal();
-                } else if (res.resultCode === "SUCCESS") {
-                    console.log("success");
-                }
-            }, function (res) {
-                console.log("Error, Status Code: " + res.statusCode);
-            }, endpoint);
-
-
+            togglePreference(endpoint);
         };
 
         /**
@@ -675,10 +735,10 @@
                 scope: $scope
             });
 
-            $scope.CASLDAPInstance.result.then(function(){
+            $scope.CASLDAPInstance.result.then(function () {
                 $scope.ldap = !$scope.ldap;
                 $scope.updateLdap();
-            }).catch(function (){
+            }).catch(function () {
                 //do nothing
             });
         };
@@ -707,10 +767,10 @@
                 scope: $scope
             });
 
-            $scope.EmailListInstance.result.then(function(){
+            $scope.EmailListInstance.result.then(function () {
                 $scope.listserv = !$scope.listserv;
                 $scope.updateListserv();
-            }).catch(function (){
+            }).catch(function () {
                 //do nothing
             });
 
@@ -729,7 +789,6 @@
         $scope.closeEmailListModal = function () {
             $scope.EmailListInstance.dismiss();
         };
-
 
 
         /**

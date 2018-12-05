@@ -1,34 +1,21 @@
-h1{
-    color:#BD9319;
+h1 {
+    color: #BD9319;
 }
-h2, h3, h4 {
+
+h2, h3, h4, h5, h6 {
     color: #9B7506;
 }
 
-#uh-nav-name{
-    color:#BD9319;
+.navbar-brand.uh-nav-app-name {
+    color: #BD9319;
 }
 
-.members-tab-title{
-    color: #9B7506;
+.navbar-brand.uh-nav-app-name:hover {
+    color: #B08A17;
 }
 
-#defMem{
-    color: #9B7506;
-}
-
-
-#overlay{
+#overlay {
     background: rgba(0, 0, 0, 0.5);
-}
-
-
-a {
-    color: #0275d8;
-}
-
-a:hover {
-    color: #0275d8;
 }
 
 .uh-branding-one {
@@ -37,89 +24,122 @@ a:hover {
 
 .uh-branding-two {
     color: #777;
-}
-
-.nav-pills > li.active > a, .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover{
-    background-color: #2C658D;
-    border-color: #477A9E;
-}
-
-/* navbar color */
-.navbar-default .navbar-nav > li > a{
-  color: #000000;
-}
-.navbar-default .navbar-nav > li > a:hover{
-  color: blue;
-}
-.navbar-default .btn-link{
-  color: #000000;
-}
-
-.navbar-default .btn-link:hover{
-  color:blue;
-}
-
-.navbar-default .navbar-nav > .open > a,
-.navbar-default .navbar-nav > .open > a:focus,
-.navbar-default .navbar-nav > .open > a:hover {
-    color: #555;
-    background-color: white;
 }
 
 .dropshadow {
     text-shadow: 1px 1px 3px rgba(150, 150, 150, 1);
 }
 
-
-.navbar-brand.uh-nav-app-name {
-    color: #BD9319;
-    background-color: transparent;
+.fa.fa-trash-o {
+    color: #d21515;
 }
 
-.navbar-brand.uh-nav-app-name:hover {
-    color: #B08A17;
+.btn.btn-primary {
+    /*    background-color: #2C658D;
+        border-color: #477A9E;*/
+    color: #fff;
+    background-color: #286090;
+    border-color: #204d74;
 }
 
-.uh-branding-one {
-    color: #777;
+.btn.btn-primary:hover {
+    /*background-color:*/
+    /*border-color:*/
 }
 
-.uh-branding-two {
-    color: #777;
+.jumbotron {
+    /*background-color:*/
+
+    background: #f5f5f5;
+    border-color: #b5bcc7;
 }
 
-.navbar-brand.uh-nav-app-name {
-    color: #BD9319;
+.bg-dashboard {
+    /*background-color:*/
 }
 
-.navbar-brand.uh-nav-app-name:hover {
-    color: #B08A17;
+/*.card.page-header */
+.card-header {
+    background-color: #e5eef1;
 }
 
-.opt-button[disabled], .opt-button:disabled, .opt-button[disabled]:active, .opt-button:disabled:active {
-    color: #C2C2C2;
+.page-item.active > .page-link {
+    /*background-color:*/
+    /*border-color:*/
 }
 
-.btn-primary{
-    background-color: #2C658D;
-    border-color: #477A9E;
+#group-pills > .nav-item > .nav-link.active {
+    /*background-color:*/
 }
 
-.panel > .table-responsive{
-  background-color: #ffffff;
+body {
+    background: url("../images/background.png") repeat 0px 0px #f0f0f0;
 }
 
-#optOutButton{
-    background-color: #2C658D;
-    border-color: #477A9E;
+.card-body {
+    background: #f5f5f5;
+    border-color: #b5bcc7;
 }
 
-#side-nav-color{
-    background-color: #2C658D;
-    border-color: #477A9E;
+.jumbotron .h1, .jumbotron h1 {
+    font-size: 63px;
 }
 
-.panel-default > .panel-heading{
-    background-color: #e3e3e3;
-    color: #9B7506;
+.jumbotron .h1, .jumbotron h1 {
+    color: inherit;
+}
+
+.btn {
+    border: 1px solid transparent;
+}
+
+.btn-group-lg > .btn, .btn-lg {
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.3333333;
+    border-radius: 6px;
+    background: #6fa9be;
+    border-color: #5a9cb4;
+    color: white;
+}
+
+.btn-default {
+    background: #6fa9be;
+}
+
+.btn-default {
+    background: #6fa9be;
+    border-color: #5a9cb4;
+    color: white;
+}
+
+#name {
+    color: #5a9cb4;
+}
+
+h1, h2, .text-left, span {
+    color: #1c6070;
+}
+
+.btn-light:hover {
+    color: #212529;
+    background-color: #e2e6ea;
+    border-color: #dae0e5;
+}
+
+.border {
+    background: white;
+}
+
+.table {
+    background: white;
+}
+
+.card-header {
+    border: 1px solid #dee2e6;
+    background: #e5eef1;
+}
+
+h3{
+    color: #1c6070;
 }
