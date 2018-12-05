@@ -28,9 +28,10 @@
             var endpoint = BASE_URL + "adminLists";
 
             dataProvider.loadData(function (res) {
-                if (_.isNull(res)) {
-                    $scope.createApiErrorModal();
-                } else {
+                //console.log(res);
+                var status = res.status;
+                res = res.data;
+                if(status === 200) {
                     $scope.adminsList = _.sortBy(res.adminGroup.members, "name");
                     $scope.filter($scope.adminsList, "pagedItemsAdmins", "currentPageAdmins", $scope.adminsQuery);
 
@@ -38,10 +39,10 @@
                     $scope.filter($scope.groupingsList, "pagedItemsGroupings", "currentPageGroupings", $scope.groupingsQuery);
 
                     $scope.loading = false;
+                } else {
+                    $scope.createApiErrorModal();
                 }
-            }, function (res) {
-                dataProvider.handleException({ exceptionMessage: res.exceptionMessage }, "feedback/error", "feedback");
-            }, endpoint);
+            },endpoint);
         };
 
         $scope.displayAdmins = function () {

@@ -14,11 +14,12 @@
             loadData: function (response, url) {
                 $http.get(encodeURI(url))
                     .then(response)
-                    .catch(function onError(response){
+                    .catch(response
+                    /*function onError(response){
                         console.log("Error. Status: ",response);
                         //Need to update redirect to trigger that the redirect to feedback page also includes error response as a stack trace.
-                        $window.location.href = "/uhgroupings/feedback";
-                    });
+                        //$window.location.href = "/uhgroupings/feedback";
+                    }*/);
             },
 
             /**
@@ -31,7 +32,7 @@
                     .then(callback)
                     .catch(function onError(callback){
                         console.log("Error. Status: ",callback);
-                        $window.location.href = "/uhgroupings/feedback";
+                        //$window.location.href = "/uhgroupings/feedback";
                     });
                     // This still needs to be rewritten
                     //.catch(console.log("Error has occurred"));

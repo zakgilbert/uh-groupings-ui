@@ -80,9 +80,9 @@
             var endpoint = BASE_URL + $scope.selectedGrouping.path + "/grouping";
 
             dataProvider.loadData(function (res) {
-                if (_.isNull(res)) {
-                    $scope.createApiErrorModal();
-                } else {
+                var status = res.status;
+                res = res.data;
+                if(status === 200) {
                     //Gets members in the basis group
                     $scope.groupingBasis = setGroupMembers(res.basis.members);
                     $scope.filter($scope.groupingBasis, "pagedItemsBasis", "currentPageBasis", $scope.basisQuery);
@@ -110,12 +110,12 @@
                     $scope.allowOptOut = res.optOutOn;
                     $scope.listserv = res.listservOn;
                     $scope.ldap = res.ldapOn;
+                } else {
+                    $scope.createApiErrorModal();
                 }
                 //Stop loading spinner
                 $scope.loading = false;
-            }, function (res) {
-                dataProvider.handleException({ exceptionMessage: res.exceptionMessage }, "feedback/error", "feedback");
-            }, endpoint);
+            },endpoint);
         };
 
         /**
@@ -197,16 +197,12 @@
          * @param {string} endpoint - the API call endpoint to add the user
          */
         $scope.updateAddMember = function (userToAdd, list, endpoint) {
+            console.log(endpoint);
             dataProvider.updateData(function (res) {
-                $scope.createAddModal({
+               console.log(res);
+                 $scope.createAddModal({
                     user: userToAdd,
-                    response: res,
-                    listName: list
-                });
-            }, function (res) {
-                $scope.createAddModal({
-                    user: userToAdd,
-                    response: res,
+                    response: res.status,
                     listName: list
                 });
             }, endpoint);
@@ -305,9 +301,12 @@
             return $q(function (resolve, reject) {
                 var endpoint = BASE_URL + "members/" + member;
                 dataProvider.loadData(function (res) {
-                    resolve(res);
-                }, function (res) {
-                    reject(res);
+                    var status = res.status;
+                    res = res.data;
+                    if(status === 200)
+                        resolve(res);
+                    else
+                        reject(res)
                 }, endpoint);
             });
         };
@@ -367,13 +366,11 @@
         $scope.createAddModal = function (options) {
             $scope.user = options.user || "";
             $scope.listName = options.listName;
-
             if (_.has(options, "response")) {
                 var addResult = _.isArray(options.response)
                     ? _.last(options.response) // For adding a user to the include/exclude list
                     : options.response; // For adding a user to the admin or owner list
-
-                $scope.wasSuccessful = _.startsWith(addResult.resultCode, "SUCCESS")
+                $scope.wasSuccessful = _.startsWith(addResult, "200")
                     ? true
                     : false;
             } else {
@@ -497,8 +494,6 @@
                     } else {
                         $scope.getGroupingInformation();
                     }
-                }, function (res) {
-                    console.log("Error, Status Code: " + res.statusCode);
                 }, options.endpoint);
 
             });
@@ -661,14 +656,11 @@
          */
         function togglePreference(endpoint) {
             dataProvider.updateData(function (res) {
-                if (!_.isUndefined(res.statusCode)) {
-                    console.log("Error, Status Code: " + res.statusCode);
-                    $scope.createPreferenceErrorModal();
-                } else if (_.startsWith(res[0].resultCode), "SUCCESS") {
-                    console.log("success");
+                if(res.status === 200){
+                    console.log("sucess")
+                } else {
+                    console.log("Error, Status Code: " + res.status);
                 }
-            }, function (res) {
-                console.log("Error, Status Code: " + res.statusCode);
             }, endpoint);
         }
 

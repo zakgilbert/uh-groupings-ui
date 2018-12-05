@@ -23,15 +23,17 @@
             var endpoint = BASE_URL + "groupingAssignment";
 
             dataProvider.loadData(function (res) {
-                if (_.isNull(res)) {
-                    $scope.createApiErrorModal();
-                } else {
+                var status = res.status;
+                res = res.data;
+
+                if(status === 200)
+                {
                     $scope.groupingsList = _.sortBy(res.groupingsOwned, "name");
                     $scope.pagedItemsGroupings = $scope.groupToPages($scope.groupingsList);
+                } else {
+                    $scope.createApiErrorModal();
                 }
                 $scope.loading = false;
-            }, function (res) {
-                dataProvider.handleException({ exceptionMessage: res.exceptionMessage }, "feedback/error", "feedback");
             }, endpoint);
         };
 

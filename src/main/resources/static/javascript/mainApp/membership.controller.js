@@ -25,6 +25,7 @@
 
             $scope.optOutList = [];
 
+            angular.extend(this, $controller("GeneralJsController", { $scope: $scope }));
             angular.extend(this, $controller("TableJsController", {$scope: $scope}));
             angular.extend(this, $controller("TimeoutJsController", {$scope: $scope}));
 
@@ -34,26 +35,26 @@
              */
             $scope.init = function () {
                 var endpoint = BASE_URL + "groupingAssignment";
-
+                $scope.loading = true;
 
                 dataProvider.loadData(function (res) {
+                        console.log(res);
+                        var status = res.status;
                         res = res.data;
 
-                        if (_.isNull(res)) {
-                            $scope.createApiErrorModal();
-                        } else {
+                        if (status == 200) {
                             $scope.membershipsList = _.sortBy(res.groupingsIn, "name");
                             $scope.filter($scope.membershipsList, "pagedItemsMemberships", "currentPageMemberships", $scope.membersQuery);
+
+                        } else {
+                            $scope.createApiErrorModal();
                         }
                         $scope.optInList = _.sortBy(res.groupingsToOptInTo, "name");
                         $scope.filter($scope.optInList, "pagedItemsOptInList", "currentPageOptIn", $scope.optInQuery);
 
                         $scope.loading = false;
-                    }
-                    ,
-                    endpoint
-                )
-                ;
+                    },endpoint
+                );
             };
 
             /**
