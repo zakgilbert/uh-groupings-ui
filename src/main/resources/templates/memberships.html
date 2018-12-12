@@ -74,18 +74,18 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="l in pagedItemsMemberships[currentPageMemberships] ">
-                                <td class="w-30">{{ l.name }}</td>
-                                <td class="w-50">{{ l.path }}</td>
+                            <tr ng-repeat="grouping in pagedItemsMemberships[currentPageMemberships] ">
+                                <td class="w-30">{{ grouping.name }}</td>
+                                <td class="w-50">{{ grouping.path }}</td>
                                 <td class="w-20 text-center">
-                                <span ng-if="!l.optOutOn">
+                                <span ng-if="!grouping.optOutOn">
                                     Membership Required
                                 </span>
-                                    <div ng-if="l.optOutOn">
+                                    <div ng-if="grouping.optOutOn">
                                         <button id="optOutButton"
                                                 class="btn btn-primary btn-block opt-button text-center"
                                                 tabindex="0"
-                                                ng-click="optOut(currentPageMemberships, $index)">
+                                                ng-click="optOut(grouping)">
                                             Opt Out
                                         </button>
                                     </div>
@@ -150,13 +150,13 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="o in pagedItemsOptInList[currentPageOptIn] ">
-                                <td class="w-30">{{ o.name }}</td>
-                                <td class="w-50" id="groupingOptInPath">{{ o.path }}</td>
+                            <tr ng-repeat="grouping in pagedItemsOptInList[currentPageOptIn] ">
+                                <td class="w-30">{{ grouping.name }}</td>
+                                <td class="w-50" id="groupingOptInPath">{{ grouping.path }}</td>
                                 <td class="w-20">
                                     <button class="btn btn-primary btn-block opt-button"
                                             tabindex="0"
-                                            ng-click="optIn(currentPageOptIn, $index)">Opt In
+                                            ng-click="optIn(grouping)">Opt In
                                     </button>
                                 </td>
                             </tr>

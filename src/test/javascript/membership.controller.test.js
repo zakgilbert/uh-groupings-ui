@@ -84,50 +84,6 @@ describe("MembershipController", function () {
 
     });
 
-    // Set up mock data for optIn, optOut, and membershipRequired
-    beforeEach(function () {
-        scope.itemsPerPage = 2;
-
-        scope.membershipsList = [
-            {
-                path: "path:path2:path3:grouping1",
-                name: "grouping1"
-            },
-            {
-                path: "path:path2:path4:grouping2",
-                name: "grouping2"
-            },
-            {
-                path: "path:path2:path5:grouping3",
-                name: "grouping3"
-            },
-            {
-                path: "path:path2:path3:grouping4",
-                name: "grouping4"
-            }
-        ];
-        scope.pagedItemsMemberships = scope.groupToPages(scope.membershipsList);
-
-        scope.optInList = [
-            {
-                path: "path1:path4:grouping5",
-                name: "grouping5"
-            }
-        ];
-        scope.pagedItemsOptInList = scope.groupToPages(scope.optInList);
-
-        scope.optOutList = [
-            {
-                path: "path:path2:path3:grouping1",
-                name: "grouping1"
-            },
-            {
-                path: "path:path2:path3:grouping4",
-                name: "grouping4"
-            }
-        ];
-    });
-
     describe("optOut", function () {
         var mockResponse;
 
@@ -147,8 +103,12 @@ describe("MembershipController", function () {
         it("should call init() on success", function () {
             spyOn(scope, "init").and.callThrough();
 
-            // path:path2:path3:grouping4
-            scope.optOut(1, 1);
+            var groupingToOptOutOf = {
+                path: "path:path2:path3:grouping4",
+                name: "grouping4"
+            };
+
+            scope.optOut(groupingToOptOutOf);
             httpBackend.expectPOST(BASE_URL + "path:path2:path3:grouping4/optOut").respond(200, mockResponse);
             httpBackend.flush();
 
@@ -177,8 +137,12 @@ describe("MembershipController", function () {
         it("should call init() on success", function () {
             spyOn(scope, "init").and.callThrough();
 
-            // path1:path4:grouping4
-            scope.optIn(0, 0);
+            var groupingToOptInTo = {
+                path: "path1:path4:grouping5",
+                name: "grouping5"
+            };
+            scope.optIn(groupingToOptInTo);
+
             httpBackend.expectPOST(BASE_URL + "path1:path4:grouping5/optIn").respond(200, mockResponse);
             httpBackend.flush();
 

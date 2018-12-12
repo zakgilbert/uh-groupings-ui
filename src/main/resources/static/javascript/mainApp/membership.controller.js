@@ -63,22 +63,20 @@
 
         /**
          * Adds the user to the exclude group of the grouping selected. Sends back an alert saying if it failed.
-         * @param {number} currentPage - the current page within the table
-         * @param {number} indexClicked - the index of the grouping clicked by the user
+         * @param {object} grouping - the grouping to opt out of
          */
-        $scope.optOut = function (currentPage, indexClicked) {
-            var groupingPath = $scope.pagedItemsMemberships[currentPage][indexClicked].path;
+        $scope.optOut = function (grouping) {
+            var groupingPath = grouping.path;
             $scope.loading = true;
             groupingsService.optOut(groupingPath, handleSuccessfulOpt, handleUnsuccessfulOpt);
         };
 
         /**
          * Adds the user to the include group of the grouping selected.
-         * @param {number} currentPage - the current page within the table
-         * @param {number} indexClicked - the index of the grouping clicked by the user
+         * @param {object} grouping - the grouping to opt in to
          */
-        $scope.optIn = function (currentPage, indexClicked) {
-            var groupingPath = $scope.pagedItemsOptInList[currentPage][indexClicked].path;
+        $scope.optIn = function (grouping) {
+            var groupingPath = grouping.path;
             $scope.loading = true;
             groupingsService.optIn(groupingPath, handleSuccessfulOpt, handleUnsuccessfulOpt);
         };

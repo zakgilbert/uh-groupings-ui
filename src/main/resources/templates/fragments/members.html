@@ -45,12 +45,12 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="g in pagedItemsMembers[currentPageMembers]">
-                <td>{{g.name}}</td>
-                <td>{{g.uuid}}</td>
+            <tr ng-repeat="member in pagedItemsMembers[currentPageMembers]">
+                <td>{{ member.name }}</td>
+                <td>{{ member.uuid }}</td>
                 <td>
-                    {{g.username}}
-                    <div ng-if="g.username === ''">
+                    {{ member.username }}
+                    <div ng-if="member.username === ''">
                         <span>N/A</span>
                         <i class="fa fa-question-circle clickable" aria-hidden="true"
                            data-toggle="tooltip" data-placement="right"
@@ -59,7 +59,7 @@
                         </i>
                     </div>
                 </td>
-                <td class="basis-column text-center">{{ g.whereListed }}</td>
+                <td class="basis-column text-center">{{ member.whereListed }}</td>
             </tr>
             </tbody>
         </table>

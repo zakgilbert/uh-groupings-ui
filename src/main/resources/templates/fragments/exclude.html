@@ -48,22 +48,22 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="e in pagedItemsExclude[currentPageExclude]">
+            <tr ng-repeat="excludeMember in pagedItemsExclude[currentPageExclude]">
                 <td tabindex="0">
-                    {{e.name}}
+                    {{ excludeMember.name }}
                     <span class="fa fa-trash-o pull-right clickable pt-1"
                           data-toggle="tooltip" data-placement="top"
                           onmouseover="$(this).tooltip('show')" onmouseout="$(this).tooltip('dispose')"
                           tabindex="0"
                           th:title="#{screen.message.common.tooltip.remove.exclude}"
-                          ng-keypress="$event.keyCode === 13 ? removeMember('Exclude', currentPageExclude, $index) : null"
-                          ng-click="removeMember('Exclude', currentPageExclude, $index)">
+                          ng-keypress="$event.keyCode === 13 ? removeMember('Exclude', excludeMember) : null"
+                          ng-click="removeMember('Exclude', excludeMember)">
                     </span>
                 </td>
-                <td>{{e.uuid}}</td>
+                <td>{{ excludeMember.uuid }}</td>
                 <td>
-                    {{e.username}}
-                    <div ng-if="e.username === ''">
+                    {{ excludeMember.username }}
+                    <div ng-if="excludeMember.username === ''">
                         <span>N/A</span>
                         <i class="fa fa-question-circle clickable" aria-hidden="true"
                            data-toggle="tooltip" data-placement="right"
@@ -72,7 +72,7 @@
                         </i>
                     </div>
                 </td>
-                <td class="basis-column text-center">{{e.inBasis}}</td>
+                <td class="basis-column text-center">{{ excludeMember.inBasis }}</td>
             </tr>
             </tbody>
         </table>

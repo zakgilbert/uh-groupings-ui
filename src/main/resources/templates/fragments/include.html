@@ -48,22 +48,22 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="i in pagedItemsInclude[currentPageInclude]">
+            <tr ng-repeat="includeMember in pagedItemsInclude[currentPageInclude]">
                 <td tabindex="0">
-                    {{i.name}}
+                    {{ includeMember.name }}
                     <span class="fa fa-trash-o pull-right clickable pt-1"
                           data-toggle="tooltip" data-placement="top"
                           onmouseover="$(this).tooltip('show')" onmouseout="$(this).tooltip('dispose')"
                           tabindex="0"
                           th:title="#{screen.message.common.tooltip.remove.include}"
-                          ng-keypress="$event.keyCode === 13 ? removeMember('Include', currentPageInclude, $index) : null"
-                          ng-click="removeMember('Include', currentPageInclude, $index)">
+                          ng-keypress="$event.keyCode === 13 ? removeMember('Include', includeMember) : null"
+                          ng-click="removeMember('Include', includeMember)">
                     </span>
                 </td>
-                <td>{{i.uuid}}</td>
+                <td>{{ includeMember.uuid }}</td>
                 <td>
-                    {{i.username}}
-                    <div ng-if="i.username === ''">
+                    {{ includeMember.username }}
+                    <div ng-if="includeMember.username === ''">
                         <span>N/A</span>
                         <i class="fa fa-question-circle clickable" aria-hidden="true"
                            data-toggle="tooltip" data-placement="right"
@@ -72,7 +72,7 @@
                         </i>
                     </div>
                 </td>
-                <td class="basis-column text-center">{{i.inBasis}}</td>
+                <td class="basis-column text-center">{{ includeMember.inBasis }}</td>
             </tr>
             </tbody>
         </table>

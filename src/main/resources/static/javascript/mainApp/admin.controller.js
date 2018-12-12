@@ -62,13 +62,9 @@
 
         /**
          * Removes an admin from the admin list. There must be at least one admin remaining.
-         * @param {number} currentPage - the current page in the admins list
-         * @param {number} index - the index of the admin to delete, with the current page and items per page taken into
-         * account
+         * @param {object} adminToRemove - the admin to remove
          */
-        $scope.removeAdmin = function (currentPage, index) {
-            var adminToRemove = $scope.pagedItemsAdmins[currentPage][index];
-
+        $scope.removeAdmin = function (adminToRemove) {
             if ($scope.adminsList.length > 1) {
                 $scope.createRemoveModal({
                     user: adminToRemove,

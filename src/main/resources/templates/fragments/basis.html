@@ -42,12 +42,12 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="b in pagedItemsBasis[currentPageBasis]">
-                <td>{{b.name}}</td>
-                <td>{{b.uuid}}</td>
+            <tr ng-repeat="basisMember in pagedItemsBasis[currentPageBasis]">
+                <td>{{ basisMember.name }}</td>
+                <td>{{ basisMember.uuid }}</td>
                 <td>
-                    {{b.username}}
-                    <div ng-if="b.username === ''">
+                    {{ basisMember.username }}
+                    <div ng-if="basisMember.username === ''">
                         <span>N/A</span>
                         <i class="fa fa-question-circle clickable" aria-hidden="true"
                            data-toggle="tooltip" data-placement="right"

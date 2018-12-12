@@ -35,7 +35,7 @@
                 <tr ng-repeat="l in pagedItemsGroupings[currentPageGroupings] ">
                     <td class="clickable" tabindex="0"
                         ng-keypress="$event.keyCode === 13 ? displayGrouping(currentPageGroupings, $index) : null"
-                        ng-click="displayGrouping(currentPageGroupings, $index)">
+                        ng-click="displayGrouping(l)">
                         {{l.name}}
                         <span class="fa fa-pencil-square-o pull-right pt-1"></span>
                     </td>

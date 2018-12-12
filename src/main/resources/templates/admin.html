@@ -77,20 +77,20 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="l in pagedItemsAdmins[currentPageAdmins]">
+                            <tr ng-repeat="admin in pagedItemsAdmins[currentPageAdmins]">
                                 <td tabindex="0">
-                                    {{l.name}}
+                                    {{ admin.name }}
                                     <span class="fa fa-trash-o pull-right clickable pt-1"
                                           data-toggle="tooltip" data-placement="top"
                                           tabindex="0"
                                           onmouseover="$(this).tooltip('show')" onmouseout="$(this).tooltip('dispose')"
                                           th:title="#{screen.message.admin.tooltip.nav.delete.admin}"
-                                          ng-click="removeAdmin(currentPageAdmins, $index)"
-                                          ng-keypress="$event.keyCode === 13 ? removeAdmin(currentPageAdmins, $index) : null">
+                                          ng-click="removeAdmin(admin)"
+                                          ng-keypress="$event.keyCode === 13 ? removeAdmin(admin) : null">
                                     </span>
                                 </td>
-                                <td>{{l.uuid}}</td>
-                                <td>{{l.username}}</td>
+                                <td>{{ admin.uuid }}</td>
+                                <td>{{ admin.username }}</td>
                             </tr>
                             </tbody>
                         </table>

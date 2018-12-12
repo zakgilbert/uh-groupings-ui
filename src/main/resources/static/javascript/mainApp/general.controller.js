@@ -50,11 +50,10 @@
 
         /**
          * Initiates the retrieval of information about the grouping clicked by the user.
-         * @param {number} currentPage - the current page number in the groupings list
-         * @param {number} index - the index of the grouping clicked by the user
+         * @param {object} grouping - the grouping to display
          */
-        $scope.displayGrouping = function (currentPage, index) {
-            $scope.selectedGrouping = $scope.pagedItemsGroupings[currentPage][index];
+        $scope.displayGrouping = function (grouping) {
+            $scope.selectedGrouping = grouping;
             $scope.getGroupingInformation();
             $scope.showGrouping = true;
         };
@@ -394,32 +393,20 @@
         /**
          * Removes a user from the include or exclude group.
          * @param {string} listName - the list to remove the user from (either Include or Exclude)
-         * @param {number} currentPage - the current page in the table
-         * @param {number} index - the index of the user clicked by the user
-         * account
+         * @param {object} member - the member to remove
          */
-        $scope.removeMember = function (listName, currentPage, index) {
-            var userToRemove;
-            if (listName === "Include") {
-                userToRemove = $scope.pagedItemsInclude[currentPage][index];
-            } else if (listName === "Exclude") {
-                userToRemove = $scope.pagedItemsExclude[currentPage][index];
-            }
-
+        $scope.removeMember = function (listName, memberToRemove) {
             $scope.createRemoveModal({
-                user: userToRemove,
+                user: memberToRemove,
                 listName: listName
             });
         };
 
         /**
          * Removes a grouping owner. There must be at least one grouping owner remaining.
-         * @param {number} currentPage - the current page in the owners table
-         * @param {number} index - the index of the owner clicked by the user
+         * @param {object} ownerToRemove - the owner to remove
          */
-        $scope.removeOwner = function (currentPage, index) {
-            var ownerToRemove = $scope.pagedItemsOwners[currentPage][index];
-
+        $scope.removeOwner = function (ownerToRemove) {
             if ($scope.groupingOwners.length > 1) {
                 $scope.createRemoveModal({
                     user: ownerToRemove,
