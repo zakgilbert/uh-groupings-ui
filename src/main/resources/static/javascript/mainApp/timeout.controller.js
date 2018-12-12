@@ -42,10 +42,10 @@
         function getCookie(cname) {
             var name = cname + "=";
             var decodedCookie = decodeURIComponent(document.cookie);
-            var ca = decodedCookie.split(';');
-            for(var i = 0; i <ca.length; i++) {
+            var ca = decodedCookie.split(";");
+            for (var i = 0; i < ca.length; i++) {
                 var c = ca[i];
-                while (c.charAt(0) == ' ') {
+                while (c.charAt(0) == " ") {
                     c = c.substring(1);
                 }
                 if (c.indexOf(name) == 0)
@@ -66,7 +66,7 @@
             }
             if ($scope.idleTime == 30) { // Logout user after 30 min has passed
                 var r = new XMLHttpRequest();
-                r.open('POST', '/uhgroupings/logout', true);
+                r.open("POST", "/uhgroupings/logout", true);
                 r.setRequestHeader("X-XSRF-TOKEN", getCookie("XSRF-TOKEN"));
                 r.send();
                 $window.location.href = "/uhgroupings/";
@@ -78,12 +78,12 @@
          * Creates a countdown timer.
          */
         function timer() {
-            var minutes = Math.round(($scope.seconds - 30)/60);
+            var minutes = Math.round(($scope.seconds - 30) / 60);
             var remainingSeconds = $scope.seconds % 60;
             if (remainingSeconds < 10) {
                 remainingSeconds = "0" + remainingSeconds;
             }
-            document.getElementById('countdown').innerHTML = minutes + ":" + remainingSeconds;
+            document.getElementById("countdown").innerHTML = minutes + ":" + remainingSeconds;
             if ($scope.seconds == 0) {
                 clearInterval($scope.countdownTimer);
             } else {
@@ -99,12 +99,12 @@
                 templateUrl: "modal/timeoutModal.html",
                 scope: $scope
             });
--
-            $scope.timeoutModalInstance.result.then(function(){
+
+            $scope.timeoutModalInstance.result.then(function () {
                 //Filler in order to catch off click dismiss
-            }, function(){
+            }, function () {
                 $scope.idleTime = 0;
-                $scope.pingServer()
+                $scope.pingServer();
             });
         };
 
@@ -112,7 +112,7 @@
          * Closes modal and restarts timer effect.
          */
         $scope.closeTimeoutModal = function () {
-          $scope.timeoutModalInstance.close();
+            $scope.timeoutModalInstance.close();
             $scope.idleTime = 0;
             $scope.pingServer();
         };
@@ -120,16 +120,18 @@
         /**
          * Pings tomcat server with a GET request to retrieve uses info.
          */
-        $scope.pingServer = function() {
-            var endpoint = BASE_URL +"members/aaronvil";
+        $scope.pingServer = function () {
+            var endpoint = BASE_URL + "members/aaronvil";
             clearInterval($scope.countdownTimer);
             $scope.seconds = 300;
             dataProvider.loadData(function (res) {
                 console.log("Success in pinging tomcat");
-            },function (res){console.log("Error in pinging tomcat")
+            }, function (res) {
+                console.log("Error in pinging tomcat");
             }, endpoint);
-        }
+        };
 
     }
+
     UHGroupingsApp.controller("TimeoutJsController", TimeoutJsController);
 })();
