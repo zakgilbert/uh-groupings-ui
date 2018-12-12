@@ -45,10 +45,10 @@
             var ca = decodedCookie.split(";");
             for (var i = 0; i < ca.length; i++) {
                 var c = ca[i];
-                while (c.charAt(0) == " ") {
+                while (c.charAt(0) === " ") {
                     c = c.substring(1);
                 }
-                if (c.indexOf(name) == 0)
+                if (c.indexOf(name) === 0)
                     return c.substring(name.length, c.length);
             }
             return "";
@@ -60,17 +60,16 @@
         function timerIncrement() {
             $scope.idleTime++;
             //console.log($scope.idleTime);
-            if ($scope.idleTime == 25) {// Create warning modal when 5 min left
+            if ($scope.idleTime === 25) {// Create warning modal when 5 min left
                 $scope.countdownTimer = setInterval(timer, 1000);
                 $scope.createTimeoutModal();
             }
-            if ($scope.idleTime == 30) { // Logout user after 30 min has passed
+            if ($scope.idleTime === 30) { // Logout user after 30 min has passed
                 var r = new XMLHttpRequest();
                 r.open("POST", "/uhgroupings/logout", true);
                 r.setRequestHeader("X-XSRF-TOKEN", getCookie("XSRF-TOKEN"));
                 r.send();
                 $window.location.href = "/uhgroupings/";
-
             }
         }
 
@@ -84,7 +83,7 @@
                 remainingSeconds = "0" + remainingSeconds;
             }
             document.getElementById("countdown").innerHTML = minutes + ":" + remainingSeconds;
-            if ($scope.seconds == 0) {
+            if ($scope.seconds === 0) {
                 clearInterval($scope.countdownTimer);
             } else {
                 $scope.seconds--;
