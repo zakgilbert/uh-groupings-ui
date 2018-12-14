@@ -51,7 +51,7 @@
         $scope.description = "test description; CHANGE ME!!!!";
         $scope.tempDescription;
         $scope.descriptionForm = false;      // used with ng-view on selected-grouping.html to toggle description editing.
-        $scope.maxDescriptionLength = 39;
+        $scope.maxDescriptionLength = 38;       // determines the max length of a user-entered grouping description.
 
         angular.extend(this, $controller("TableJsController", { $scope: $scope }));
 
@@ -127,13 +127,23 @@
         }
 
         /**
-         * Used for placeholder text for a grouping's description
+         * Used for placeholder text for a grouping's description in the form box.
          * @returns {string} either the description of the grouping, or, placeholder text if the description is empty.
          */
         $scope.descriptionDisplay = function() {
             return ($scope.description.length > 0)
                 ? $scope.description
                 : "";       // causes the description edit box to display the placeholder text.
+        }
+
+        /**
+         * Used for placeholder text for a grouping's description if the description is saved as an empty string.
+         * @returns {string} either the description of the grouping, or, placeholder text if the description is empty.
+         */
+        $scope.descriptionDisplay = function() {
+            return ($scope.description.length > 0)
+                ? $scope.description
+                : "No description given for this Grouping.";
         }
 
         /**

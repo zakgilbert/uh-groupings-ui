@@ -36,11 +36,12 @@
                         <td style="table-layout: fixed; width: 80%">
                             <!--<div ng-show="!descriptionOn">-->
                             <div ng-show="!descriptionForm">
-                                {{ description }}
+                                {{ descriptionDisplay() }}
                                 <!-- fa-save -->
                                 <!-- <i class="far fa-times-circle"></i> -->
                                 <span ng-click="editDescription()" class="fa fa-pencil-square-o p-1 pull-right clickable"
-                                      style="margin-right: 16px"></span>
+                                      th:title="#{screen.message.description.edit}"
+                                      style="margin-right: 16px; margin-top: 2px"></span>
                                 <!--<span ng-click="changeDescription()" class="fa fa-pencil-square-o pull-right pt-1"></span>-->
                             </div>
 
@@ -53,20 +54,26 @@
                                         <p th:utext="#{screen.message.admin.selectedGrouping.descriptionWarning}"> </p>
                                     </div>
 
-                                    <input class="form-control"
-                                           style="margin: 5px 5px 10px 5px; width: 90%; float: left"
+                                    <input class="form-control ljlk"
+                                           style="margin: 5px 5px 10px 5px; float: left;
+                                           width: -webkit-calc(100% - 80px);
+                                           width:    -moz-calc(100% - 80px);
+                                           width:         calc(100% - 80px)"
                                            th:title="#{screen.message.admin.selectedGrouping.descriptionFormTitle}"
                                            th:placeholder="#{screen.message.admin.selectedGrouping.descriptionPlaceholder}"
                                            ng-value="descriptionDisplay()"
                                            ng-model="description"
                                            maxlength="{{ maxDescriptionLength }}"
                                            id="descriptionForm" />
+                                    <!--data-toggle="tooltip" data-placement="top-left"-->
                                     <span ng-click="editDescription()"
+                                          th:title="#{screen.message.description.save}"
                                           class="fa fa-save pull-right pt-1 clickable"
                                           style="margin-left: 14px; margin-top: 12px; margin-right: 10px; float: left"></span>
                                     <span ng-click="cancelDescriptionEdit()"
+                                          th:title="#{screen.message.description.cancel}"
                                           class="fa fa-times-circle pull-right pt-1 clickable" id="descriptionString"
-                                          style="margin-top: 12px; margin-right: 8px; float: left"></span>
+                                          style="margin-top: 12px; float: left"></span>
                                 </form>
                             </div>
 
