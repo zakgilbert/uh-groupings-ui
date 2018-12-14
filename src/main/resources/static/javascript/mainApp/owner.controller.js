@@ -4,12 +4,9 @@
      * This controller contains functions specific to the groupings page.
      * @param $scope - binding between controller and HTML page
      * @param $controller - service for instantiating controllers
-     * @param $window - the browser window object
-     * @param $uibModal - the UI Bootstrap service for creating modals
-     * @param dataProvider - service function that provides GET and POST requests for getting or updating data
-     * @param BASE_URL - the constant base URL for endpoints
+     * @param groupingsService - service for creating requests to the groupings API
      */
-    function OwnerJsController($scope, $controller, $window, $uibModal, dataProvider, BASE_URL) {
+    function OwnerJsController($scope, $controller, groupingsService, dataProvider) {
 
         // Allow this controller to use functions from the General Controller
         angular.extend(this, $controller("GeneralJsController", { $scope: $scope }));
@@ -20,21 +17,19 @@
          */
         $scope.init = function () {
             $scope.loading = true;
-            var endpoint = BASE_URL + "groupingAssignment";
 
-            dataProvider.loadData(function (res) {
+            groupingsService.getGroupingsOwned(function (res) {
                 var status = res.status;
                 res = res.data;
 
-                if(status === 200)
-                {
-                    $scope.groupingsList = _.sortBy(res.groupingsOwned, "name");
+                if(status === 200) {
+                    $scope.groupingsList = _.sortBy(res, "name");
                     $scope.pagedItemsGroupings = $scope.groupToPages($scope.groupingsList);
                 } else {
-                    $scope.createApiErrorModal();
+                    dataProvider.handleException({ exceptionMessage: res.exceptionMessage }, "feedback/error", "feedback");
                 }
                 $scope.loading = false;
-            }, endpoint);
+            });
         };
 
     }
