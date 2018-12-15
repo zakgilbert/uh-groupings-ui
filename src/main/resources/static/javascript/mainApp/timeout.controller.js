@@ -18,6 +18,7 @@
 
         $scope.seconds = 300;
         $scope.idleTime = 0;
+
         /**
          * Every minute, checks whether or not user has clicked or pressed button
          */
