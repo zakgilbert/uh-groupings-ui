@@ -60,8 +60,8 @@
             //The user input
             $scope.modelDescription;
 
-            var maxLength = 40;
-            var noDescriptionMessage = "No description given for this Grouping.";
+            const maxLength = 40;
+            const noDescriptionMessage = "No description given for this Grouping.";
 
             angular.extend(this, $controller("TableJsController", { $scope: $scope }));
 
@@ -281,7 +281,7 @@
              * @returns {string} either the description of the grouping, or, placeholder text if the description is empty.
              */
             $scope.descriptionDisplay = function () {
-                var descriptionLength;
+                let descriptionLength;
 
                 if ($scope.description === "") {
                     (descriptionLength = "");
@@ -783,10 +783,10 @@
                 $scope.removeModalInstance.result.then(function () {
                     $scope.loading = true;
 
-                    var userToRemove = options.user.username;
+                    const userToRemove = options.user.username;
 
                     // groupingPath should only be defined if listName is not "admins"
-                    if ($scope.listName != "admins") {
+                    if ($scope.listName !== "admins") {
                         groupingPath = $scope.selectedGrouping.path;
                     }
 
@@ -1172,10 +1172,10 @@
                 let ca = decodedCookie.split(";");
                 for (let i = 0; i < ca.length; i++) {
                     let c = ca[i];
-                    while (c.charAt(0) == " ") {
+                    while (c.charAt(0) === " ") {
                         c = c.substring(1);
                     }
-                    if (c.indexOf(name) == 0)
+                    if (c.indexOf(name) === 0)
                         return c.substring(name.length, c.length);
                 }
                 return "";
