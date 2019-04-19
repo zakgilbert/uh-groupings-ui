@@ -86,19 +86,20 @@ public class GroupingsRestController {
      *
      * @param uid: Username of user to obtain attributes about
      * @return Map of user attributes
-     @RequestMapping(value = "/members/{uid}",
-     method = RequestMethod.GET,
-     produces = MediaType.APPLICATION_JSON_VALUE)
-     @ResponseBody public ResponseEntity memberAttributes(Principal principal, @PathVariable String uid) {
-     logger.info("Entered REST memberAttributes...");
-
-     String safeInput = policy.sanitize(uid);
-
-     String uri = String.format(API_2_1_BASE + "/members/%s", safeInput);
-     return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.GET);
-     }
-
      */
+    @RequestMapping(value = "/members/{uid}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity memberAttributes(Principal principal, @PathVariable String uid) {
+        logger.info("Entered REST memberAttributes...");
+
+        String safeInput = policy.sanitize(uid);
+
+        String uri = String.format(API_2_1_BASE + "/members/%s", safeInput);
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.GET);
+    }
+
     /**
      * adds a member to the admin group
      *
