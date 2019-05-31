@@ -106,6 +106,13 @@
                 </div>
             </form>
         </div>
+        <div class="d-lg-flex d-block justify-content-lg-between justify-content-start">
+            <div>
+                <form ng-submit="importMembers('Include')">
+                </form>
+                <input type="file" id="importFile">
+            </div>
+        </div>
         <div class="mt-lg-0 mt-2">
             <div th:replace="fragments/pagination :: pagination(currentPage ='currentPageInclude', pagedItems='pagedItemsInclude')"></div>
         </div>
