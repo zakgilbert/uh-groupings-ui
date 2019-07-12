@@ -106,13 +106,14 @@
                 </div>
             </form>
         </div>
-        <div class="d-lg-flex d-block justify-content-lg-between justify-content-start">
-            <div>
-                <form ng-submit="importMembers('Include')">
-                </form>
-                <input type="file" id="importFile">
+    </div>
+    <div class="d-lg-flex d-block justify-content-lg-between justify-content-start">
+        <form ng-click="importMembers('include')">
+            <div class="input-group">
+                <input type="file" ng-click="openFile()" ng-model="event"/>
+                <output id="userNames"></output>
             </div>
-        </div>
+        </form>
         <div class="mt-lg-0 mt-2">
             <div th:replace="fragments/pagination :: pagination(currentPage ='currentPageInclude', pagedItems='pagedItemsInclude')"></div>
         </div>
