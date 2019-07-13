@@ -410,10 +410,10 @@
          */
         $scope.addMember = function (list) {
             const groupingPath = $scope.selectedGrouping.path;
-            console.log(list);
+
             groupingsService.getGrouping(groupingPath, 1, PAGE_SIZE, "name", true, function () {
                 const userToAdd = $scope.userToAdd;
-                console.log(userToAdd);
+
                 if (_.isEmpty(userToAdd)) {
                     $scope.createAddErrorModal(userToAdd);
                 } else if ($scope.existInList(userToAdd, list)) {
@@ -446,21 +446,7 @@
             });
             console.log(usersToAdd);
         };
-        /**
-        $scope.openFile = function (event) {
-            let input = event.target;
-            let reader = new FileReader();
 
-            reader.onload = function () {
-                let text = reader.resault;
-                console.log(reader.result.substring(0, 200));
-            };
-            reader.readAsText(input.files[0]);
-        };
-         **/
-        $scope.importMembers = function (list) {
-            let input = $scope.event.target;
-        };
         /**
          * Creates a modal display for members added, and calls addMembersToInclude service.
          * @param usersToAdd
