@@ -94,6 +94,10 @@
         $scope.decrementPageIndex = function () {
             $scope.firstIndex -= $scope.pageSize;
         };
+        $scope.resetPageIndex = function () {
+            $scope.firstIndex = 0;
+        };
+
 
         /**
          * Generic handler for unsuccessful requests to the API.
@@ -165,10 +169,13 @@
 
             const groupingPath = $scope.selectedGrouping.path;
 
-            groupingsService.getGrouping(groupingPath, 1, PAGE_SIZE, "name", true, function (res) {
+            groupingsService.getGrouping(groupingPath, null, PAGE_SIZE, "name", true, function (res) {
 
                 // Gets members in the basis group
                 // Gets the description go the group
+                $scope.groupingMembers = setGroupMembers(res.composite.members);
+                $scope.filter($scope.groupingMembers, "pagedItemsMembers", "currentPageMembers", $scope.membersQuery, true);
+                console.log($scope.groupingMembers);
 
                 $scope.allowOptIn = res.optInOn;
                 $scope.allowOptOut = res.optOutOn;
@@ -263,6 +270,8 @@
          * @param {String} sortString - Parameter to sort the grouping database by before retrieving information
          * @param {Boolean} isAscending - If true, grouping database is sorted ascending (A-Z), false for descending (Z-A)
          */
+
+        /*
         $scope.getPages = function (groupingPath, page, size, sortString, isAscending) {
 
             groupingsService.getGrouping(groupingPath, page, size, sortString, isAscending, function (res) {
@@ -318,7 +327,7 @@
                 }
             });
         };
-
+*/
         //todo IMPORTANT: This is the only function we have to update manually when adding new syncDests
         // There's no way around this as we can't dynamically generate these strings without external data in server
         // As far as I know, this can't go into the properties file because the checkboxes are generated dynamically

@@ -60,7 +60,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="g in pagedItemsMembers[currentPageMembers]" class="table table-sm">
+                <tr ng-repeat="g in groupingMembers | limitTo : pageSize : firstIndex" class="table table-sm">
                     <td class="p-10">{{g.name}}</td>
                     <td class="p-10">{{g.uuid}}</td>
                     <td class="p-10">
