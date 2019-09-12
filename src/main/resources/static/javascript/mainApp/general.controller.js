@@ -174,9 +174,9 @@
                 // Gets members in the basis group
                 // Gets the description go the group
                 $scope.groupingMembers = setGroupMembers(res.composite.members);
+                $scope.addWhereListed($scope.groupingMembers);
                 $scope.filter($scope.groupingMembers, "pagedItemsMembers", "currentPageMembers", $scope.membersQuery, true);
                 console.log($scope.groupingMembers);
-
                 $scope.allowOptIn = res.optInOn;
                 $scope.allowOptOut = res.optOutOn;
 
