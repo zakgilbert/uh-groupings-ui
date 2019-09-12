@@ -10,7 +10,7 @@
             </li>
             <li class="page-item" th:attr="ng-class='{ disabled: disableFirstAndPrev(' + ${currentPage} + ') }'">
                 <a class="page-link"
-                   th:attr="ng-click='setPage(\'Prev\', \'' + ${currentPage} + '\', \'' + ${pagedItems} + '\')'">
+                   th:attr="ng-click='decrementPageIndex(); setPage(\'Prev\', \'' + ${currentPage} + '\', \'' + ${pagedItems} + '\')'">
                     ‹ <span class="d-sm-inline d-none">Prev</span>
                 </a>
             </li>
@@ -26,14 +26,14 @@
             <li class="page-item"
                 th:attr="ng-class='{ disabled: disableNextAndLast(' + ${pagedItems} + ', ' + ${currentPage} + ') }'">
                 <a class="page-link"
-                   th:attr="ng-click='setPage(\'Next\', \'' + ${currentPage} + '\', \'' + ${pagedItems} + '\')'">
+                   th:attr="ng-click='incrementPageIndex(); setPage(\'Next\', \'' + ${currentPage} + '\', \'' + ${pagedItems} + '\')'">
                     <span class="d-sm-inline d-none">Next</span> ›
                 </a>
             </li>
             <li class="page-item"
                 th:attr="ng-class='{ disabled: disableNextAndLast(' + ${pagedItems} + ', ' + ${currentPage} + ') }'">
                 <a class="page-link"
-                   th:attr="ng-click='setPage(\'Last\', \'' + ${currentPage} + '\', \'' + ${pagedItems} + '\')'">
+                   th:attr="ng-click=' setPage(\'Last\', \'' + ${currentPage} + '\', \'' + ${pagedItems} + '\')'">
                     <span class="d-sm-inline d-none">Last</span> »
                 </a>
             </li>

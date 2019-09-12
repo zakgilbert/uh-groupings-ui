@@ -17,9 +17,8 @@
             </tr>
             </thead>
             <tbody class="p-2 table table-borderless">
-            <tr ng-repeat="l in pagedItemsGroupings[currentPageGroupings] ">
+            <tr ng-repeat="l in groupingsList | limitTo : pageSize : firstIndex ">
                 <td class="p-10 clickable align-middle" tabindex="0"
-                    ng-keypress="$event.keyCode === 13 ? displayGrouping(currentPageGroupings, $index) : null"
                     ng-click="displayGrouping(currentPageGroupings, $index)">
                     <i class="fa fa-fw fa-pencil-square-o" aria-hidden="true"></i>
                     {{l.name}}
