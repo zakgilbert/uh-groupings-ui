@@ -16,6 +16,7 @@
                 $http.get(encodeURI(url))
                     .then(function (response) {
                         console.log(url);
+                        console.log(response.data);
                         callback(response.data);
                     }, function (response) {
                         // console.log("Error A", response);
@@ -23,7 +24,6 @@
                         callError(response);
                         console.log(JSON.stringify(response, null, 4));
                         console.log("Error in dataProvider; status: ", response.status);
-
                     });
             },
 
