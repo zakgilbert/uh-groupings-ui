@@ -699,7 +699,7 @@
                     (memberNew.status === $scope.listName) ? "No" : " Yes",
                     attributes.uhuuid, attributes.uid));
 
-                    $scope.VALID_UNAME_COUNT += (memberNew.status !== $scope.listName);
+                $scope.VALID_UNAME_COUNT += (memberNew.status !== $scope.listName);
 
             }, function (res) {
                 if (res.statusCode === undefined || res.statusCode === 404)
@@ -1741,6 +1741,10 @@
                 str += line + "\r\n";
             }
             return str;
+        };
+
+        $scope.convertImportDataToCsv = function (data) {
+
         };
 
         /**

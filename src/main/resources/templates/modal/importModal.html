@@ -74,6 +74,23 @@
     </p>
     <button class="btn btn-primary" ng-click="importMembers()">Yes</button>
     <button class="btn btn-default" data-dismiss="modal" ng-click="cancelImportModalInstance()">Cancel</button>
+    <button class="btn btn-sm btn-primary float-right mb-1 mt-1" type="submit"
+            ng-click="exportGroupToCsv(userNameList, selectedGrouping.name, 'include')"
+            ng-hide="!paginatingComplete">
+        <i class="fa fa-refresh mr-2" aria-hidden="true"></i>
+        Export to CSV
+    </button>
 </div>
+<!--
+<div class="modal-footer">
+    <button class="btn btn-sm btn-primary float-right mb-1 mt-1" type="submit"
+            ng-click="exportGroupToCsv(groupingInclude, selectedGrouping.name, 'include')"
+            ng-hide="!paginatingComplete">
+        <i class="fa fa-refresh mr-2" aria-hidden="true"></i>
+        Export to CSV
+    </button>
+
+</div>
+--->
 
 </html>
