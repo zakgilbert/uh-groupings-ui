@@ -694,10 +694,12 @@
          */
         function checkUserNameValidity(memberNew, data) {
             groupingsService.checkMember(memberNew.name, data, function (attributes) {
-                data.push(new Member(memberNew.name,
+                data.push(new Member(
+                    memberNew.name,
                     (memberNew.status === "") ? "Valid" : memberNew.status,
                     (memberNew.status === $scope.listName) ? "No" : " Yes",
-                    attributes.uhuuid, attributes.uid));
+                    attributes.uhuuid,
+                    attributes.uid));
 
                 $scope.VALID_UNAME_COUNT += (memberNew.status !== $scope.listName);
 
