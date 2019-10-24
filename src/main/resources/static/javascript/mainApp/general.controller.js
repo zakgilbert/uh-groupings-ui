@@ -24,6 +24,9 @@
         $scope.sortStatus = false;
         $scope.addMultipleMembers = false;
 
+        $scope.summarizeImport = false;
+        $scope.listImport = false;
+
         $scope.itemsAlreadyInList = [];
         $scope.itemsInOtherList = [];
 
@@ -661,7 +664,13 @@
          */
         $scope.createUniqArrayFromString = function (str, delimi) {
             let arr = _.without([...new Set(str.split(delimi))], "");
-            $scope.importCount = arr.length;
+            let importCount = arr.length;
+
+            $scope.summarizeImport = (importCount > $scope.MAX_IMPORT);
+            $scope.listImport = (importCount < $scope.MAX_IMPORT);
+
+            $scope.importCount = importCount;
+
             return arr;
         };
 
@@ -688,7 +697,7 @@
         };
 
         /**
-         * Send a GET request to grouper in order to verify the validity of a UH user name
+         * Send a GET request to grouper in order to verify the validity of a UH username
          * @param memberNew - UH user name
          * @param data - Object Array
          */
@@ -721,7 +730,12 @@
 
             for (let item of pendingList) {
                 if (item.length <= 16)
-                    checkUserNameValidity(whichList(item, $scope.existInList(item, listName), $scope.isInAnotherList(item, listName), listName), userNameList, listName);
+                    checkUserNameValidity(
+                        whichList(item,
+                            $scope.existInList(item, listName),
+                            $scope.isInAnotherList(item, listName),
+                            listName),
+                        userNameList);
             }
             return userNameList;
         }
