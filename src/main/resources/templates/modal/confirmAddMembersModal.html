@@ -9,10 +9,11 @@
 </div>
 <div class="modal-body" id="modal-body">
     <p>
-        {{ validUserNameCount }} users have been added to the {{ listName }} list.
+        Are you sure you want to add {{ IMPORT_COUNT }} to the {{ listName }} list?
     </p>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="closeConfirmAddMembersModalInstance()">OK</button>
+    <button class="btn btn-primary" ng-click="importMembers()">Yes</button>
+    <button class="btn btn-default" data-dismiss="modal" ng-click="cancelImportModalInstance()">Cancel</button>
 </div>
 </html>

@@ -15,8 +15,7 @@
 
         $scope.userNameList = [];
         $scope.selectedRow = null;
-        $scope.importCount = 0;
-        $scope.VALID_UNAME_COUNT = 0;
+        $scope.IMPORT_COUNT = 0;
         $scope.MAX_IMPORT = 100;
         $scope.sortNameStr = "name";
         $scope.sortStatusStr = "status";
@@ -528,6 +527,7 @@
                 $scope.addMultipleMembers = true;
                 $scope.userNameList = strList;
                 $scope.imported = true;
+                $scope.IMPORT_COUNT = strList.length;
                 $scope.launchAddMembersModal(listName);
             } else if (strList.length === 1) {
                 $scope.userToAdd = strList[0];
@@ -543,7 +543,7 @@
             $scope.listName = listName;
 
             $scope.confirmImportInstance = $uibModal.open({
-                templateUrl: "modal/addMembersModal",
+                templateUrl: "modal/confirmAddMembersModal",
                 size: "lg",
                 scope: $scope
             });
@@ -617,20 +617,17 @@
          * @param listName
          */
         $scope.updateImportMembers = function (listName) {
+            $scope.loading = false;
+            $scope.getGroupingInformation();
+            console.log($scope.groupingMembers);
             $scope.confirmAddMembersModalInstance = $uibModal.open({
-                templateUrl: "modal/confirmAddMembersModal",
+                templateUrl: "modal/addMembersModal",
                 scope: $scope
             });
-            $scope.loading = false;
             $scope.confirmAddMembersModalInstance.result.finally(function () {
                 clearAddMemberInput(listName);
                 $scope.loading = true;
-                if ($scope.listName === "admins") {
-                    // Refreshes the groupings list and the admins list
-                    $scope.init();
-                } else {
-                    $scope.getGroupingInformation();
-                }
+                $scope.init();
             });
         };
 
@@ -699,6 +696,11 @@
         };
          */
 
+        $scope.closeAddMultipleMembersResultModal = function () {
+            clearAddMemberInput($scope.listName);
+            $scope.confirmAddMembersModalInstance.dismiss();
+            $scope.cancelImportModalInstance();
+        };
         /**
          * Cancel the import Modal instance
          */
