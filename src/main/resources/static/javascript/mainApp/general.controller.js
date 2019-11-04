@@ -601,8 +601,9 @@
          */
         $scope.createConfirmImportModal = function (userNameList, listName) {
             let groupingPath = $scope.selectedGrouping.path;
-            let handleSuccessfulAdd = function () {
+            let handleSuccessfulAdd = function (res) {
                 $scope.updateImportMembers(listName);
+                console.log(res);
             };
             if (listName === "Include")
                 groupingsService.addMembersToInclude(groupingPath, userNameList, handleSuccessfulAdd, handleUnsuccessfulRequest);
