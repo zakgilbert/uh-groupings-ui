@@ -22,6 +22,7 @@
         $scope.sortName = false;
         $scope.sortStatus = false;
         $scope.addMultipleMembers = false;
+        $scope.usersAdded = [];
 
         $scope.summarizeImport = false;
         $scope.listImport = false;
@@ -593,6 +594,14 @@
 
         };
 
+        function extractImportResponse(res) {
+            let result = [];
+            for (let i = 0; i < res.length; i++) {
+                result.push(res[i][0].person);
+            }
+            return result;
+        }
+
         /**
          * - Post new imported data to the grouper database
          * - Open import success modal
@@ -602,8 +611,10 @@
         $scope.createConfirmImportModal = function (userNameList, listName) {
             let groupingPath = $scope.selectedGrouping.path;
             let handleSuccessfulAdd = function (res) {
+                for (let i = 0; i < res.length; i++)
+                    $scope.usersAdded.push(res[i][0].person);
+                console.log($scope.usersAdded);
                 $scope.updateImportMembers(listName);
-                console.log(res);
             };
             if (listName === "Include")
                 groupingsService.addMembersToInclude(groupingPath, userNameList, handleSuccessfulAdd, handleUnsuccessfulRequest);
@@ -620,9 +631,9 @@
         $scope.updateImportMembers = function (listName) {
             $scope.loading = false;
             $scope.getGroupingInformation();
-            console.log($scope.groupingMembers);
             $scope.confirmAddMembersModalInstance = $uibModal.open({
                 templateUrl: "modal/addMembersModal",
+                size: "lg",
                 scope: $scope
             });
             $scope.confirmAddMembersModalInstance.result.finally(function () {

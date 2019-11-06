@@ -26,12 +26,16 @@
                     <table>
                         <thead class="import-table-thead-tbody-tr import-table-thead">
                         <tr class="import-table-thead-tbody-tr" style="white-space: nowrap">
-                            <td>User Name</td>
+                            <td>UH UserName</td>
+                            <td>UH Uuid</td>
+                            <td>Name</td>
                         </tr>
                         </thead>
                         <tbody class="import-table-tbody">
-                        <tr class="import-table-thead-tbody-tr" ng-repeat="item in userNameList">
-                            <td>{{item}}</td>
+                        <tr class="import-table-thead-tbody-tr" ng-repeat="item in usersAdded">
+                            <td>{{item.username}}</td>
+                            <td>{{item.uuid}}</td>
+                            <td>{{item.name}}</td>
                         </tr>
                         </tbody>
                     </table>
