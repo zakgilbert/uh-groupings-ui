@@ -1,10 +1,9 @@
-
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
       lang="en">
 <div class="modal-header">
     <h5 class="modal-title" id="modal-title">Add Results</h5>
-    <button type="button" class="close" data-dismiss="dialog" ng-click="cancelImportModalInstance()">
+    <button type="button" class="close" data-dismiss="dialog" ng-click="closeAddMultipleMembersResultModal()">
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
@@ -13,7 +12,7 @@
         <!--
         <span style="color: black" th:text="#{screen.message.modal.import.confirmation}"></span>
         -->
-        <span style="color: black" >The following members have been added</span>
+        <span style="color: black">The following members have been added</span>
         <span style="color: black;">{{listName}} list.</span>
     </p>
     <div class="container">

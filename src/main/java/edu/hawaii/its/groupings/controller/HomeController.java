@@ -201,9 +201,9 @@ public class HomeController {
         return "modal/importModal";
     }
 
-    @RequestMapping(value = "/modal/addMembersModal", method = RequestMethod.GET)
-    public String addMembersModal(Locale locale, Model model) {
-        return "modal/addMembersModal";
+    @RequestMapping(value = "/modal/displayMultipleAddResults", method = RequestMethod.GET)
+    public String displayMultipleAddResults(Locale locale, Model model) {
+        return "modal/displayMultipleAddResults";
     }
 
     @RequestMapping(value = "/modal/confirmAddMembersModal", method = RequestMethod.GET)

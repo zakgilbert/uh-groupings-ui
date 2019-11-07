@@ -576,6 +576,7 @@
             reader.onload = function (e) {
                 let str = e.target.result;
                 $scope.userNameList = $scope.createUniqArrayFromString(str, "\n");
+                $scope.importMembers();
             };
             reader.readAsText(file);
         };
@@ -594,32 +595,28 @@
 
         };
 
-        function extractImportResponse(res) {
-            let result = [];
-            for (let i = 0; i < res.length; i++) {
-                result.push(res[i][0].person);
-            }
-            return result;
-        }
-
         /**
          * - Post new imported data to the grouper database
+         * - Extract server response
          * - Open import success modal
          * @param userNameList - string of comma separated user names
          * @param listName - Include or Exclude
          */
         $scope.createConfirmImportModal = function (userNameList, listName) {
             let groupingPath = $scope.selectedGrouping.path;
+
+
             let handleSuccessfulAdd = function (res) {
                 for (let i = 0; i < res.length; i++)
                     $scope.usersAdded.push(res[i][0].person);
-                console.log($scope.usersAdded);
-                $scope.updateImportMembers(listName);
+                $scope.IMPORT_COUNT = $scope.usersAdded.length;
+                $scope.displayImportModal(listName);
             };
             if (listName === "Include")
                 groupingsService.addMembersToInclude(groupingPath, userNameList, handleSuccessfulAdd, handleUnsuccessfulRequest);
             else if (listName === "Exclude")
                 groupingsService.addMembersToExclude(groupingPath, userNameList, handleSuccessfulAdd, handleUnsuccessfulRequest);
+
         };
 
         /**
@@ -628,16 +625,15 @@
          * - Refresh page after the modal is closed
          * @param listName
          */
-        $scope.updateImportMembers = function (listName) {
+        $scope.displayImportModal = function (listName) {
             $scope.loading = false;
             $scope.getGroupingInformation();
             $scope.confirmAddMembersModalInstance = $uibModal.open({
-                templateUrl: "modal/addMembersModal",
+                templateUrl: "modal/displayMultipleAddResults",
                 size: "lg",
                 scope: $scope
             });
             $scope.confirmAddMembersModalInstance.result.finally(function () {
-                clearAddMemberInput(listName);
                 $scope.loading = true;
                 $scope.init();
             });
@@ -713,6 +709,7 @@
             $scope.confirmAddMembersModalInstance.dismiss();
             $scope.cancelImportModalInstance();
         };
+
         /**
          * Cancel the import Modal instance
          */
@@ -1300,6 +1297,8 @@
                     $scope.addMultipleMembers = false;
                     $scope.VALID_UNAME_COUNT = 0;
                     $scope.importCount = 0;
+                    $scope.IMPORT_COUNT = 0;
+                    $scope.usersAdded = [];
                     break;
                 case "Exclude":
                     $scope.userToAdd = "";
@@ -1313,6 +1312,8 @@
                     $scope.addMultipleMembers = false;
                     $scope.VALID_UNAME_COUNT = 0;
                     $scope.importCount = 0;
+                    $scope.IMPORT_COUNT = 0;
+                    $scope.usersAdded = [];
                     break;
                 case "owners":
                     $scope.ownerToAdd = "";
