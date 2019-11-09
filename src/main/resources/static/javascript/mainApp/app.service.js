@@ -6,7 +6,7 @@
      */
     UHGroupingsApp.factory("dataProvider", function ($http, $window) {
         return {
-            //todo It might be possible to use async/await function to change the promise behavior to better accomodate async getGrouping
+            //todo It might be possible to use async/await function to change the promise behavior to better accommodate async getGrouping
             /**
              * Performs a GET request to the specified URL.
              * @param {function} callback - the function to perform on a successful request (200)
@@ -33,8 +33,8 @@
              */
             updateData: function (callback, callError, url) {
                 $http.post(encodeURI(url))
-                    .then(function (response) {
-                        callback(response.data);
+                    .then(async function (response) {
+                        await callback(response.data);
                     }, function (response) {
                         callError(response);
                         console.log("Error in dataProvider; status: ", response.status);

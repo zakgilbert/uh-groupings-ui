@@ -42,9 +42,8 @@
         </table>
     </div>
 </div>
-<div class="modal-footer"
->
-    <p style="padding-right: 100px; padding-left: 20px">
+<div class="modal-footer">
+    <p>
         You have successfully added
         <span class="blu-bold">{{ IMPORT_COUNT }}</span>
         users to the
@@ -52,8 +51,8 @@
         <span style="color: black"> list</span>
     </p>
     <button class="btn btn-primary" ng-click="closeAddMultipleMembersResultModal()">OK</button>
-    <!---
-    <button class="btn btn-default" data-dismiss="modal" ng-click="cancelImportModalInstance()">Cancel</button>
-    --->
+    <button class="btn btn-primary" ng-click="exportGroupToCsv(usersAdded, selectedGrouping.name, listName )">
+        Export to Csv
+    </button>
 </div>
 </html>

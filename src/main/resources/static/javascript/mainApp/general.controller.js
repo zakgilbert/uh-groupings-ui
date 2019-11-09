@@ -605,11 +605,11 @@
         $scope.createConfirmImportModal = function (userNameList, listName) {
             let groupingPath = $scope.selectedGrouping.path;
 
-
             let handleSuccessfulAdd = function (res) {
                 for (let i = 0; i < res.length; i++)
                     $scope.usersAdded.push(res[i][0].person);
                 $scope.IMPORT_COUNT = $scope.usersAdded.length;
+                console.log($scope.usersAdded);
                 $scope.displayImportModal(listName);
             };
             if (listName === "Include")
@@ -1606,22 +1606,20 @@
          * @returns the table in CSV format
          */
         $scope.convertListToCsv = function (table) {
-            let str = "Last,First,Username,uhNumber,Email\r\n";
+            let fields = Object.keys(table[0]);
+            let str = toCommaSeparatedString(fields);
+            str += "\r\n";
+
             for (let i = 0; i < table.length; i++) {
                 let line = "";
-                line += table[i].lastName + ",";
-                line += table[i].firstName + ",";
-                line += table[i].username + ",";
-                line += table[i].uuid + ",";
-                line += table[i].username + "@hawaii.edu,";
+                for (let k = 0; k < fields.length - 1; k++) {
+                    line += table[i][fields[k]] + ",";
+                }
                 str += line + "\r\n";
             }
             return str;
         };
 
-        $scope.convertImportDataToCsv = function (data) {
-
-        };
 
         /**
          * Determines whether a warning message should be displayed when removing yourself from a list.
