@@ -592,19 +592,24 @@
             let validUserNames = toCommaSeparatedString($scope.userNameList);
 
             // $scope.loading = true;
-            $scope.createConfirmImportModal(validUserNames, $scope.listName);
-
+            $scope.createAddResultsModal(validUserNames, $scope.listName);
         };
 
         /**
-         * NEEDS RENAME
+         * Create an on success callback which is passed in to an addMembers function.  Both addmembersToInclude() and
+         * addMembersToExclude() send a POST to the server. On the response, the users which were successfully added to the
+         * grouping are returned in the res object contained in handleSuccessfullAdd. Since the add functions are
+         * called as asynchronous, JavaScript will not wait for the response, Although the Import Status modal will
+         * render once the HTTP response is received.
          * @param userNameList
          * @param listName
          * @return {Promise<void>}
          */
-        $scope.createConfirmImportModal = async function (userNameList, listName) {
+        $scope.createAddResultsModal = async function (userNameList, listName) {
             let groupingPath = $scope.selectedGrouping.path;
+
             let handleSuccessfulAdd = function (res) {
+                console.log(res);
                 for (let i = 0; i < res.length; i++)
                     $scope.usersAdded.push(res[i][0].person);
                 $scope.IMPORT_COUNT = $scope.usersAdded.length;
@@ -612,6 +617,7 @@
                 $scope.waitingOnAsyncResponse = false;
                 $scope.displayImportModal(listName);
             };
+
             $scope.waitingOnAsyncResponse = true;
             if (listName === "Include")
                 await groupingsService.addMembersToInclude(groupingPath, userNameList, handleSuccessfulAdd, handleUnsuccessfulRequest);
