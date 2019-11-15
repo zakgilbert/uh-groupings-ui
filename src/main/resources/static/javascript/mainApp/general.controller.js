@@ -590,7 +590,7 @@
             $scope.imported = true;
             let validUserNames = toCommaSeparatedString($scope.userNameList);
 
-            $scope.loading = true;
+           // $scope.loading = true;
             $scope.createConfirmImportModal(validUserNames, $scope.listName);
 
         };
@@ -602,7 +602,7 @@
          * @param userNameList - string of comma separated user names
          * @param listName - Include or Exclude
          */
-        $scope.createConfirmImportModal = function (userNameList, listName) {
+        $scope.createConfirmImportModal = async function (userNameList, listName) {
             let groupingPath = $scope.selectedGrouping.path;
 
             let handleSuccessfulAdd = function (res) {
@@ -612,10 +612,11 @@
                 console.log($scope.usersAdded);
                 $scope.displayImportModal(listName);
             };
+
             if (listName === "Include")
-                groupingsService.addMembersToInclude(groupingPath, userNameList, handleSuccessfulAdd, handleUnsuccessfulRequest);
+               await groupingsService.addMembersToInclude(groupingPath, userNameList, handleSuccessfulAdd, handleUnsuccessfulRequest);
             else if (listName === "Exclude")
-                groupingsService.addMembersToExclude(groupingPath, userNameList, handleSuccessfulAdd, handleUnsuccessfulRequest);
+                await groupingsService.addMembersToExclude(groupingPath, userNameList, handleSuccessfulAdd, handleUnsuccessfulRequest);
 
         };
 
@@ -626,14 +627,14 @@
          * @param listName
          */
         $scope.displayImportModal = function (listName) {
-            $scope.loading = false;
+          //  $scope.loading = false;
             $scope.getGroupingInformation();
             $scope.confirmAddMembersModalInstance = $uibModal.open({
                 templateUrl: "modal/displayMultipleAddResults",
                 scope: $scope
             });
             $scope.confirmAddMembersModalInstance.result.finally(function () {
-                $scope.loading = true;
+             //   $scope.loading = true;
                 $scope.init();
             });
         };

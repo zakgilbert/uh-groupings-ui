@@ -87,8 +87,11 @@
              * @param {string} userToAdd - the usernames of the members to add
              */
             addMembersToInclude: function (path, usersToAdd, onSuccess, onError) {
-                var endpoint = BASE_URL + path + "/" + usersToAdd + "/addMembersToIncludeGroup";
-                dataProvider.updateData(onSuccess, onError, endpoint);
+                return new Promise(resolve => {
+                    var endpoint = BASE_URL + path + "/" + usersToAdd + "/addMembersToIncludeGroup";
+                    dataProvider.updateData(onSuccess, onError, endpoint);
+                    resolve();
+                });
             },
 
             /**
@@ -178,7 +181,7 @@
                 let endpoint = BASE_URL + "members/" + member;
                 dataProvider.loadData(onSuccess, onError, endpoint);
             },
-            
+
             /**
              * Checks if member exists so that multiple pending user names can be displayed for the user.
              * @param {string} member - the UH username of the member.

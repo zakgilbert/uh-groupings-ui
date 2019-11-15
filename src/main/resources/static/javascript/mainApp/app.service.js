@@ -33,8 +33,8 @@
              */
             updateData: function (callback, callError, url) {
                 $http.post(encodeURI(url))
-                    .then(async function (response) {
-                        await callback(response.data);
+                    .then(function (response) {
+                        callback(response.data);
                     }, function (response) {
                         callError(response);
                         console.log("Error in dataProvider; status: ", response.status);
