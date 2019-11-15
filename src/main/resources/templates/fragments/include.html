@@ -106,9 +106,10 @@
                             <button class="btn btn-primary"
                                     ng-click="launchImportModal('Include')">Import File
                             </button>
-                            <div class="spinner-border spinner-border-sm" style="display:inline-block"
+                            <div class="spinner-border spinner-border-sm" data-toggle="tooltip"
+                                 style="display:inline-block"
                                  ng-hide="!waitingOnAsyncResponse"
-                                 role="status">
+                                 role="status" th:title="Waiting for response from server">
                                 <span class="sr-only">Loading...</span>
                             </div>
                         </div>
