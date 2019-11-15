@@ -630,7 +630,6 @@
             $scope.getGroupingInformation();
             $scope.confirmAddMembersModalInstance = $uibModal.open({
                 templateUrl: "modal/displayMultipleAddResults",
-                size: "lg",
                 scope: $scope
             });
             $scope.confirmAddMembersModalInstance.result.finally(function () {
@@ -1582,6 +1581,7 @@
             let data, filename, link;
 
             let csv = $scope.convertListToCsv(table);
+
             if (csv == null) {
                 $scope.createApiErrorModal();
                 return;

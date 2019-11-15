@@ -17,28 +17,20 @@
     </p>
     <div class="container">
         <table>
-            <tr>
-                <td>
-                    <table>
-                        <thead class="import-table-thead-tbody-tr import-table-thead">
-                        <tr class="import-table-thead-tbody-tr" style="white-space: nowrap">
-                            <td>UH UserName</td>
-                            <td>UH Uuid</td>
-                            <td>Name</td>
-                        </tr>
-                        </thead>
-                        <tbody class="import-table-tbody">
-                        <tr class="import-table-thead-tbody-tr" ng-repeat="item in usersAdded">
-                            <td>{{item.username}}</td>
-                            <td>{{item.uuid}}</td>
-                            <td>{{item.name}}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </td>
-                <td>
-                </td>
+            <thead class="import-table-thead-tbody-tr import-table-thead">
+            <tr class="import-table-thead-tbody-tr" style="white-space: nowrap">
+                <td>UH Username</td>
+                <td>UH Uuid</td>
+                <td>Name</td>
             </tr>
+            </thead>
+            <tbody class="import-table-tbody">
+            <tr class="import-table-thead-tbody-tr" ng-repeat="item in usersAdded">
+                <td>{{item.username}}</td>
+                <td>{{item.uuid}}</td>
+                <td>{{item.name}}</td>
+            </tr>
+            </tbody>
         </table>
     </div>
 </div>
@@ -48,10 +40,11 @@
         <span class="blu-bold">{{ IMPORT_COUNT }}</span>
         users to the
         <span style="color: black">{{ listName }}</span>
-        <span style="color: black"> list</span>
+        <span style="color: black"> list.</span>
     </p>
     <button class="btn btn-primary" ng-click="closeAddMultipleMembersResultModal()">OK</button>
-    <button class="btn btn-primary" ng-click="exportGroupToCsv(usersAdded, selectedGrouping.name, listName )">
+    <button class="btn btn-sm btn-primary float-right mb-1 mt-1"
+            ng-click="exportGroupToCsv(usersAdded, selectedGrouping.name, listName )">
         Export to Csv
     </button>
 </div>
