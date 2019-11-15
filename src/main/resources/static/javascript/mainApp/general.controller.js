@@ -23,6 +23,7 @@
         $scope.sortStatus = false;
         $scope.addMultipleMembers = false;
         $scope.usersAdded = [];
+        $scope.waitingOnAsyncResponse = false;
 
         $scope.summarizeImport = false;
         $scope.listImport = false;
@@ -608,14 +609,14 @@
                     $scope.usersAdded.push(res[i][0].person);
                 $scope.IMPORT_COUNT = $scope.usersAdded.length;
                 console.log($scope.usersAdded);
+                $scope.waitingOnAsyncResponse = false;
                 $scope.displayImportModal(listName);
             };
-
+            $scope.waitingOnAsyncResponse = true;
             if (listName === "Include")
                 await groupingsService.addMembersToInclude(groupingPath, userNameList, handleSuccessfulAdd, handleUnsuccessfulRequest);
             else if (listName === "Exclude")
                 await groupingsService.addMembersToExclude(groupingPath, userNameList, handleSuccessfulAdd, handleUnsuccessfulRequest);
-            $scope.launchImportModal.close();
 
         };
 
