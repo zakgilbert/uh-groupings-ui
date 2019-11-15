@@ -590,21 +590,19 @@
             $scope.imported = true;
             let validUserNames = toCommaSeparatedString($scope.userNameList);
 
-           // $scope.loading = true;
+            // $scope.loading = true;
             $scope.createConfirmImportModal(validUserNames, $scope.listName);
 
         };
 
         /**
-         * - Post new imported data to the grouper database
-         * - Extract server response
-         * - Open import success modal
-         * @param userNameList - string of comma separated user names
-         * @param listName - Include or Exclude
+         * NEEDS RENAME
+         * @param userNameList
+         * @param listName
+         * @return {Promise<void>}
          */
         $scope.createConfirmImportModal = async function (userNameList, listName) {
             let groupingPath = $scope.selectedGrouping.path;
-
             let handleSuccessfulAdd = function (res) {
                 for (let i = 0; i < res.length; i++)
                     $scope.usersAdded.push(res[i][0].person);
@@ -614,9 +612,10 @@
             };
 
             if (listName === "Include")
-               await groupingsService.addMembersToInclude(groupingPath, userNameList, handleSuccessfulAdd, handleUnsuccessfulRequest);
+                await groupingsService.addMembersToInclude(groupingPath, userNameList, handleSuccessfulAdd, handleUnsuccessfulRequest);
             else if (listName === "Exclude")
                 await groupingsService.addMembersToExclude(groupingPath, userNameList, handleSuccessfulAdd, handleUnsuccessfulRequest);
+            $scope.launchImportModal.close();
 
         };
 
@@ -627,14 +626,14 @@
          * @param listName
          */
         $scope.displayImportModal = function (listName) {
-          //  $scope.loading = false;
+            //  $scope.loading = false;
             $scope.getGroupingInformation();
             $scope.confirmAddMembersModalInstance = $uibModal.open({
                 templateUrl: "modal/displayMultipleAddResults",
                 scope: $scope
             });
             $scope.confirmAddMembersModalInstance.result.finally(function () {
-             //   $scope.loading = true;
+                //   $scope.loading = true;
                 $scope.init();
             });
         };

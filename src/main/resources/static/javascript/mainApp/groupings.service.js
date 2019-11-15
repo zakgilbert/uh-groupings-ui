@@ -90,7 +90,6 @@
                 return new Promise(resolve => {
                     var endpoint = BASE_URL + path + "/" + usersToAdd + "/addMembersToIncludeGroup";
                     dataProvider.updateData(onSuccess, onError, endpoint);
-                    resolve();
                 });
             },
 
@@ -110,8 +109,10 @@
              * @param {string} usersToAdd - the usernames of the members to add
              */
             addMembersToExclude: function (path, usersToAdd, onSuccess, onError) {
-                let endpoint = BASE_URL + path + "/" + usersToAdd + "/addMembersToExcludeGroup";
-                dataProvider.updateData(onSuccess, onError, endpoint);
+                return new Promise(resolve => {
+                    let endpoint = BASE_URL + path + "/" + usersToAdd + "/addMembersToExcludeGroup";
+                    dataProvider.updateData(onSuccess, onError, endpoint);
+                });
             },
 
             /**
