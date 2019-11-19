@@ -498,6 +498,7 @@ public class GroupingsRestController {
     }
 
     //todo Remove
+
     /**
      * This allows an owner of a Grouping to change whether or not a Grouping is connected to a Listserv
      *
@@ -519,6 +520,7 @@ public class GroupingsRestController {
     }
 
     //todo Remove
+
     /**
      * This allows an owner of a Grouping to change whether or not a Grouping is connected to LDAP.
      *
@@ -542,7 +544,7 @@ public class GroupingsRestController {
     /**
      * This allows an owner of a Grouping to enable that a Grouping connected to a given sync destination
      *
-     * @param path: the path to the Grouping
+     * @param path:       the path to the Grouping
      * @param syncDestId: id of the syncDest to be enabled
      * @return information about the success of the operation
      */
@@ -563,7 +565,7 @@ public class GroupingsRestController {
     /**
      * This allows an owner of a Grouping to disable that a Grouping connected to a given sync destination
      *
-     * @param path: the path to the Grouping
+     * @param path:       the path to the Grouping
      * @param syncDestId: id of the syncDest to be disabled
      * @return information about the success of the operation
      */
@@ -631,6 +633,7 @@ public class GroupingsRestController {
 
     /**
      * Returns a list of supported sync destinations
+     *
      * @return List of Sync Destinations
      */
     @RequestMapping(value = "/syncDestinations",

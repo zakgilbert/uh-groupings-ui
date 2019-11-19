@@ -609,11 +609,9 @@
             let groupingPath = $scope.selectedGrouping.path;
 
             let handleSuccessfulAdd = function (res) {
-                console.log(res);
                 for (let i = 0; i < res.length; i++)
                     $scope.usersAdded.push(res[i][0].person);
                 $scope.IMPORT_COUNT = $scope.usersAdded.length;
-                console.log($scope.usersAdded);
                 $scope.waitingOnAsyncResponse = false;
                 $scope.displayImportModal(listName);
             };
