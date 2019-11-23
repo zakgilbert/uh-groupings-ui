@@ -1703,8 +1703,8 @@
          */
         $scope.exportGroupToCsv = function (table, grouping, list) {
             let data, filename, link;
-
             let csv = $scope.convertListToCsv(table);
+
             if (csv == null) {
                 $scope.createApiErrorModal();
                 return;
@@ -1726,22 +1726,25 @@
         /**
          * Converts the data in the table into comma-separated values.
          * @param {object[]} table - the table to convert
-         * @returns the table in CSV format
+         * @returns string table in CSV format
          */
         $scope.convertListToCsv = function (table) {
-            let str = "Last,First,Username,uhNumber,Email\r\n";
-            for (let i = 0; i < table.length; i++) {
+            let fields = Object.keys(table[0]);
+            let str = "";
+            for (let i = 0; i < fields.length - 1; i++)
+                str += fields[i] + ",";
+
+            str += "\r\n";
+
+            for (let i = 0; i < table.length - 1; i++) {
                 let line = "";
-                line += table[i].lastName + ",";
-                line += table[i].firstName + ",";
-                line += table[i].username + ",";
-                line += table[i].uuid + ",";
-                line += table[i].username + "@hawaii.edu,";
+                for (let k = 0; k < fields.length; k++) {
+                    line += table[i][fields[k]] + ",";
+                }
                 str += line + "\r\n";
             }
             return str;
         };
-
         /**
          * Determines whether a warning message should be displayed when removing yourself from a list.
          * @returns {boolean} returns true if you are removing yourself from either the owners or admins list, otherwise
