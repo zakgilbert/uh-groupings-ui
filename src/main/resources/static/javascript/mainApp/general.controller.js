@@ -534,21 +534,20 @@
             reader.readAsText(file);
         };
 
-        $scope.addMultipleMembers = function (list, listName, size) {
+        $scope.addMultipleMembers = async function (list, listName, size) {
             let groupingPath = $scope.selectedGrouping.path;
-            if (size > $scope.MAX_IMPORT)
-                $scope.launchCreateGenericOkModal("Test", `You are attempting to add a large group of size ${size}, this could take a while.`);
+            let timeoutModal = function () {
+                return launchCreateGenericOkModal("Test", `You are attempting to add a large group of size ${size}, this could take a while.`);
+            };
+
             let handleSuccessfulAdd = function (res) {
                 console.log(res);
                 $scope.updateImportMembers(listName);
             };
-            let fourOfour = function (res) {
-                $scope.updateImportMembers(listName);
-            };
             if (listName === "Include")
-                groupingsService.addMembersToInclude(groupingPath, list, handleSuccessfulAdd, fourOfour);
+                await groupingsService.addMembersToInclude(groupingPath, list, handleSuccessfulAdd, handleUnsuccessfulRequest, timeoutModal);
             else if (listName === "Exclude")
-                groupingsService.addMembersToExclude(groupingPath, list, handleSuccessfulAdd, fourOfour);
+                await groupingsService.addMembersToExclude(groupingPath, list, handleSuccessfulAdd, handleUnsuccessfulRequest, timeoutModal);
         };
 
         /**
@@ -618,7 +617,7 @@
             $scope.confirmImportInstance.close();
         };
 
-        $scope.launchCreateGenericOkModal = function (title, body) {
+        function launchCreateGenericOkModal(title, body) {
             $scope.currentModalTitle = title;
             $scope.currentModalBody = body;
 
