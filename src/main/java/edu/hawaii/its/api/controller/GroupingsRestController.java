@@ -417,6 +417,18 @@ public class GroupingsRestController {
         String uri = String.format(API_2_1_BASE + "/owners/%s/groupings", safeUid);
         return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.GET);
     }
+    /**
+     * @return a list of groupings that a user owns
+     */
+    @RequestMapping(value = "/{path}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity gen(Principal principal, @PathVariable String path) {
+        logger.info("Entered REST GroupingAssignment...");
+
+        String uri = String.format(API_2_1_BASE + "/%s", path);
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.GET);
+    }
 
     /**
      * gives the user read, update and view privileges for the Grouping

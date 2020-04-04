@@ -182,6 +182,9 @@
 
             //Increments due to being called again
             asyncThreadCount++;
+            groupingsService.gen("owners/groupings",
+                (res) => console.log(res),
+                (res) => console.log(res));
 
             /**
              * Makes sure only one asyncThreadCount is running to call another grouping

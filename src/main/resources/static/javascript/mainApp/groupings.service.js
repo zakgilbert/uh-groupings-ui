@@ -307,6 +307,10 @@
             getGroupingsOwned(onSuccess, onError) {
                 let endpoint = BASE_URL + "owners/groupings";
                 dataProvider.loadData(onSuccess, onError, endpoint);
+            },
+            gen(path, onSuccess, onError) {
+                let endpoint = BASE_URL + path;
+                dataProvider.loadData(onSuccess, onError, endpoint);
             }
         };
     });
