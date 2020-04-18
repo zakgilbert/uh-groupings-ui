@@ -697,6 +697,23 @@
          */
         $scope.addMember = function (list) {
             let groupingPath = $scope.selectedGrouping.path;
+            let groupPath = list.toLowerCase();
+            let addObject = null;
+            groupingsService.getAddCheck(groupingPath, groupPath, $scope.userToAdd,
+                (res) => {
+                    console.log(groupingsService.parseGenericResponseData(res));
+                },
+                (res) => console.log(res)
+            );
+
+
+            /*
+            if (!addObject.add)
+                return launchCreateGenericOkModal("Invalid Uid", "The Uid you are attempting to add is invalid please try again", 20000);
+
+             */
+
+            /*
             groupingsService.getGrouping(groupingPath, 1, PAGE_SIZE, "name", true, function () {
                 let user = $scope.userToAdd;
                 let inBasis = _.some($scope.groupingBasis, { username: user });
@@ -719,6 +736,8 @@
                     $scope.createOwnerErrorModal();
                 }
             });
+
+             */
         };
 
         /**

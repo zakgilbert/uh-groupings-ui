@@ -78,6 +78,11 @@
                 dataProvider.loadData(onSuccess, onError, endpoint);
             },
 
+            getAddCheck(groupingPath, groupPath, userToCheck, onSuccess, onError) {
+                let endpoint = BASE_URL + groupingPath + "/" + groupPath + "/" + userToCheck + "/getAddCheck";
+                dataProvider.loadData(onSuccess, onError, endpoint);
+            },
+
             /**
              * Adds a member to the include group of a grouping.
              * @param {string} path - the path to the grouping
@@ -318,12 +323,12 @@
              */
             parseGenericResponseData(response) {
                 let parsedObject = {};
-                if (!(_.isEqual(["data", "map"], Object.keys(response))))
+                if (!(_.isEqual(["data", "keys"], Object.keys(response))))
                     parsedObject = { "Response Parse Error": "Keys were not set due to response format", ...response };
                 else {
-                    let keys = Object.keys(response.map);
+                    let keys = Object.keys(response.keys);
                     for (let i = 0; i < keys.length; i++)
-                        parsedObject[keys[i]] = response.data[response.map[keys[i]]];
+                        parsedObject[keys[i]] = response.data[response.keys[keys[i]]];
                 }
                 return parsedObject;
             }

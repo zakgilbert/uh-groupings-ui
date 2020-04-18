@@ -232,6 +232,19 @@ public class GroupingsRestController {
         return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.PUT);
     }
 
+    @GetMapping(value = "/{groupingPath}/{groupPath}/{userToCheck}/getAddCheck")
+    public ResponseEntity getAddCheck(Principal principal,
+            @PathVariable String groupingPath, @PathVariable String groupPath, @PathVariable String userToCheck) {
+        logger.info("Entered REST getAddCheck");
+        String uri =
+                String.format(API_2_1_BASE + "/groupings/%s/grouping/%s/checkAddMember/%s", groupingPath, groupPath,
+                        userToCheck);
+        System.out.println("------------------------------------");
+        System.out.println(uri);
+        System.out.println("------------------------------------");
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.GET);
+    }
+
     /**
      * adds a member to the include group of the Grouping who's path is in 'grouping'
      * if that member is in the exclude group, they will be removed from it
