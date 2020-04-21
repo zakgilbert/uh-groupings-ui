@@ -12,6 +12,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -239,10 +240,15 @@ public class GroupingsRestController {
         String uri =
                 String.format(API_2_1_BASE + "/groupings/%s/grouping/%s/checkAddMember/%s", groupingPath, groupPath,
                         userToCheck);
-        System.out.println("------------------------------------");
-        System.out.println(uri);
-        System.out.println("------------------------------------");
         return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.GET);
+    }
+
+    @PostMapping(value = "/{addPath}/{delPath}/{userToAdd}/addMember")
+    public ResponseEntity addMember(Principal principal,
+            @PathVariable String addPath, @PathVariable String delPath, @PathVariable String userToAdd) {
+        logger.info("Entered REST addMember");
+        String uri = String.format(API_2_1_BASE + "/groupings/%s/%s/addMember/%s", addPath, delPath, userToAdd);
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.PUT);
     }
 
     /**

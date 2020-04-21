@@ -83,6 +83,11 @@
                 dataProvider.loadData(onSuccess, onError, endpoint);
             },
 
+            addMember(addPath, delPath, userToAdd, onSuccess, onError) {
+                let endpoint = BASE_URL + addPath + "/" + delPath + "/" + userToAdd + "/addMember";
+                dataProvider.updateData(onSuccess, onError, endpoint);
+            },
+
             /**
              * Adds a member to the include group of a grouping.
              * @param {string} path - the path to the grouping

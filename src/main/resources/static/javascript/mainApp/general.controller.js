@@ -579,7 +579,6 @@
             await groupingsService[(listName === "Include") ? (fun + "Include") : (fun + "Exclude")]
             (groupingPath, list, handleSuccessfulAdd, handleUnsuccessfulRequest, timeoutModal);
 
-
             /*
              if (listName === "Include")
                  await groupingsService.addMembersToInclude(groupingPath, list, handleSuccessfulAdd,
@@ -701,43 +700,26 @@
             let addObject = null;
             groupingsService.getAddCheck(groupingPath, groupPath, $scope.userToAdd,
                 (res) => {
-                    console.log(groupingsService.parseGenericResponseData(res));
+                    addObject = groupingsService.parseGenericResponseData(res);
+                    if ("FAILURE" === addObject.result.resultCode) {
+                        launchCreateGenericOkModal("Invalid Uid Error", "The uid enter is not valid.", 20000);
+                        return;
+                    }
+                    if (!addObject.add) {
+                        launchCreateGenericOkModal("Already in Group", "The person entered is all ready in the " + groupPath + " group.", 20000);
+                        return;
+                    }
+                    launchCreateGenericOkModal("Confirm Adding New Member", "Adding " + $scope.userToAdd + " to the " + groupPath);
+                    let addPath = addObject.addPath;
+                    let deletePath = addObject.deletePath;
+                    if (!addObject.delete) {
+                        deletePath = "null";
+                    }
+                    groupingsService.addMember(addPath, deletePath, $scope.userToAdd, (res) => console.log(groupingsService.parseGenericResponseData(res)), (res) => console.log(res));
+
                 },
                 (res) => console.log(res)
             );
-
-
-            /*
-            if (!addObject.add)
-                return launchCreateGenericOkModal("Invalid Uid", "The Uid you are attempting to add is invalid please try again", 20000);
-
-             */
-
-            /*
-            groupingsService.getGrouping(groupingPath, 1, PAGE_SIZE, "name", true, function () {
-                let user = $scope.userToAdd;
-                let inBasis = _.some($scope.groupingBasis, { username: user });
-                if (_.isEmpty(user)) {
-                    $scope.createAddErrorModal(user);
-                } else if ($scope.existInList(user, list)) {
-                    $scope.createCheckModal(user, list, false, inBasis);
-                } else if ($scope.isInAnotherList(user, list)) {
-                    $scope.createCheckModal(user, list, true, inBasis);
-                } else if ((inBasis && list === "Include") || (!inBasis && list === "Exclude")) {
-                    $scope.createBasisWarningModal(user, list, inBasis);
-                } else {
-                    $scope.createConfirmAddModal({
-                        userToAdd: user,
-                        listName: list
-                    });
-                }
-            }, function (res) {
-                if (res.statusCode === 403) {
-                    $scope.createOwnerErrorModal();
-                }
-            });
-
-             */
         };
 
         /**
@@ -1664,8 +1646,7 @@
             $window.location.href = "/uhgroupings/";
         };
 
-    }
+    };
 
     UHGroupingsApp.controller("GeneralJsController", GeneralJsController);
 }());
-//})();
