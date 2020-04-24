@@ -660,10 +660,12 @@
          * @param title - message title to be displayed in modal header
          * @param body - message body to be displayed in modal body
          * @param timeTillClose - Millisecond till modal is modal is automatically closed.
+         * @param closingMethod - Method called on modal closure, defaults to createGenericOkModal.dismiss.
          */
-        function launchCreateGenericOkModal(title, body, timeTillClose) {
+        function launchCreateGenericOkModal(title, body, timeTillClose, closingMethod) {
             $scope.currentModalTitle = title;
             $scope.currentModalBody = body;
+            $scope.closingMethod = closingMethod;
 
             $scope.createGenericOkModal = $uibModal.open({
                 templateUrl: "modal/genericOkModal",
@@ -671,8 +673,8 @@
             });
 
             if (undefined !== timeTillClose) {
-                let closeOnTimeout = function () {
-                    $scope.createGenericOkModal.dismiss();
+                let closeOnTimeout = () => {
+                    $scope.closingMethod();
                 };
                 setTimeout(closeOnTimeout, timeTillClose);
             }
@@ -697,30 +699,49 @@
         $scope.addMember = function (list) {
             let groupingPath = $scope.selectedGrouping.path;
             let groupPath = list.toLowerCase();
+
             let addObject = null;
-            groupingsService.getAddCheck(groupingPath, groupPath, $scope.userToAdd,
+            let addResults = null;
+            let userToAdd = $scope.userToAdd;
+            groupingsService.getAddCheck(groupingPath, groupPath, userToAdd,
                 (res) => {
                     addObject = groupingsService.parseGenericResponseData(res);
                     if ("FAILURE" === addObject.result.resultCode) {
-                        launchCreateGenericOkModal("Invalid Uid Error", "The uid enter is not valid.", 20000);
-                        return;
+                        return launchCreateGenericOkModal("Invalid Uid Error", "The uid enter is not valid.", 20000);
                     }
                     if (!addObject.add) {
-                        launchCreateGenericOkModal("Already in Group", "The person entered is all ready in the " + groupPath + " group.", 20000);
-                        return;
+                        return launchCreateGenericOkModal("Already in Group", "The person entered is all ready in the " + groupPath + " group.", 20000);
                     }
-                    launchCreateGenericOkModal("Confirm Adding New Member", "Adding " + $scope.userToAdd + " to the " + groupPath);
-                    let addPath = addObject.addPath;
-                    let deletePath = addObject.deletePath;
-                    if (!addObject.delete) {
-                        deletePath = "null";
-                    }
-                    groupingsService.addMember(addPath, deletePath, $scope.userToAdd, (res) => console.log(groupingsService.parseGenericResponseData(res)), (res) => console.log(res));
+                    launchCreateGenericOkModal("Confirm Adding New Member", "Adding " + userToAdd + " to the " + groupPath, 20000);
+                    $scope.addPath = addObject.addPath;
+                    $scope.deletePath = addObject.deletePath;
+                    $scope.list = list;
+                    $scope.checkModalInstance = $uibModal.open({
+                        templateUrl: "modal/checkModal",
+                        scope: $scope,
+                        backdrop: "static",
+                        keyboard: false
+                    });
+
 
                 },
                 (res) => console.log(res)
             );
         };
+
+        function adddMember(addPath, deletePath, userToAdd) {
+            groupingsService.addMember(addPath, deletePath, userToAdd, (res) => {
+                addResults = groupingsService.parseGenericResponseData(res);
+                let addResult = addResults.addResult;
+                let deleteResult = addResult.deleteResult;
+                if ("FAILURE" === addResult.resultCode) {
+                    return launchCreateGenericOkModal("Internal Server Error", userToAdd + " was not added to the " + groupPath + " path.", 20000);
+                }
+                launchCreateGenericOkModal("Add Result", userToAdd + " was successfully added to the " + groupPath + " path.", 20000);
+            }, (res) => console.log(res));
+
+
+        }
 
         /**
          * Creates a modal display for members added, and calls addMembersToInclude service.
@@ -809,8 +830,7 @@
          * Creates a modal that asks whether or not they want to add a person that is already in another list.
          * @param user - Username of the user they are trying to add.
          * @param listName - name of the list they are adding to (either Include or Exclude)
-         */
-        $scope.createCheckModal = function (user, listName, swap, inBasis) {
+         $scope.createCheckModal = function (user, listName, swap, inBasis) {
             $scope.user = user;
             $scope.listName = listName;
             $scope.swap = swap;
@@ -827,6 +847,7 @@
                 $scope.updateAddMember(user, listName);
             });
         };
+         */
 
         /**
          * Creates a modal that asks for confirmation when importing multiple users.
