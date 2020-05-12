@@ -91,21 +91,6 @@
             },
 
             /**
-             * Adds a members to the include group of a grouping.
-             * @param {string} path - the path to the grouping
-             * @param usersToAdd
-             * @param onSuccess
-             * @param onError
-             * @param modal
-             */
-            addMembersToInclude(path, usersToAdd, onSuccess, onError, modal) {
-                let endpoint = BASE_URL + path + "/" + usersToAdd + "/addMembersToIncludeGroup";
-                return new Promise(resolve => {
-                    dataProvider.updateDataWithTimeoutModal(onSuccess, onError, endpoint, modal);
-                });
-            },
-
-            /**
              * Adds a member to the exclude group of a grouping.
              * @param {string} path - the path to the grouping
              * @param {string} userToAdd - the username of the member to add
@@ -115,21 +100,6 @@
             addMemberToExclude(path, userToAdd, onSuccess, onError) {
                 let endpoint = BASE_URL + path + "/" + userToAdd + "/addMemberToExcludeGroup";
                 dataProvider.updateData(onSuccess, onError, endpoint);
-            },
-
-            /**
-             * Adds a members to the exclude group of a grouping.
-             * @param {string} path - the path to the grouping
-             * @param {string} usersToAdd - the usernames of the members to add
-             * @param onSuccess
-             * @param onError
-             * @param modal
-             */
-            addMembersToExclude(path, usersToAdd, onSuccess, onError, modal) {
-                let endpoint = BASE_URL + path + "/" + usersToAdd + "/addMembersToExcludeGroup";
-                return new Promise(resolve => {
-                    dataProvider.updateDataWithTimeoutModal(onSuccess, onError, endpoint, modal);
-                });
             },
 
             /**
@@ -308,13 +278,10 @@
              */
             parseGenericResponseData(response) {
                 let parsedObject = {};
-                if (!(_.isEqual(["data", "map"], Object.keys(response))))
-                    parsedObject = { "Response Parse Error": "Keys were not set due to response format", ...response };
-                else {
-                    let keys = Object.keys(response.map);
-                    for (let i = 0; i < keys.length; i++)
-                        parsedObject[keys[i]] = response.data[response.map[keys[i]]];
-                }
+                let keys = Object.keys(response.map);
+                for (let i = 0; i < keys.length; i++)
+                    parsedObject[keys[i]] = response.data[response.map[keys[i]]];
+                parsedObject = { "groupingsServiceResult": response.groupingsServiceResult, ...parsedObject };
                 return parsedObject;
             }
         };
