@@ -54,6 +54,7 @@
          * @param {object} res - the response from opting into/out of a grouping
          */
         function handleSuccessfulOpt(res) {
+            console.log(res);
             if (_.startsWith(res[0].resultCode, "SUCCESS")) {
                 $scope.init();
             }
