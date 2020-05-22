@@ -847,12 +847,8 @@
         $scope.createConfirmAddModal = function (options) {
             const userToAdd = options.userToAdd;
 
-            groupingsService.getMemberAttributes(userToAdd, function (attributes) {
-                $scope.fullNameToAdd = attributes.cn;
-                $scope.givenNameToAdd = attributes.givenName;
-                $scope.uhUuidToAdd = attributes.uhUuid;
-                $scope.uidToAdd = attributes.uid;
-
+            groupingsService.getMemberAttributes(userToAdd, function (res) {
+                $scope.personToAdd = res;
                 $scope.listName = options.listName;
 
                 // Ask for confirmation from the user to add the member
