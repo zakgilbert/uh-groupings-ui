@@ -265,9 +265,8 @@
                         currentPage++;
                     }
                 }, function (res) {
+                    $scope.loading = false;
                     console.log("There was an error in Grouper, refresh the page.");
-                    $scope.paginatingProgress = false;
-                    $scope.paginatingComplete = true;
                     $scope.createApiErrorModal();
                 });
                 //Will only decrement threadcount if previous call absolutely finishes
@@ -343,6 +342,7 @@
                     } else if (res.statusCode === 403) {
                         $scope.createOwnerErrorModal();
                     } else {
+                        $scope.loading = false;
                         console.log("There was an error in Grouper, refresh the page.");
                         $scope.createApiErrorModal();
                         // dataProvider.handleException({ exceptionMessage: JSON.stringify(res, null, 4) }, "feedback/error", "feedback");
