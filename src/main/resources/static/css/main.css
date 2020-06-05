@@ -615,3 +615,13 @@ label input {
 .check-space{
     margin-right: 10px;
 }
+
+.btn-md{
+    width: 90%;
+    padding-right: 16px;
+    padding-left: 9px;
+}
+
+.mng-prsn{
+    padding-left: 20px;
+}
