@@ -1083,11 +1083,6 @@
             $scope.syncDestArray = [];
         }
         function handleMultiMemberRemove() {
-            for (let i = 0; i < $scope.multiMemberPaths.length; i++){
-                $scope.selectedGrouping.path = $scope.multiMemberPaths[i];
-                $scope.getGroupingInformation();
-                $scope.syncDestArray = [];
-            }
             $scope.searchForUserGroupingInformation();
         }
 
@@ -1163,7 +1158,7 @@
         };
 
         /**
-         * Creates a modal that prompts the user whether they want to delete the user or not. If 'Yes' is pressed, then
+         * Creates a modal that prompts the user whether they want to delete the user from multiple groups or not. If 'Yes' is pressed, then
          * a request is made to delete the user.
          * @param {object} options - the options object
          * @param {object} options.user - the user being removed

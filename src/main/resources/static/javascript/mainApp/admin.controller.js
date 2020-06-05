@@ -59,25 +59,29 @@
         };
 
         $scope.searchForUserGroupingInformation = function () {
-            $scope.loading = true;
-            groupingsService. getMembershipAssignmentForUser(function (res) {
+            if($scope.personToLookup == ""){
+                console.log("Search bar is empty...");
+            }else {
+                $scope.loading = true;
+                groupingsService.getMembershipAssignmentForUser(function (res) {
 
-                $scope.personList = _.sortBy(res.combinedGroupings, "name");
-                $scope.filter($scope.personList, "pagedItemsPerson", "currentPagePerson", $scope.personQuery, true);
-                _.forEach($scope.pagedItemsPerson[$scope.currentPagePerson], function (group) {
-                    group["inOwner"] = res.inOwner[group.path];
-                    group["inBasis"] = res.inBasis[group.path];
-                    group["inInclude"] = res.inInclude[group.path];
-                    group["inExclude"] = res.inExclude[group.path];
-                    if (group.inInclude || group.inOwner) {
-                        group["isSelected"] = false;
-                        totalCheckBoxCount = totalCheckBoxCount + 1;
-                    }
-                });
-                $scope.loading = false;
-            }, function (res) {
-                dataProvider.handleException({ exceptionMessage: JSON.stringify(res, null, 4) }, "feedback/error", "feedback");
-            }, $scope.personToLookup);
+                    $scope.personList = _.sortBy(res.combinedGroupings, "name");
+                    $scope.filter($scope.personList, "pagedItemsPerson", "currentPagePerson", $scope.personQuery, true);
+                    _.forEach($scope.pagedItemsPerson[$scope.currentPagePerson], function (group) {
+                        group["inOwner"] = res.inOwner[group.path];
+                        group["inBasis"] = res.inBasis[group.path];
+                        group["inInclude"] = res.inInclude[group.path];
+                        group["inExclude"] = res.inExclude[group.path];
+                        if (group.inInclude || group.inOwner) {
+                            group["isSelected"] = false;
+                            totalCheckBoxCount = totalCheckBoxCount + 1;
+                        }
+                    });
+                    $scope.loading = false;
+                }, function (res) {
+                    dataProvider.handleException({ exceptionMessage: JSON.stringify(res, null, 4) }, "feedback/error", "feedback");
+                }, $scope.personToLookup);
+            }
         };
 
         $scope.displayAdmins = function () {
