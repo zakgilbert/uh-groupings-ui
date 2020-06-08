@@ -203,38 +203,38 @@
                                 </td>
                                 <td class="p-10" tabindex="0">
                                     <div ng-if="l.inOwner">
-                                        <i class="fa fa-check text-dark"></i>
+                                        <i class="fa fa-check text-dark mng-prsn0"></i>
                                         <label><input type="checkbox"
                                                       ng-model="l.isSelected" ng-change="updateCheckAll(l)"></label>
                                     </div>
                                     <div ng-if="!l.inOwner">
-                                        <i class="fa fa-times text-dark"></i>
+                                        <i class="fa fa-times text-dark mng-prsn0"></i>
                                     </div>
                                 </td>
                                 <td class="p-10" tabindex="0">
                                     <div ng-if="l.inBasis">
-                                        <i class="fa fa-check text-dark"></i>
+                                        <i class="fa fa-check text-dark mng-prsn1"></i>
                                     </div>
                                     <div ng-if="!l.inBasis">
-                                        <i class="fa fa-times text-dark"></i>
+                                        <i class="fa fa-times text-dark mng-prsn1"></i>
                                     </div>
                                 </td>
                                 <td class="p-10" tabindex="0">
                                     <div ng-if="l.inInclude">
-                                        <i class="fa fa-check text-dark"></i>
+                                        <i class="fa fa-check text-dark mng-prsn2"></i>
                                         <label><input type="checkbox"
                                                       ng-model="l.isSelected" ng-change="updateCheckAll(l)"></label>
                                     </div>
                                     <div ng-if="!l.inInclude">
-                                        <i class="fa fa-times text-dark"></i>
+                                        <i class="fa fa-times text-dark mng-prsn2"></i>
                                     </div>
                                 </td>
                                 <td>
                                     <div ng-if="l.inExclude">
-                                        <i class="fa fa-check text-dark"></i>
+                                        <i class="fa fa-check text-dark mng-prsn3"></i>
                                     </div>
                                     <div ng-if="!l.inExclude">
-                                        <i class="fa fa-times text-dark"></i>
+                                        <i class="fa fa-times text-dark mng-prsn3"></i>
                                     </div>
                                     <!--                                    <i class="fa fa-trash-o pull-right clickable pt-1"-->
                                     <!--                                       data-toggle="tooltip" data-placement="top"-->
@@ -247,7 +247,7 @@
                                 </td>
                                 <td>
                                     <div ng-if="l.inOwner || l.inInclude">
-                                        <label><input type="checkbox"
+                                        <label class="mng-prsn4"><input type="checkbox"
                                                       ng-model="l.isSelected" ng-change="updateCheckAll(l)"></label>
                                     </div>
                                 </td>
