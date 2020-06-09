@@ -192,7 +192,7 @@
                                     Exclude?
                                 </th>
                                 <th>
-                                    Remove
+                                    Full Remove
                                 </th>
                             </tr>
                             </thead>
@@ -205,7 +205,7 @@
                                     <div ng-if="l.inOwner">
                                         <i class="fa fa-check text-dark mng-prsn0"></i>
                                         <label><input type="checkbox"
-                                                      ng-model="l.isSelected" ng-change="updateCheckAll(l)"></label>
+                                                      ng-model="l.ownerIsSelected" ng-change="updateCheckOwner(l)"></label>
                                     </div>
                                     <div ng-if="!l.inOwner">
                                         <i class="fa fa-times text-dark mng-prsn0"></i>
@@ -223,7 +223,7 @@
                                     <div ng-if="l.inInclude">
                                         <i class="fa fa-check text-dark mng-prsn2"></i>
                                         <label><input type="checkbox"
-                                                      ng-model="l.isSelected" ng-change="updateCheckAll(l)"></label>
+                                                      ng-model="l.includeIsSelected" ng-change="updateCheckInclude(l)"></label>
                                     </div>
                                     <div ng-if="!l.inInclude">
                                         <i class="fa fa-times text-dark mng-prsn2"></i>
