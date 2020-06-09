@@ -74,6 +74,8 @@
                         group["inExclude"] = res.inExclude[group.path];
                         if (group.inInclude || group.inOwner) {
                             group["isSelected"] = false;
+                            group["includeIsSelected"] = false;
+                            group["ownerIsSelected"] = false;
                             totalCheckBoxCount = totalCheckBoxCount + 1;
                         }
                     });
@@ -105,7 +107,7 @@
             $scope.selectedGroupingsNames = [];
             let i = 0;
             _.forEach($scope.pagedItemsPerson[$scope.currentPagePerson], function (grouping) {
-                if(grouping.isSelected) {
+                if(grouping.isSelected || grouping.ownerIsSelected || grouping.includeIsSelected) {
                     if (i == 0) {
                         let temp = grouping.path;
                         $scope.selectedGrouping.path = temp;
@@ -116,13 +118,13 @@
                         $scope.selectedGrouping.path = $scope.selectedGrouping.path + temp;
                         $scope.multiMemberPaths[i] = temp;
                     }
-                    if(grouping.inOwner){
+                    if(grouping.ownerIsSelected){
                         $scope.selectedGroupings.push(grouping.path + ":owners");
                         let temp = grouping.path;
                         temp = temp.split(":").pop();
                         $scope.selectedGroupingsNames.push(temp);
                     }
-                    if(grouping.inInclude){
+                    if(grouping.includeIsSelected){
                         $scope.selectedGroupings.push(grouping.path + ":include")
                         let temp = grouping.path;
                         temp = temp.split(":").pop();
@@ -157,6 +159,8 @@
             _.forEach($scope.pagedItemsPerson[$scope.currentPagePerson], function (grouping) {
                 if (grouping.inInclude || grouping.inOwner) {
                     grouping.isSelected = $scope.checkAll;
+                    grouping.includeIsSelected = $scope.checkAll;
+                    grouping.ownerIsSelected = $scope.checkAll;
                 }
             });
             if($scope.checkAll) {
@@ -166,11 +170,54 @@
             }
         };
 
-        $scope.updateCheckAll = function(grouping) {
+        $scope.updateCheckInclude = function(grouping) {
 
-            if(grouping.isSelected){
+            if(grouping.includeIsSelected){
+                if(grouping.ownerIsSelected || !grouping.inOwner){
+                    grouping.isSelected = true;
+                }
                 count = count + 1;
             } else {
+                count = count - 1;
+            }
+
+            if(!grouping.ownerIsSelected || !grouping.includeIsSelected){
+                grouping.isSelected = false;
+            }
+
+            $scope.checkAll = (count === totalCheckBoxCount);
+
+            console.log("Count: " + count + ", Total: " + totalCheckBoxCount);
+        };
+
+        $scope.updateCheckOwner = function(grouping) {
+
+            if(grouping.ownerIsSelected){
+                if(grouping.includeIsSelected || !grouping.inInclude){
+                    grouping.isSelected = true;
+                }
+                count = count + 1;
+            } else {
+                count = count - 1;
+            }
+
+            if(!grouping.ownerIsSelected || !grouping.includeIsSelected){
+                grouping.isSelected = false;
+            }
+
+            $scope.checkAll = (count === totalCheckBoxCount);
+
+            console.log("Count: " + count + ", Total: " + totalCheckBoxCount);
+        };
+
+        $scope.updateCheckAll = function(grouping) {
+            if(grouping.isSelected){
+                grouping.ownerIsSelected = true;
+                grouping.includeIsSelected = true;
+                count = count + 1;
+            } else {
+                grouping.ownerIsSelected = false;
+                grouping.includeIsSelected = false;
                 count = count - 1;
             }
 
