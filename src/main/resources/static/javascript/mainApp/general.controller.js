@@ -883,35 +883,6 @@
             });
         };
 
-        /*$scope.createConfirmUserRemoveModal = function (options) {
-            const userToRemove = options.userToRemove;
-
-            groupingsService.getMemberAttributes(userToAdd, function (attributes) {
-                $scope.fullNameToAdd = attributes.cn;
-                $scope.givenNameToAdd = attributes.givenName;
-                $scope.uhUuidToAdd = attributes.uhUuid;
-                $scope.uidToAdd = attributes.uid;
-
-                $scope.listName = options.listName;
-
-                // Ask for confirmation from the user to add the member
-                $scope.confirmAddModalInstance = $uibModal.open({
-                    templateUrl: "modal/confirmAddModal",
-                    scope: $scope,
-                    backdrop: "static",
-                    keyboard: false
-                });
-
-                $scope.confirmAddModalInstance.result.then(function () {
-                    $scope.updateAddMember(userToAdd, options.listName);
-                });
-            }, function (res) {
-                if (res.statusCode === 404) {
-                    $scope.createAddErrorModal(userToAdd);
-                }
-            });
-        };*/
-
         /**
          * Closes CheckModal and proceeds with the checkModalInstance result.then function
          */
