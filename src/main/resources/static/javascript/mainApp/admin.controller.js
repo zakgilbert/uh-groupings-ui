@@ -59,12 +59,53 @@
         };
 
         $scope.searchForUserGroupingInformation = function () {
-            if($scope.personToLookup == ""){
+            if ($scope.personToLookup == "") {
                 console.log("Search bar is empty...");
-            }else {
+            } else {
                 $scope.loading = true;
                 groupingsService.getMembershipAssignmentForUser(function (res) {
 
+                    // put each membership in an array.
+                    let data = [];
+                    _.forEach(groupingsService.parseGenericResponseData(res).memberships, (membership) => {
+                        data.push(groupingsService.parseGenericResponseData(membership));
+                    });
+
+                    // filter all the dups into there own sub arrays.
+                    let dups = [];
+                    _.forEach(data, (membership) => {
+                        dups.push(data.filter(ms => {
+                            if (ms.name === membership.name) {
+                                return ms;
+                            }
+                            ;
+                        }));
+                    });
+                    // merge the boolean values of all dups.
+                    let result = [];
+                    _.forEach(dups, (membership) => {
+                        if (membership.length > 1) {
+                            _.forEach(membership, m => {
+                                membership[0].inInclude |= m.inInclude;
+                                membership[0].inExclude |= m.inExclude;
+                                membership[0].inBasis |= m.inBasis;
+                                membership[0].inOwner |= m.inOwner;
+                            });
+                        }
+                        result.push(membership[0]);
+                    });
+                    result = _.sortBy(_.uniq(result), "name");
+
+                    // Chunk array to pages
+                    let i = 0;
+                    const pageSize = 20;
+                    while (i < result.length) {
+                        $scope.pagedItemsPerson.push(result.slice(i, pageSize + i));
+                        i += pageSize;
+                    }
+
+
+                    /*
                     $scope.personList = _.sortBy(res.combinedGroupings, "name");
                     $scope.filter($scope.personList, "pagedItemsPerson", "currentPagePerson", $scope.personQuery, true);
                     _.forEach($scope.pagedItemsPerson[$scope.currentPagePerson], function (group) {
@@ -79,6 +120,8 @@
                             totalCheckBoxCount = totalCheckBoxCount + 1;
                         }
                     });
+                     */
+                    console.log($scope.pagedItemsPerson);
                     $scope.loading = false;
                 }, function (res) {
                     dataProvider.handleException({ exceptionMessage: JSON.stringify(res, null, 4) }, "feedback/error", "feedback");
@@ -95,6 +138,7 @@
 
         /*todo:people copy*/
         $scope.displayPerson = function () {
+            console.log($scope.personList);
             $scope.resetGroupingInformation();
             $scope.filter($scope.personList, "pagedItemsPerson", "currentPagePerson", $scope.personQuery, true);
             $scope.pagedItemsPerson = $scope.groupToPages($scope.personList);
@@ -107,25 +151,25 @@
             $scope.selectedGroupingsNames = [];
             let i = 0;
             _.forEach($scope.pagedItemsPerson[$scope.currentPagePerson], function (grouping) {
-                if(grouping.isSelected || grouping.ownerIsSelected || grouping.includeIsSelected) {
+                if (grouping.isSelected || grouping.ownerIsSelected || grouping.includeIsSelected) {
                     if (i == 0) {
                         let temp = grouping.path;
                         $scope.selectedGrouping.path = temp;
                         $scope.multiMemberPaths[i] = temp;
 
-                    }else{
+                    } else {
                         let temp = grouping.path;
                         $scope.selectedGrouping.path = $scope.selectedGrouping.path + temp;
                         $scope.multiMemberPaths[i] = temp;
                     }
-                    if(grouping.ownerIsSelected){
+                    if (grouping.ownerIsSelected) {
                         $scope.selectedGroupings.push(grouping.path + ":owners");
                         let temp = grouping.path;
                         temp = temp.split(":").pop();
                         $scope.selectedGroupingsNames.push(temp);
                     }
-                    if(grouping.includeIsSelected){
-                        $scope.selectedGroupings.push(grouping.path + ":include")
+                    if (grouping.includeIsSelected) {
+                        $scope.selectedGroupings.push(grouping.path + ":include");
                         let temp = grouping.path;
                         temp = temp.split(":").pop();
                         $scope.selectedGroupingsNames.push(temp);
@@ -134,7 +178,7 @@
                 i++;
             });
 
-            if($scope.personToLookup != null) {
+            if ($scope.personToLookup != null) {
                 groupingsService.getMemberAttributes($scope.personToLookup, function (attributes) {
                     let userToRemove = {
                         username: attributes.uid,
@@ -155,7 +199,7 @@
         };
 
         $scope.updateCheckBoxes = function () {
-          $scope.checkAll = !$scope.checkAll;
+            $scope.checkAll = !$scope.checkAll;
             _.forEach($scope.pagedItemsPerson[$scope.currentPagePerson], function (grouping) {
                 if (grouping.inInclude || grouping.inOwner) {
                     grouping.isSelected = $scope.checkAll;
@@ -163,17 +207,17 @@
                     grouping.ownerIsSelected = $scope.checkAll;
                 }
             });
-            if($scope.checkAll) {
+            if ($scope.checkAll) {
                 count = totalCheckBoxCount;
             } else {
                 count = 0;
             }
         };
 
-        $scope.updateCheckInclude = function(grouping) {
+        $scope.updateCheckInclude = function (grouping) {
 
-            if(grouping.includeIsSelected){
-                if(grouping.ownerIsSelected || !grouping.inOwner){
+            if (grouping.includeIsSelected) {
+                if (grouping.ownerIsSelected || !grouping.inOwner) {
                     grouping.isSelected = true;
                 }
                 count = count + 1;
@@ -181,7 +225,7 @@
                 count = count - 1;
             }
 
-            if(!grouping.ownerIsSelected || !grouping.includeIsSelected){
+            if (!grouping.ownerIsSelected || !grouping.includeIsSelected) {
                 grouping.isSelected = false;
             }
 
@@ -190,10 +234,10 @@
             console.log("Count: " + count + ", Total: " + totalCheckBoxCount);
         };
 
-        $scope.updateCheckOwner = function(grouping) {
+        $scope.updateCheckOwner = function (grouping) {
 
-            if(grouping.ownerIsSelected){
-                if(grouping.includeIsSelected || !grouping.inInclude){
+            if (grouping.ownerIsSelected) {
+                if (grouping.includeIsSelected || !grouping.inInclude) {
                     grouping.isSelected = true;
                 }
                 count = count + 1;
@@ -201,7 +245,7 @@
                 count = count - 1;
             }
 
-            if(!grouping.ownerIsSelected || !grouping.includeIsSelected){
+            if (!grouping.ownerIsSelected || !grouping.includeIsSelected) {
                 grouping.isSelected = false;
             }
 
@@ -210,8 +254,8 @@
             console.log("Count: " + count + ", Total: " + totalCheckBoxCount);
         };
 
-        $scope.updateCheckAll = function(grouping) {
-            if(grouping.isSelected){
+        $scope.updateCheckAll = function (grouping) {
+            if (grouping.isSelected) {
                 grouping.ownerIsSelected = true;
                 grouping.includeIsSelected = true;
                 count = count + 1;
