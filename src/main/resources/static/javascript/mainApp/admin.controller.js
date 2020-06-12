@@ -115,6 +115,7 @@
                     /*
                     $scope.personList = _.sortBy(res.combinedGroupings, "name");
                     $scope.filter($scope.personList, "pagedItemsPerson", "currentPagePerson", $scope.personQuery, true);
+                    console.log($scope.pagedItemsPerson);
                     _.forEach($scope.pagedItemsPerson[$scope.currentPagePerson], function (group) {
                         group["inOwner"] = res.inOwner[group.path];
                         group["inBasis"] = res.inBasis[group.path];
