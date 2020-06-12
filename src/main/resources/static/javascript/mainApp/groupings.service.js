@@ -85,7 +85,7 @@
              * @param onSuccess
              * @param onError
              */
-             addMemberToInclude(path, userToAdd, onSuccess, onError) {
+            addMemberToInclude(path, userToAdd, onSuccess, onError) {
                 let endpoint = BASE_URL + path + "/" + userToAdd + "/addMemberToIncludeGroup";
                 dataProvider.updateData(onSuccess, onError, endpoint);
             },
@@ -156,7 +156,7 @@
             },
 
             removeFromGroups(groups, member, onSuccess, onError) {
-                let endpoint = BASE_URL + groups + "/" + member +"/removeFromGroups";
+                let endpoint = BASE_URL + groups + "/" + member + "/removeFromGroups";
                 dataProvider.updateData(onSuccess, onError, endpoint);
             },
 
@@ -331,12 +331,10 @@
             parseGenericResponseData(response) {
                 let parsedObject = {};
                 if (!(_.isEqual(["data", "map"], Object.keys(response))))
-                    parsedObject = { "Response Parse Error": "Keys were not set due to response format", ...response };
-                else {
-                    let keys = Object.keys(response.map);
-                    for (let i = 0; i < keys.length; i++)
-                        parsedObject[keys[i]] = response.data[response.map[keys[i]]];
-                }
+                    return response;
+                let keys = Object.keys(response.map);
+                for (let i = 0; i < keys.length; i++)
+                    parsedObject[keys[i]] = this.parseGenericResponseData(response.data[response.map[keys[i]]]);
                 return parsedObject;
             }
         };
