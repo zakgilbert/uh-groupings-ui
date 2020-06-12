@@ -70,6 +70,7 @@
                     _.forEach(groupingsService.parseGenericResponseData(res).memberships, (membership) => {
                         data.push(groupingsService.parseGenericResponseData(membership));
                     });
+                    console.log(data);
 
                     // filter all the dups into there own sub arrays.
                     let dups = [];
@@ -81,6 +82,8 @@
                             ;
                         }));
                     });
+                    console.log(dups);
+                    
                     // merge the boolean values of all dups.
                     let result = [];
                     _.forEach(dups, (membership) => {
@@ -92,6 +95,9 @@
                                 membership[0].inOwner |= m.inOwner;
                             });
                         }
+                        membership[0].isSelected = false;
+                        membership[0].includeIsSelected = false;
+                        membership[0].ownerIsSelected = false;
                         result.push(membership[0]);
                     });
                     result = _.sortBy(_.uniq(result), "name");
@@ -103,6 +109,7 @@
                         $scope.pagedItemsPerson.push(result.slice(i, pageSize + i));
                         i += pageSize;
                     }
+
 
 
                     /*
@@ -121,7 +128,6 @@
                         }
                     });
                      */
-                    console.log($scope.pagedItemsPerson);
                     $scope.loading = false;
                 }, function (res) {
                     dataProvider.handleException({ exceptionMessage: JSON.stringify(res, null, 4) }, "feedback/error", "feedback");
