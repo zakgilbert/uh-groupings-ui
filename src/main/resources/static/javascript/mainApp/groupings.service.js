@@ -353,7 +353,7 @@
              */
             parseGenericResponseData(response) {
                 let parsedObject = {};
-                if (!(_.isEqual(["data", "map"], Object.keys(response))))
+                if (!(_.isEqual(["data", "map", "groupingsServiceResult"], Object.keys(response))))
                     return response;
                 let keys = Object.keys(response.map);
                 for (let i = 0; i < keys.length; i++)
