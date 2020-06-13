@@ -64,13 +64,12 @@
             } else {
                 $scope.loading = true;
                 groupingsService.getMembershipAssignmentForUser(function (res) {
-
                     // put each membership in an array.
                     let data = [];
                     _.forEach(groupingsService.parseGenericResponseData(res).memberships, (membership) => {
                         data.push(groupingsService.parseGenericResponseData(membership));
                     });
-                    console.log(data);
+                    //console.log(data);
 
                     // filter all the dups into there own sub arrays.
                     let dups = [];
@@ -82,8 +81,8 @@
                             ;
                         }));
                     });
-                    console.log(dups);
-                    
+                    //console.log(dups);
+
                     // merge the boolean values of all dups.
                     let result = [];
                     _.forEach(dups, (membership) => {
@@ -109,29 +108,13 @@
                         $scope.pagedItemsPerson.push(result.slice(i, pageSize + i));
                         i += pageSize;
                     }
-
-
-
-                    /*
-                    $scope.personList = _.sortBy(res.combinedGroupings, "name");
-                    $scope.filter($scope.personList, "pagedItemsPerson", "currentPagePerson", $scope.personQuery, true);
-                    console.log($scope.pagedItemsPerson);
-                    _.forEach($scope.pagedItemsPerson[$scope.currentPagePerson], function (group) {
-                        group["inOwner"] = res.inOwner[group.path];
-                        group["inBasis"] = res.inBasis[group.path];
-                        group["inInclude"] = res.inInclude[group.path];
-                        group["inExclude"] = res.inExclude[group.path];
-                        if (group.inInclude || group.inOwner) {
-                            group["isSelected"] = false;
-                            group["includeIsSelected"] = false;
-                            group["ownerIsSelected"] = false;
-                            totalCheckBoxCount = totalCheckBoxCount + 1;
-                        }
-                    });
-                     */
                     $scope.loading = false;
                 }, function (res) {
-                    dataProvider.handleException({ exceptionMessage: JSON.stringify(res, null, 4) }, "feedback/error", "feedback");
+                    console.log("CALLED");
+                    console.log(res);
+                    $scope.loading = false;
+                    $scope.createUserNotFound($scope.personToLookup);
+                    //dataProvider.handleException({ exceptionMessage: JSON.stringify(res, null, 4) }, "feedback/error", "feedback");
                 }, $scope.personToLookup);
             }
         };
@@ -145,7 +128,7 @@
 
         /*todo:people copy*/
         $scope.displayPerson = function () {
-            console.log($scope.personList);
+            //console.log($scope.personList);
             $scope.resetGroupingInformation();
             $scope.filter($scope.personList, "pagedItemsPerson", "currentPagePerson", $scope.personQuery, true);
             $scope.pagedItemsPerson = $scope.groupToPages($scope.personList);
@@ -238,7 +221,7 @@
 
             $scope.checkAll = (count === totalCheckBoxCount);
 
-            console.log("Count: " + count + ", Total: " + totalCheckBoxCount);
+            //console.log("Count: " + count + ", Total: " + totalCheckBoxCount);
         };
 
         $scope.updateCheckOwner = function (grouping) {
@@ -258,7 +241,7 @@
 
             $scope.checkAll = (count === totalCheckBoxCount);
 
-            console.log("Count: " + count + ", Total: " + totalCheckBoxCount);
+            //console.log("Count: " + count + ", Total: " + totalCheckBoxCount);
         };
 
         $scope.updateCheckAll = function (grouping) {
@@ -274,7 +257,7 @@
 
             $scope.checkAll = (count === totalCheckBoxCount);
 
-            console.log("Count: " + count + ", Total: " + totalCheckBoxCount);
+            //console.log("Count: " + count + ", Total: " + totalCheckBoxCount);
         };
 
 

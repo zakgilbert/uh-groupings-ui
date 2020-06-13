@@ -971,7 +971,6 @@
 
         $scope.createAddErrorModal = function (userAdded) {
             $scope.user = userAdded;
-
             $scope.addErrorModalInstance = $uibModal.open({
                 templateUrl: "modal/addErrorModal",
                 scope: $scope,
@@ -980,8 +979,19 @@
             });
         };
 
-        $scope.closeAddErrorModal = function () {
-            $scope.addErrorModalInstance.close();
+        //HERHEREHEREHERE
+        $scope.createUserNotFound = function (user) {
+            $scope.user = user;
+
+            $scope.userNotFoundModalInstance = $uibModal.open({
+                templateUrl: "modal/userNotFoundModal",
+                scope: $scope,
+                backdrop: "static",
+                keyboard: false
+            });
+        };
+        $scope.closeUserNotFound = function () {
+            $scope.userNotFoundModalInstance.close();
         };
 
         /**
@@ -1058,6 +1068,7 @@
             $scope.syncDestArray = [];
         }
         function handleMultiMemberRemove() {
+            $scope.pagedItemsPerson = [];
             $scope.searchForUserGroupingInformation();
         }
 
@@ -1154,6 +1165,8 @@
                 $scope.loading = true;
                 let userToRemove = options.user.username;
                 let groupingPath = $scope.selectedGroupings;
+                console.log("userToRemove: " + userToRemove);
+                console.log("GroupingPath: " + groupingPath);
                 groupingsService.removeFromGroups(groupingPath,userToRemove, handleMultiMemberRemove, handleUnsuccessfulRequest);
                 $scope.personToLookup = userToRemove;
             });
