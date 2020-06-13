@@ -325,6 +325,29 @@
 
             /**
              * Parse a generic response data type.
+             * The Groupings API contains a data type genericServiceResult which contains an arbitrary list of data and
+             * a Map<String, Integer> containing the key of the data type and the index of where that data is located in
+             * the arbitrary list of data. The following method matches the keys to their correct data using the index
+             * the key.
+             *     A genericServiceResult...
+             *     response {
+             *         data [
+             *             true,
+             *             45,
+             *             "zeb"
+             *         ],
+             *         map {
+             *             "myString" : 2,
+             *             "myBoolean" : 0,
+             *             "myNumber" : 1
+             *         }
+             *     }
+             *     After the response passed through the method...
+             *     parseObject {
+             *             "myBoolean" : true,
+             *             "myNumber" : 45,
+             *             "myString" : "zeb
+             *     }
              * @param response
              * @returns {{}}
              */

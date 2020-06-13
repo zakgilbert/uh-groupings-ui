@@ -100,15 +100,15 @@
                         result.push(membership[0]);
                     });
                     result = _.sortBy(_.uniq(result), "name");
+                    console.log(result);
 
-                    // Chunk array to pages
+                    $scope.loading = false;  // Chunk array to pages
                     let i = 0;
                     const pageSize = 20;
                     while (i < result.length) {
                         $scope.pagedItemsPerson.push(result.slice(i, pageSize + i));
                         i += pageSize;
                     }
-                    $scope.loading = false;
                 }, function (res) {
                     console.log("CALLED");
                     console.log(res);
