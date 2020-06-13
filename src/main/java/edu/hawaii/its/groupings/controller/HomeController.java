@@ -136,6 +136,11 @@ public class HomeController {
         return "modal/addModal";
     }
 
+    @RequestMapping(value = "/modal/userNotFoundModal", method = RequestMethod.GET)
+    public String userNotFoundModal(Locale locale, Model model) {
+        return "modal/userNotFoundModal";
+    }
+
     @RequestMapping(value = "/modal/removeModal", method = RequestMethod.GET)
     public String removeModal(Locale locale, Model model) {
         return "modal/removeModal";
