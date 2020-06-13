@@ -116,8 +116,7 @@
                 $scope.loading = false;
                 $scope.createUserNotFound($scope.personToLookup);
             }, $scope.personToLookup);
-        }
-        ;
+        };
 
         $scope.displayAdmins = function () {
             $scope.resetGroupingInformation();
