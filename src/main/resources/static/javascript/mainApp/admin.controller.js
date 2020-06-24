@@ -61,63 +61,63 @@
         $scope.searchForUserGroupingInformation = function () {
             if ($scope.personToLookup == "") {
                 console.log("Search bar is empty...");
-            } else {
-                $scope.loading = true;
-                groupingsService.getMembershipAssignmentForUser(function (res) {
-                    // put each membership in an array.
-                    let data = [];
-                    _.forEach(groupingsService.parseGenericResponseData(res).memberships, (membership) => {
-                        data.push(groupingsService.parseGenericResponseData(membership));
-                    });
-                    //console.log(data);
-
-                    // filter all the dups into there own sub arrays.
-                    let dups = [];
-                    _.forEach(data, (membership) => {
-                        dups.push(data.filter(ms => {
-                            if (ms.name === membership.name) {
-                                return ms;
-                            }
-                            ;
-                        }));
-                    });
-                    //console.log(dups);
-
-                    // merge the boolean values of all dups.
-                    let result = [];
-                    _.forEach(dups, (membership) => {
-                        if (membership.length > 1) {
-                            _.forEach(membership, m => {
-                                membership[0].inInclude |= m.inInclude;
-                                membership[0].inExclude |= m.inExclude;
-                                membership[0].inBasis |= m.inBasis;
-                                membership[0].inOwner |= m.inOwner;
-                            });
-                        }
-                        membership[0].isSelected = false;
-                        membership[0].includeIsSelected = false;
-                        membership[0].ownerIsSelected = false;
-                        result.push(membership[0]);
-                    });
-                    result = _.sortBy(_.uniq(result), "name");
-
-                    // Chunk array to pages
-                    let i = 0;
-                    const pageSize = 20;
-                    while (i < result.length) {
-                        $scope.pagedItemsPerson.push(result.slice(i, pageSize + i));
-                        i += pageSize;
-                    }
-                    $scope.loading = false;
-                }, function (res) {
-                    console.log("CALLED");
-                    console.log(res);
-                    $scope.loading = false;
-                    $scope.createUserNotFound($scope.personToLookup);
-                    //dataProvider.handleException({ exceptionMessage: JSON.stringify(res, null, 4) }, "feedback/error", "feedback");
-                }, $scope.personToLookup);
+                return;
             }
-        };
+            $scope.loading = true;
+            groupingsService.getMembershipAssignmentForUser(function (res) {
+                // put each membership in an array.
+                let data = [];
+                _.forEach(groupingsService.parseGenericResponseData(res).memberships, (membership) => {
+                    data.push(groupingsService.parseGenericResponseData(membership));
+                });
+                //console.log(data);
+
+                // filter all the dups into there own sub arrays.
+                let dups = [];
+                _.forEach(data, (membership) => {
+                    dups.push(data.filter(ms => {
+                        if (ms.name === membership.name) {
+                            return ms;
+                        }
+                        ;
+                    }));
+                });
+                //console.log(dups);
+
+                // merge the boolean values of all dups.
+                let result = [];
+                _.forEach(dups, (membership) => {
+                    if (membership.length > 1) {
+                        _.forEach(membership, m => {
+                            membership[0].inInclude |= m.inInclude;
+                            membership[0].inExclude |= m.inExclude;
+                            membership[0].inBasis |= m.inBasis;
+                            membership[0].inOwner |= m.inOwner;
+                        });
+                    }
+                    membership[0].isSelected = false;
+                    membership[0].includeIsSelected = false;
+                    membership[0].ownerIsSelected = false;
+                    result.push(membership[0]);
+                });
+                result = _.sortBy(_.uniq(result), "name");
+
+                // Chunk array to pages
+                let i = 0;
+                const pageSize = 20;
+                while (i < result.length) {
+                    $scope.pagedItemsPerson.push(result.slice(i, pageSize + i));
+                    i += pageSize;
+                }
+                $scope.loading = false;
+            }, function (res) {
+                console.log("CALLED");
+                console.log(res);
+                $scope.loading = false;
+                $scope.createUserNotFound($scope.personToLookup);
+            }, $scope.personToLookup);
+        }
+        ;
 
         $scope.displayAdmins = function () {
             $scope.resetGroupingInformation();
@@ -317,7 +317,7 @@
             copyText.select();
             document.execCommand("copy");
         };
-    }
+    };
 
     UHGroupingsApp.controller("AdminJsController", AdminJsController);
 
