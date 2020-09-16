@@ -516,11 +516,23 @@
             if (_.isEmpty($scope.usersToAdd)) {
                 $scope.createAddErrorModal($scope.usersToAdd);
             } else {
-                let numMembers = ($scope.usersToAdd.split(" ").length - 1);
+                let usersArray = [];
+                usersArray = $scope.usersToAdd.split(" ");
+                let currentMembers = [];
+                _.forEach($scope["pagedItems" + listName], (page) => {
+                    _.forEach(page, (member) => {
+                        currentMembers.push(member.username);
+                    });
+                });
+                _.forEach(currentMembers, (member) => {
+                    _.pull(usersArray, member);
+                });
+                let numMembers = usersArray.length - 1;
 
                 if (numMembers > 0) {
-                    let users = $scope.usersToAdd.split(/[ ,]+/).join(",");
+                    let users = usersArray.join(",");
 
+                    console.log(users);
                     $scope.usersToAdd = [];
                     if (numMembers > $scope.maxImport) {
                         launchDynamicModal(
@@ -570,7 +582,6 @@
          */
         $scope.addMultipleMembers = async function (list, listName) {
             let groupingPath = $scope.selectedGrouping.path;
-            $scope.removeMultipleUsers(list);
 
             let timeoutModal = function () {
                 return launchDynamicModal(
@@ -599,9 +610,7 @@
                     $scope.personProps = Object.keys($scope.multiAddResults[0]);
                 }
 
-                console.log($scope.personProps);
-                console.log($scope.multiAddResults);
-                 $scope.launchMultiAddResultModal(listName);
+                $scope.launchMultiAddResultModal(listName);
             };
             $scope.waitingForImportResponse = true; /* Spinner on */
 
