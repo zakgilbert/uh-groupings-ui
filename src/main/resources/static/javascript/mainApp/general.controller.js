@@ -580,21 +580,33 @@
             };
 
             let handleSuccessfulAdd = function (res) {
+
                 $scope.waitingForImportResponse = false;
+                let data = [];
                 for (let i = 0; i < res.length; i++) {
-                    $scope.multiAddResults[i] = res[i].person;
-                    $scope.multiAddResultsGeneric[i] = res[i].person;
+                    data.push(res[i]);
                 }
-                if (undefined !== res[0].person) {
-                    $scope.personProps = Object.keys(res[0].person);
-                    $scope.personProps.shift();
+                _.forEach(data, (result) => {
+                    $scope.multiAddResults.push({
+                        "name": result["name"],
+                        "uid": result["uid"],
+                        "uhUuid": result["uhUuid"],
+                        "status": result["code"]
+                    });
+                });
+
+                if (undefined !== data[0]) {
+                    $scope.personProps = Object.keys($scope.multiAddResults[0]);
                 }
-                $scope.launchMultiAddResultModal(listName);
+
+                console.log($scope.personProps);
+                console.log($scope.multiAddResults);
+                 $scope.launchMultiAddResultModal(listName);
             };
             $scope.waitingForImportResponse = true; /* Spinner on */
 
             let path = groupingPath + ":" + listName.toLowerCase();
-            groupingsService.addMembers(path, list, (res) => console.log(res), (res) => console.log(res));
+            groupingsService.addMembers(path, list, handleSuccessfulAdd, (res) => console.log(res));
         };
 
         /**
