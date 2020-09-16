@@ -593,9 +593,8 @@
             };
             $scope.waitingForImportResponse = true; /* Spinner on */
 
-            let fun = "addMembersTo";
-            await groupingsService[(listName === "Include") ? (fun + "Include") : (fun + "Exclude")]
-            (groupingPath, list, handleSuccessfulAdd, handleUnsuccessfulRequest, timeoutModal);
+            let path = groupingPath + ":" + listName.toLowerCase();
+            groupingsService.addMembers(path, list, (res) => console.log(res), (res) => console.log(res));
         };
 
         /**
@@ -775,10 +774,9 @@
                 });
             };
 
-            if (list === "Include") {
-                groupingsService.addMemberToInclude(groupingPath, userToAdd, handleSuccessfulAdd, handleUnsuccessfulRequest);
-            } else if (list === "Exclude") {
-                groupingsService.addMemberToExclude(groupingPath, userToAdd, handleSuccessfulAdd, handleUnsuccessfulRequest);
+            if (list === "Include" || list === "Exclude") {
+                let path = groupingsService + ":" + list.toLowerCase();
+                groupingsService.addMembers(path, userToAdd, (res) => console.log(res), (res) => console.log(res));
             } else if (list === "owners") {
                 groupingsService.assignOwnership(groupingPath, userToAdd, handleSuccessfulAdd, handleUnsuccessfulRequest);
             } else if (list === "admins") {

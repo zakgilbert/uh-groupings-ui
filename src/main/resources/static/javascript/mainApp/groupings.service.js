@@ -104,6 +104,11 @@
                 });
             },
 
+            addMembers(path, usersToadd, onSuccess, onError) {
+                let endpoint = BASE_URL + path + "/" + usersToadd + "/addMembers";
+                dataProvider.updateData(onSuccess, onError, endpoint);
+            },
+
             /**
              * Adds a member to the exclude group of a grouping.
              * @param {string} path - the path to the grouping

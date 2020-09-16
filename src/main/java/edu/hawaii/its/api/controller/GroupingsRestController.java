@@ -320,6 +320,13 @@ public class GroupingsRestController {
         return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.PUT);
     }
 
+    @PostMapping(value = "/{path}/{usersToAdd}/addMembers")
+    public ResponseEntity addIncludeMembers(Principal principal, @PathVariable String path,
+            @PathVariable String usersToAdd) {
+        String uri = String.format(API_2_1_BASE + "/groupings/%s/group/%s", path, usersToAdd);
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.PUT);
+    }
+
     /**
      * adds a member to the exclude group of the Grouping who's path is in 'grouping'
      * if that member is in the include group, they will be removed from it
