@@ -775,7 +775,7 @@
             };
 
             if (list === "Include" || list === "Exclude") {
-                let path = groupingsService + ":" + list.toLowerCase();
+                let path = groupingPath + ":" + list.toLowerCase();
                 groupingsService.addMembers(path, userToAdd, (res) => console.log(res), (res) => console.log(res));
             } else if (list === "owners") {
                 groupingsService.assignOwnership(groupingPath, userToAdd, handleSuccessfulAdd, handleUnsuccessfulRequest);
