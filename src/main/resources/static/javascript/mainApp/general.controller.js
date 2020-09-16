@@ -707,28 +707,20 @@
          */
         $scope.addMember = function (list) {
             let groupingPath = $scope.selectedGrouping.path;
-            groupingsService.getGrouping(groupingPath, 1, PAGE_SIZE, "name", true, function (res) {
-                let user = $scope.userToAdd;
-                let inBasis = _.some($scope.groupingBasis, { username: user });
-                if ($scope.existInList(user, list)) {
-                    $scope.createCheckModal(user, list, false, inBasis);
-                } else if (res.status === 404) {
-                    $scope.createAddErrorModal($scope.userToAdd);
-                } else if ($scope.isInAnotherList(user, list)) {
-                    $scope.createCheckModal(user, list, true, inBasis);
-                } else if ((inBasis && list === "Include") || (!inBasis && list === "Exclude")) {
-                    $scope.createBasisWarningModal(user, list, inBasis);
-                } else {
-                    $scope.createConfirmAddModal({
-                        userToAdd: user,
-                        listName: list
-                    });
-                }
-            }, function (res) {
-                if (res.status === 403) {
-                    $scope.createOwnerErrorModal();
-                }
-            });
+            let user = $scope.userToAdd;
+            let inBasis = _.some($scope.groupingBasis, { username: user });
+            if ($scope.existInList(user, list)) {
+                $scope.createCheckModal(user, list, false, inBasis);
+            } else if ($scope.isInAnotherList(user, list)) {
+                $scope.createCheckModal(user, list, true, inBasis);
+            } else if ((inBasis && list === "Include") || (!inBasis && list === "Exclude")) {
+                $scope.createBasisWarningModal(user, list, inBasis);
+            } else {
+                $scope.createConfirmAddModal({
+                    userToAdd: user,
+                    listName: list
+                });
+            }
         };
 
         /**
