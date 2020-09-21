@@ -56,7 +56,7 @@
                 result.push({
                     "name": membership[0].name,
                     "path": path,
-                    "optOutEnabled": membership[0].optOutEnabled
+                    "optOutEnabled": membership[0].optOutEnabled && membership[0].inInclude && !membership[0].inExclude
                 });
             });
             return result;
@@ -92,7 +92,6 @@
 
             // Request a list of membership objects from the API.
             groupingsService.getMembershipResults((res) => {
-
                     let data = [];
 
                     _.forEach(res, (membership) => {
