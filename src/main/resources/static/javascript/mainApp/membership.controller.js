@@ -81,6 +81,14 @@
          */
         $scope.init = function () {
             $scope.loading = true;
+            $scope.membershipsList = [];
+            $scope.pagedItemsMemberships = [];
+            $scope.currentPageMemberships = 0;
+
+            $scope.optInList = [];
+            $scope.pagedItemsOptInList = [];
+            $scope.currentPageOptIn = 0;
+
 
             // Request a list of membership objects from the API.
             groupingsService.getMembershipResults((res) => {
@@ -136,9 +144,9 @@
          */
         function handleSuccessfulOpt(res) {
 
-            if (_.startsWith(res[0].resultCode, "SUCCESS")) {
-                $scope.init();
-            }
+            console.log(res);
+            $scope.loading = false;
+            $scope.init();
         }
 
         function handleUnsuccessfulOpt(res) {
