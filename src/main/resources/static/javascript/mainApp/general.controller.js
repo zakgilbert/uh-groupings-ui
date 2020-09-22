@@ -516,45 +516,53 @@
             if (_.isEmpty($scope.usersToAdd)) {
                 return $scope.createAddErrorModal($scope.usersToAdd);
             }
+
             let usersArray = [];
             usersArray = $scope.usersToAdd.split(" ");
             let currentMembers = [];
+
+            // Get all members from pagedItems listName.
             _.forEach($scope["pagedItems" + listName], (page) => {
                 _.forEach(page, (member) => {
                     currentMembers.push(member.username);
                 });
             });
+
+            // Pull any out all current members.
             _.forEach(currentMembers, (member) => {
                 _.pull(usersArray, member);
             });
             let numMembers = usersArray.length - 1;
 
-            
-            if (numMembers > 0) {
-                let users = usersArray.join(",");
+            // Check a for a single add.
+            if (numMembers === 0) {
+                $scope.userToAdd = $scope.usersToAdd;
+                return $scope.addMember(listName);
 
-                console.log(users);
-                $scope.usersToAdd = [];
-                if (numMembers > $scope.maxImport) {
-                    launchDynamicModal(
-                        Message.Title.IMPORT_OUT_OF_BOUNDS,
-                        `Importing more than ${$scope.maxImport} users is not allowed.`,
-                        8000);
-                } else {
-                    if (numMembers > $scope.multiAddThreshold) {
-                        launchDynamicModal(
-                            Message.Title.LARGE_IMPORT,
-                            `You are attempting to import ${numMembers} new users to the ${listName} list.
+            }
+            let users = usersArray.join(",");
+
+            $scope.usersToAdd = [];
+
+            // Return an error modal if import is too large.
+            if (numMembers > $scope.maxImport) {
+                return launchDynamicModal(
+                    Message.Title.IMPORT_OUT_OF_BOUNDS,
+                    `Importing more than ${$scope.maxImport} users is not allowed.`,
+                    8000);
+            }
+
+            // Return a warning modal if the import is large.
+            if (numMembers > $scope.multiAddThreshold) {
+                launchDynamicModal(
+                    Message.Title.LARGE_IMPORT,
+                    `You are attempting to import ${numMembers} new users to the ${listName} list.
                              Imports larger than ${$scope.multiAddThreshold} can take a few minutes.  An email with 
                              the import results will be sent.`,
-                            8000);
-                    }
-                    $scope.addMultipleMembers(users, listName).then(r => );
-                }
-            } else {
-                $scope.userToAdd = $scope.usersToAdd;
-                $scope.addMember(listName);
+                    8000);
             }
+            $scope.addMultipleMembers(users, listName);
+
         };
 
         /**
@@ -789,7 +797,7 @@
 
             if (list === "Include" || list === "Exclude") {
                 let path = groupingPath + ":" + list.toLowerCase();
-                groupingsService.addMembers(path, userToAdd, (res) => console.log(res), (res) => console.log(res));
+                groupingsService.addMembers(path, userToAdd, handleSuccessfulAdd, handleUnsuccessfulRequest);
             } else if (list === "owners") {
                 groupingsService.assignOwnership(groupingPath, userToAdd, handleSuccessfulAdd, handleUnsuccessfulRequest);
             } else if (list === "admins") {
