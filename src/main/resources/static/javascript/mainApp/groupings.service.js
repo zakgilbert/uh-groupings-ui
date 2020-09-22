@@ -109,6 +109,14 @@
                 dataProvider.updateData(onSuccess, onError, endpoint);
             },
 
+            addMembersWithTimeoutModal(path, usersToAdd, onSuccess, onError, modal) {
+                let endpoint = BASE_URL + path + "/" + usersToAdd + "/addMembers";
+                return new Promise(resolve => {
+                    dataProvider.updateDataWithTimeoutModal(onSuccess, onError, endpoint, modal);
+                });
+
+            },
+
             /**
              * Adds a member to the exclude group of a grouping.
              * @param {string} path - the path to the grouping
