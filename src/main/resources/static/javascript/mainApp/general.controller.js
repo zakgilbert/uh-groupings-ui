@@ -403,21 +403,21 @@
         };
 
         /**
-        * Set a new description for a Grouping.
-        */
+         * Set a new description for a Grouping.
+         */
         $scope.saveDescription = function () {
-          if (groupingDescription.localeCompare($scope.modelDescription) === 0) {
-            return $scope.cancelDescriptionEdit();
-        }
-          groupingDescription = $scope.modelDescription;
-          groupingsService.updateDescription(groupingDescription, $scope.selectedGrouping.path,
-            () => {
-              $scope.descriptionForm = !($scope.descriptionForm);
-            }, // close description form when done.
-            (res) => {
-              dataProvider.handleException({ exceptionMessage: JSON.stringify(res, null, 4) },
-                  "feedback/error", "feedback");
-            }); // send user to feedback page if fail
+            if (groupingDescription.localeCompare($scope.modelDescription) === 0) {
+                return $scope.cancelDescriptionEdit();
+            }
+            groupingDescription = $scope.modelDescription;
+            groupingsService.updateDescription(groupingDescription, $scope.selectedGrouping.path,
+                () => {
+                    $scope.descriptionForm = !($scope.descriptionForm);
+                }, // close description form when done.
+                (res) => {
+                    dataProvider.handleException({ exceptionMessage: JSON.stringify(res, null, 4) },
+                        "feedback/error", "feedback");
+                }); // send user to feedback page if fail
         };
 
         /**
@@ -580,22 +580,43 @@
                     8000);
             };
             let handleSuccessfulAdd = function (res) {
+
                 $scope.launchMultiAddResultModal(listName);
                 for (let i = 0; i < res.length; i++) {
-                    $scope.multiAddResults[i] = res[i].person;
-                    $scope.multiAddResultsGeneric[i] = res[i].person;
+                    if (res[i].result === "FAILURE" || res[i].userWasAdded === false) {
+                        continue;
+                    }
+                    let result = "";
+                    if (res[i].userWasRemoved === true) {
+                        result = "Moved";
+                    } else {
+                        result = "Added";
+                    }
+
+                    $scope.multiAddResults[i] = {
+                        "Name": res[i].name,
+                        "Uid": res[i].uid,
+                        "UhUuid": res[i].uhUuid,
+                        "Status": result
+                    };
+                    $scope.multiAddResultsGeneric[i] = {
+                        "Name": res[i].name,
+                        "Uid": res[i].uid,
+                        "UhUuid": res[i].uhUuid,
+                        "Status": result
+                    };
                 }
-                if (undefined !== res[0].person) {
-                    $scope.personProps = Object.keys(res[0].person);
-                    $scope.personProps.shift();
+                if ($scope.multiAddResults[0] !== undefined) {
+                    $scope.personProps = Object.keys($scope.multiAddResults[0]);
+                    console.log($scope.multiAddResults);
+                    console.log($scope.personProps);
                 }
             };
             $scope.waitingForImportResponse = true; /* Spinner on */
-            if(listName === "Include"){
-                await groupingsService.addMembersToInclude(list, groupingPath, handleSuccessfulAdd, handleUnsuccessfulRequest, timeoutModal);
-            }
-            else if(listName === "Exclude") {
-                await groupingsService.addMembersToExclude(list, groupingPath, handleSuccessfulAdd, handleUnsuccessfulRequest, timeoutModal);
+            if (listName === "Include") {
+                await groupingsService.addIncludeMembers(list, groupingPath, handleSuccessfulAdd, handleUnsuccessfulRequest, timeoutModal);
+            } else if (listName === "Exclude") {
+                await groupingsService.addExcludeMembers(list, groupingPath, handleSuccessfulAdd, handleUnsuccessfulRequest, timeoutModal);
             }
         };
 

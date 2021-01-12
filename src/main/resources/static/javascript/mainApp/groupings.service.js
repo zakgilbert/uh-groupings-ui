@@ -90,6 +90,20 @@
                 });
             },
 
+            addIncludeMembers(usersToAdd, path, onSuccess, onError, modal) {
+                let endpoint = BASE_URL + path + "/" + usersToAdd + "/addIncludeMembers";
+                return new Promise(resolve => {
+                    dataProvider.updateDataWithTimeoutModal(endpoint, onSuccess, onError, modal);
+                });
+            },
+            addExcludeMembers(usersToAdd, path, onSuccess, onError, modal) {
+                let endpoint = BASE_URL + path + "/" + usersToAdd + "/addExcludeMembers";
+                return new Promise(resolve => {
+                    dataProvider.updateDataWithTimeoutModal(endpoint, onSuccess, onError, modal);
+                });
+            },
+
+
             /**
              * Add a member to the exclude group of a grouping.
              */

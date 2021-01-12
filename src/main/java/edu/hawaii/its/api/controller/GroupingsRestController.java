@@ -273,6 +273,30 @@ public class GroupingsRestController {
         return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.PUT);
     }
 
+    @PostMapping(value = "/{groupingPath}/{usersToAdd}/addIncludeMembers")
+    public ResponseEntity<String> addIncludeMembers(Principal principal,
+            @PathVariable String groupingPath,
+            @PathVariable String usersToAdd) {
+        logger.info("Entered REST addMembersToIncludeGroup...");
+        String safeGroupingPath = policy.sanitize(groupingPath);
+        String safeUsersToAdd = policy.sanitize(usersToAdd);
+        String uri = String.format(API_2_1_BASE + "/groupings/%s/addIncludeMembers/%s", safeGroupingPath,
+                safeUsersToAdd);
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.PUT);
+    }
+
+    @PostMapping(value = "/{groupingPath}/{usersToAdd}/addExcludeMembers")
+    public ResponseEntity<String> addExcludeMembers(Principal principal,
+            @PathVariable String groupingPath,
+            @PathVariable String usersToAdd) {
+        logger.info("Entered REST addMembersToExcludeGroup...");
+        String safeGroupingPath = policy.sanitize(groupingPath);
+        String safeUsersToAdd = policy.sanitize(usersToAdd);
+        String uri = String.format(API_2_1_BASE + "/groupings/%s/addExcludeMembers/%s", safeGroupingPath,
+                safeUsersToAdd);
+        return httpRequestService.makeApiRequest(principal.getName(), uri, HttpMethod.PUT);
+    }
+
     /**
      * Add a user to exclude group of grouping at path.
      */
