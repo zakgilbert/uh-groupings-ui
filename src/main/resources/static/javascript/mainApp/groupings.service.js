@@ -79,6 +79,15 @@
                 dataProvider.updateData(endpoint, onSuccess, onError);
             },
 
+            addIncludeMember(path, userToAdd, onSuccess, onError) {
+                let endpoint = BASE_URL + path + "/" + userToAdd + "/addIncludeMember";
+                dataProvider.updateData(endpoint, onSuccess, onError);
+            },
+            addExcludeMember(path, userToAdd, onSuccess, onError) {
+                let endpoint = BASE_URL + path + "/" + userToAdd + "/addExcludeMember";
+                dataProvider.updateData(endpoint, onSuccess, onError);
+            },
+
             /**
              * Add a members to the include group of a grouping. A modal is passed in an launched after a certain amount
              * of time has elapsed.

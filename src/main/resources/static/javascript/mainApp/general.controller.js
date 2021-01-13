@@ -784,6 +784,7 @@
             }
 
             const handleSuccessfulAdd = function (res) {
+                console.log(res);
                 $scope.createSuccessfulAddModal({
                     user: userToAdd,
                     listName: list,
@@ -792,9 +793,9 @@
             };
 
             if (list === "Include") {
-                groupingsService.addMemberToInclude(groupingPath, userToAdd, handleSuccessfulAdd, handleUnsuccessfulRequest);
+                groupingsService.addIncludeMember(groupingPath, userToAdd, handleSuccessfulAdd, handleUnsuccessfulRequest);
             } else if (list === "Exclude") {
-                groupingsService.addMemberToExclude(groupingPath, userToAdd, handleSuccessfulAdd, handleUnsuccessfulRequest);
+                groupingsService.addExcludeMember(groupingPath, userToAdd, handleSuccessfulAdd, handleUnsuccessfulRequest);
             } else if (list === "owners") {
                 groupingsService.assignOwnership(groupingPath, userToAdd, handleSuccessfulAdd, handleUnsuccessfulRequest);
             } else if (list === "admins") {
